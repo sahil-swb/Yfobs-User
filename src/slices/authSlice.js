@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import React from 'react';
-import { useNavigate } from 'react-router';
-
 import { useHistory } from 'react-router-dom';
 import { successPNotify, warningPNotify, errorPNotify } from '../components/alertMsg';
 import { BASE_URL_FOR_USER, CHANGE_USER_PASSWORD, FORGOT_USER_PASSWORD, LOGIN_USER, REGISTER_USER } from '../constants/urlConfig';
@@ -41,12 +38,10 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
         response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
 
         if (response?.data?.status) {
-            // successPNotify(response?.data?.message);
-            console.log(response?.data?.token);
+            console.log(response?.data);
             localStorage.setItem('authToken', response?.data?.token);
-            // history.push('/dashboard');
-            // navigate('/dashboard');
-            return response?.data;
+            history.push('/dashboard');
+            return response?.data?.data;
         } else {
             return response?.data?.data;
         }

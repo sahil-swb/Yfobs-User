@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     deleteModal: false,
     modalIsOpen: false,
-    modalType: 'EDIT'
+    modalType: ''
 };
 
 //MODAL SLICE

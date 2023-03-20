@@ -54,12 +54,12 @@ const Categories = () => {
     ];
 
     const [rowData, setRowData] = useState(null);
-    const { getAllCategories } = useSelector((state) => state.categoriesReducer);
+    const { getAllData, updateData, deleteData, createData } = useSelector((state) => state.categoriesReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getAllCategoriesApi());
-    }, []);
+    }, [updateData, deleteData, createData]);
 
     const handleDelete = (row) => {
         setRowData(row);
@@ -80,17 +80,17 @@ const Categories = () => {
                     <Button
                         onClick={() => {
                             dispatch(commonModalIsOpen(true));
-                            dispatch(commonModalType(!'EDIT'));
+                            dispatch(commonModalType('ADD'));
                         }}
                         size="sm"
-                        className="d-flex align-items-center"
+                        className="d-flex align-items-center p-2"
                     >
                         <i className="feather icon-plus f-20" />
                         <div>New Category</div>
                     </Button>
                 </Card.Header>
                 <Card.Body>
-                    <CommonDataTable columns={columns} data={getAllCategories} />
+                    <CommonDataTable columns={columns} data={getAllData} />
                 </Card.Body>
             </Card>
             <CategoriesModal data={rowData} />

@@ -31,7 +31,7 @@ const ChangePassword = () => {
                 >
                     <Form>
                         <div className="form-group fill mb-4">
-                            <Field name="password" type="password" className="form-control" placeholder="Old Password" />
+                            <Field name="password" type="password" className="form-control" placeholder="Enter OTP" />
                         </div>
                         <div className="form-group fill mb-4">
                             <Field name="newPassword" type="password" className="form-control" placeholder="New Password" />

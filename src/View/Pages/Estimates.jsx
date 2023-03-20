@@ -1,4 +1,7 @@
 import React from 'react';
+import { Button, Card } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 
 const Estimates = () => {
     const columns = [
@@ -39,7 +42,34 @@ const Estimates = () => {
             }
         }
     ];
-    return <div>Estimates</div>;
+
+    const dispatch = useDispatch();
+    const handleEdit = () => {
+        console.log('handleEdit');
+    };
+
+    const handleDelete = () => {
+        console.log('handleDelete');
+    };
+    return (
+        <Card>
+            <Card.Header className="d-flex justify-content-between align-items-center">
+                <Card.Title className="m-0 font-weight-bold">All Products</Card.Title>
+                <Button
+                    onClick={() => {
+                        dispatch(commonModalIsOpen(true));
+                        dispatch(commonModalType(!'EDIT'));
+                    }}
+                    size="sm"
+                    className="d-flex align-items-center p-2"
+                >
+                    <i className="feather icon-plus f-20" />
+                    <div>New Product</div>
+                </Button>
+            </Card.Header>
+            <Card.Body>{/* <CommonDataTable columns={columns} data={getAllProducts} /> */}</Card.Body>
+        </Card>
+    );
 };
 
 export default Estimates;

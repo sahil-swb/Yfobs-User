@@ -25,12 +25,7 @@ const Login = () => {
         console.log(payload);
         dispatch(setIsLogin(true));
         dispatch(loginUser({ payload }));
-        if (loginData?.status) {
-            history.push('/dashboard');
-        }
     };
-
-    console.log(loginData);
 
     return (
         <>

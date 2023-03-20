@@ -24,6 +24,7 @@ const App = () => {
         <>
             <ScrollToTop>
                 <Suspense fallback={<Loader />}>
+                    {/* Auth Routes */}
                     <Route path={routesOnePage.map((x) => x.path)}>
                         <Switch location={location} key={location.pathname}>
                             {routesOnePage.map((route, index) => {
@@ -39,22 +40,14 @@ const App = () => {
                         </Switch>
                     </Route>
 
-                    {/* <Route path={routes.map((x) => x.path)}>
-                        <AdminLayout />
-                    </Route>
-
-                    <Route path="/">
-                        <Login />
-                        <Register />
-                        <ForgotPassword />
-                        <ChangePassword />
-                    </Route> */}
+                    {/* User Panel Routes */}
                     <Route path={routes.map((x) => x.path)}>
                         <AdminLayout />
                     </Route>
-                    <Route path={'/'} exact>
+
+                    {/* <Route path={'/'} exact>
                         <Redirect to={Config.defaultPath} />
-                    </Route>
+                    </Route> */}
                 </Suspense>
             </ScrollToTop>
             <div className="backdrop" />

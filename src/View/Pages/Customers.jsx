@@ -94,7 +94,7 @@ const Customers = () => {
                             dispatch(commonModalType(!'EDIT'));
                         }}
                         size="sm"
-                        className="d-flex align-items-center"
+                        className="d-flex align-items-center p-2"
                     >
                         <i className="feather icon-plus f-20" />
                         New Customer

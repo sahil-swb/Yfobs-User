@@ -6,6 +6,7 @@ import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserForgotPassword } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
+import history from '../../history';
 
 const ForgotPassword = () => {
     const { forgotPasswordData } = useSelector((state) => state.authReducer);
@@ -15,6 +16,7 @@ const ForgotPassword = () => {
             email: values.email
         };
         dispatch(UserForgotPassword({ payload }));
+        history.push('/change_password');
     };
     console.log(forgotPasswordData);
     return (
@@ -35,7 +37,7 @@ const ForgotPassword = () => {
                 </Formik>
                 <p className="mb-0 text-muted">
                     Don’t have an account?{' '}
-                    <NavLink to="/auth/signup-1" className="f-w-400">
+                    <NavLink to="/register" className="f-w-400">
                         Signup
                     </NavLink>
                 </p>
