@@ -1,0 +1,113 @@
+//REACT IMPORTS
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+//PACKAGE IMPORTS
+import { Button, Card } from 'react-bootstrap';
+// REDUX-TOOLKIT IMPORTS
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+//CUSTOM OR COMPONENTS IMPORTS
+import CommonDataTable from '../../components/CommonDataTable';
+import CustomersModal from '../../components/modals/CustomersModal';
+import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import { getAllCustomersApi } from '../../slices/customersSlice';
+import { commonDeleteModal, commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+
+const Customers = () => {
+    //COLUMNS FOR CUSTOMER TABLE
+    const columns = [
+        {
+            name: '#',
+            selector: (row) => row.index,
+            sortable: true
+        },
+        {
+            name: 'Name',
+            selector: (row) => row.name,
+            sortable: true
+        },
+        {
+            name: 'Email',
+            selector: (row) => row.email,
+            sortable: true
+        },
+        {
+            name: 'Phone',
+            selector: (row) => row.phone,
+            sortable: true
+        },
+        {
+            name: 'Action',
+            selector: (row) => {
+                return (
+                    <div>
+                        <i
+                            onClick={() => handleEdit(row)}
+                            className="icon feather icon-edit f-22 text-c-blue mr-3"
+                            role="button"
+                            aria-hidden="true"
+                        />
+
+                        <i
+                            onClick={() => handleDelete(row)}
+                            className="icon feather icon-trash-2 f-22 text-c-red"
+                            role="button"
+                            aria-hidden="true"
+                        />
+                    </div>
+                );
+            }
+        }
+    ];
+
+    //STATES
+    const [rowData, setRowData] = useState(null);
+    const { getAllCustomers } = useSelector((state) => state.customers);
+    const dispatch = useDispatch();
+
+    //APICALL ON PAGE LOAD
+    useEffect(() => {
+        dispatch(getAllCustomersApi());
+    }, []);
+
+    //FUNCTION FOR DELETE CUSTOMER
+    const handleDelete = (row) => {
+        setRowData(row);
+        dispatch(commonDeleteModal(true));
+    };
+
+    // FUNCTION FOR EDIT CUSTOMER
+    const handleEdit = (row) => {
+        dispatch(commonModalIsOpen(true));
+        dispatch(commonModalType('EDIT'));
+        setRowData(row);
+    };
+
+    return (
+        <div>
+            <Card>
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                    <Card.Title className="m-0 font-weight-bold">All Customers</Card.Title>
+                    <Button
+                        onClick={() => {
+                            dispatch(commonModalIsOpen(true));
+                            dispatch(commonModalType(!'EDIT'));
+                        }}
+                        size="sm"
+                        className="d-flex align-items-center"
+                    >
+                        <i className="feather icon-plus f-20" />
+                        New Customer
+                    </Button>
+                </Card.Header>
+                <Card.Body>
+                    <CommonDataTable columns={columns} data={getAllCustomers} />
+                </Card.Body>
+            </Card>
+            <CustomersModal data={rowData} />
+            <DeleteConfModal del_id={rowData?._id} type={'CUSTOMERS'} title={rowData?.name} />
+        </div>
+    );
+};
+
+export default Customers;

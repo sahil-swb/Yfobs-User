@@ -1,0 +1,35 @@
+.genarl-col input[type='file'] {
+    font-size: 20px;
+    position: relative;
+    width: 133px;
+    height: 35px;
+    top: -34px;
+    left: 0;
+    opacity: 0;
+    z-index: 9999;
+}
+
+.btn-files {
+    border: 0px;
+    color: white;
+    background-color: rgb(114, 172, 27);
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.modal-col input[type='file'] {
+    font-size: 20px;
+    position: relative;
+    width: 105px;
+    height: 35px;
+    top: -1px;
+    left: -203px;
+    opacity: 0;
+    z-index: 9999;
+}
+
+.register,
+.login {
+    background: linear-gradient(to right, #cf1178 0%, #832685 55%);
+}
