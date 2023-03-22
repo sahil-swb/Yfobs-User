@@ -2,7 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { successPNotify, warningPNotify, errorPNotify } from '../components/alertMsg';
-import { BASE_URL_FOR_USER, CHANGE_USER_PASSWORD, FORGOT_USER_PASSWORD, LOGIN_USER, REGISTER_USER } from '../constants/urlConfig';
+import {
+    BASE_URL_FOR_USER,
+    CHANGE_USER_PASSWORD,
+    FORGOT_USER_PASSWORD,
+    GET_SINGLE_AUTH_USER,
+    LOGIN_USER,
+    REGISTER_USER
+} from '../constants/urlConfig';
 import history from '../history';
 
 const initialState = {
@@ -11,7 +18,8 @@ const initialState = {
     loginData: {},
     isLogin: false,
     forgotPasswordData: {},
-    changePasswordData: {}
+    changePasswordData: {},
+    getDataById: {}
 };
 
 export const registerUser = createAsyncThunk('register/user', async ({ payload }, { rejectWithValue }) => {
@@ -20,7 +28,7 @@ export const registerUser = createAsyncThunk('register/user', async ({ payload }
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
         console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
@@ -41,6 +49,7 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
             console.log(response?.data);
             localStorage.setItem('authToken', response?.data?.token);
             history.push('/dashboard');
+            // window.location.reload();
             return response?.data?.data;
         } else {
             return response?.data?.data;
@@ -57,7 +66,7 @@ export const UserForgotPassword = createAsyncThunk('user/UserForgotPassword', as
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
@@ -72,7 +81,21 @@ export const UserChangePassword = createAsyncThunk('user/UserChangePassword', as
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        console.log(error?.response?.data);
+        return rejectWithValue(error.response?.data?.message);
+    }
+});
+
+export const getSingleUser = createAsyncThunk('user/getSingleUser', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`${BASE_URL_FOR_USER + GET_SINGLE_AUTH_USER}${payload._id}`, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
@@ -129,6 +152,16 @@ const authSlice = createSlice({
                 state.changePasswordData = action.payload;
             })
             .addCase(UserChangePassword.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(getSingleUser.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(getSingleUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getDataById = action.payload;
+            })
+            .addCase(getSingleUser.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

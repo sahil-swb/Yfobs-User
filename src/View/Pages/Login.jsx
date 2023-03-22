@@ -9,10 +9,10 @@ import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, setIsLogin } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
+import history from '../../history';
 // import history from '../../history';
 
 const Login = () => {
-    const history = useHistory();
     const { loginData, isLogin } = useSelector((state) => state.authReducer);
     const dispatch = useDispatch();
 
@@ -25,6 +25,7 @@ const Login = () => {
         console.log(payload);
         dispatch(setIsLogin(true));
         dispatch(loginUser({ payload }));
+        // history.push('/dashboard');
     };
 
     return (

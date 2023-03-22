@@ -27,6 +27,7 @@ const Register = () => {
         resetForm();
         setPhoneValue('');
         history.push('/');
+        window.location.reload();
     };
 
     const handlePhone = (e) => {

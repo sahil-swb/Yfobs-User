@@ -20,11 +20,13 @@ const AdminLayout = lazy(() => import('./layout/AdminLayout'));
 const App = () => {
     const location = useLocation();
 
+    let loginData = localStorage.getItem('authToken');
+    console.log(loginData);
+
     return (
         <>
             <ScrollToTop>
                 <Suspense fallback={<Loader />}>
-                    {/* Auth Routes */}
                     <Route path={routesOnePage.map((x) => x.path)}>
                         <Switch location={location} key={location.pathname}>
                             {routesOnePage.map((route, index) => {
@@ -39,8 +41,6 @@ const App = () => {
                             })}
                         </Switch>
                     </Route>
-
-                    {/* User Panel Routes */}
                     <Route path={routes.map((x) => x.path)}>
                         <AdminLayout />
                     </Route>

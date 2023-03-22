@@ -5,7 +5,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     deleteModal: false,
     modalIsOpen: false,
-    modalType: ''
+    modalType: '',
+    rowData: {}
 };
 
 //MODAL SLICE
@@ -21,9 +22,12 @@ const modalSlice = createSlice({
         },
         commonModalType: (state, action) => {
             state.modalType = action.payload;
+        },
+        setRowData: (state, action) => {
+            state.rowData = action.payload;
         }
     }
 });
 
-export const { commonModalIsOpen, commonDeleteModal, commonModalType } = modalSlice.actions;
+export const { commonModalIsOpen, commonDeleteModal, commonModalType, setRowData } = modalSlice.actions;
 export default modalSlice.reducer;

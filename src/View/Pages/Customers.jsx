@@ -11,7 +11,7 @@ import CommonDataTable from '../../components/CommonDataTable';
 import CustomersModal from '../../components/modals/CustomersModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import { getAllCustomersApi } from '../../slices/customersSlice';
-import { commonDeleteModal, commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+import { commonDeleteModal, commonModalIsOpen, commonModalType, setRowData } from '../../slices/modalSlice';
 
 const Customers = () => {
     //COLUMNS FOR CUSTOMER TABLE
@@ -61,8 +61,8 @@ const Customers = () => {
     ];
 
     //STATES
-    const [rowData, setRowData] = useState(null);
     const { getAllCustomers } = useSelector((state) => state.customers);
+    const { rowData } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
 
     //APICALL ON PAGE LOAD
@@ -72,7 +72,7 @@ const Customers = () => {
 
     //FUNCTION FOR DELETE CUSTOMER
     const handleDelete = (row) => {
-        setRowData(row);
+        dispatch(setRowData(row));
         dispatch(commonDeleteModal(true));
     };
 
@@ -80,7 +80,7 @@ const Customers = () => {
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
         dispatch(commonModalType('EDIT'));
-        setRowData(row);
+        dispatch(setRowData(row));
     };
 
     return (
@@ -104,7 +104,7 @@ const Customers = () => {
                     <CommonDataTable columns={columns} data={getAllCustomers} />
                 </Card.Body>
             </Card>
-            <CustomersModal data={rowData} />
+            <CustomersModal />
             <DeleteConfModal del_id={rowData?._id} type={'CUSTOMERS'} title={rowData?.name} />
         </div>
     );

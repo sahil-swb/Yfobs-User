@@ -1,6 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import React from 'react';
-import { USER_CREATE_ESTIMATES, USER_DELETE_ESTIMATES, USER_GET_ALL_ESTIMATES, USER_UPDATE_ESTIMATES } from '../constants/UrlConfig';
+import {
+    BASE_URL_FOR_USER,
+    USER_CREATE_ESTIMATES,
+    USER_DELETE_ESTIMATES,
+    USER_GET_ALL_ESTIMATES,
+    USER_UPDATE_ESTIMATES
+} from '../constants/urlConfig';
 
 const initialState = {
     isLoading: false,

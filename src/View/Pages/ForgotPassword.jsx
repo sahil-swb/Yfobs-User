@@ -4,7 +4,7 @@ import Breadcrumb from '../../App/layout/AdminLayout/Breadcrumb';
 import { NavLink } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserForgotPassword } from '../../slices/authSlice';
+import { getSingleUser, UserForgotPassword } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
 import history from '../../history';
 
@@ -17,6 +17,7 @@ const ForgotPassword = () => {
         };
         dispatch(UserForgotPassword({ payload }));
         history.push('/change_password');
+        window.location.reload();
     };
     console.log(forgotPasswordData);
     return (
