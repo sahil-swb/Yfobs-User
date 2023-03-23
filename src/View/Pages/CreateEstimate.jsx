@@ -1,15 +1,18 @@
 import { Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { Accordion, Button, Card, Col, ListGroup, Row, Table } from 'react-bootstrap';
+import { Accordion, Badge, Button, Card, Col, ListGroup, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CustomersModal from '../../components/modals/CustomersModal';
 import ProductsEstimateModal from '../../components/modals/ProductsEstimateModal';
 import { getAllCustomersApi } from '../../slices/customersSlice';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+import favicon from '../../assets/images/favicon-32x32.png';
+import JoditEditor from 'jodit-react';
 
 const CreateEstimate = () => {
     const [modalOpenType, setModalTypeOpen] = useState('');
+    const [footerText, setFooterText] = useState('');
     const { getAllCustomers } = useSelector((state) => state.customers);
     const dispatch = useDispatch();
 
@@ -17,6 +20,13 @@ const CreateEstimate = () => {
         dispatch(getAllCustomersApi());
     }, []);
     console.log(getAllCustomers);
+
+    const handleFooterText = (e) => {
+        const fText = e;
+        setFooterText(fText);
+    };
+
+    console.log(footerText);
     return (
         <>
             <div>
@@ -52,7 +62,7 @@ const CreateEstimate = () => {
                     <Form>
                         <Accordion defaultActiveKey="0">
                             <Card>
-                                <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold" eventKey="0">
+                                <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
                                     Business address and contact details, title, summary, and logo
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="0">
@@ -60,7 +70,7 @@ const CreateEstimate = () => {
                                         <Row className="d-flex align-items-center">
                                             <Col>
                                                 <div>
-                                                    <img src="" alt="Company Logo" />
+                                                    <img src={favicon} width={40} alt="Company Logo" />
                                                 </div>
                                                 <div>
                                                     <strong>SilverWebbuzz</strong>, india
@@ -170,8 +180,44 @@ const CreateEstimate = () => {
                                                 Add an Item
                                             </Button>
                                         </div>
+                                        <div className="text-right font-weight-bold h5">
+                                            <ListGroup variant="flush">
+                                                <ListGroup.Item>
+                                                    <span className="mr-5">Sub Total</span> 0
+                                                </ListGroup.Item>
+                                                <ListGroup.Item>
+                                                    <label className="mr-3">Discount in %</label>
+                                                    <Field
+                                                        className="mr-5 rounded p-1"
+                                                        style={{ width: '40px' }}
+                                                        name="discount"
+                                                        type="number"
+                                                    />
+                                                    <span>0</span>
+                                                </ListGroup.Item>
+                                                <ListGroup.Item>
+                                                    <label className="mr-3">Tax in %</label>
+                                                    <Field
+                                                        className="mr-5 rounded p-1"
+                                                        style={{ width: '40px' }}
+                                                        name="tax"
+                                                        type="number"
+                                                    />
+                                                    <span>0</span>
+                                                </ListGroup.Item>
+                                                <ListGroup.Item>
+                                                    <span className="mr-5"> Grand Total</span> 0
+                                                </ListGroup.Item>
+                                            </ListGroup>
+                                        </div>
                                     </Col>
                                 </Row>
+                            </Card.Body>
+                        </Card>
+                        <Card>
+                            <Card.Header as="h4">Footer</Card.Header>
+                            <Card.Body>
+                                <JoditEditor value={footerText} onChange={handleFooterText} />
                             </Card.Body>
                         </Card>
                     </Form>
