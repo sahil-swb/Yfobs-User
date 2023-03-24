@@ -3,19 +3,22 @@ import logoDark from '../../assets/images/logo-dark.png';
 import Breadcrumb from '../../App/layout/AdminLayout/Breadcrumb';
 import { Field, Form, Formik } from 'formik';
 import { UserChangePassword } from '../../slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthLayout from '../../components/AuthLayout';
+import history from '../../history';
 
 const ChangePassword = () => {
     const dispatch = useDispatch();
     const handleChangePassword = (values) => {
         let payload = {
-            _id: '63c4f7c4274cbea3a36918e4',
+            _id: '64194f70a826c510dda58df1',
             password: values.password,
             newPassword: values.newPassword
         };
         if (values.newPassword === values.confPassword) {
             dispatch(UserChangePassword({ payload }));
+            history.push('/');
+            window.location.reload();
         } else {
             alert('Password Not Matched');
         }
@@ -31,13 +34,13 @@ const ChangePassword = () => {
                 >
                     <Form>
                         <div className="form-group fill mb-4">
-                            <Field name="password" type="password" className="form-control" placeholder="Old Password" />
+                            <Field name="password" type="password" className="form-control" placeholder="Enter OTP" />
                         </div>
                         <div className="form-group fill mb-4">
                             <Field name="newPassword" type="password" className="form-control" placeholder="New Password" />
                         </div>
                         <div className="form-group fill mb-4">
-                            <Field name="confPassword" type="password" className="form-control" placeholder="Re-Type New Password" />
+                            <Field name="confPassword" type="password" className="form-control" placeholder="Confirm New Password" />
                         </div>
                         <button type="submit" className="btn btn-block btn-primary mb-4">
                             Change password

@@ -9,7 +9,7 @@ import { createProductApi, getAllProductsApi, updateProductApi } from '../../sli
 
 const ProductsModal = ({ data }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
-    const { getAllCategories } = useSelector((state) => state.categories);
+    const { getAllData } = useSelector((state) => state.categoriesReducer);
     const [showIncome, setShowIncome] = useState(false);
     const [showExpense, setShowExpense] = useState(false);
 
@@ -34,9 +34,9 @@ const ProductsModal = ({ data }) => {
             dispatch(createProductApi({ payload }));
         }
         dispatch(commonModalIsOpen(false));
-        setTimeout(() => {
-            dispatch(getAllProductsApi());
-        }, 1000);
+        // setTimeout(() => {
+        //     dispatch(getAllProductsApi());
+        // }, 1000);
     };
 
     useEffect(() => {
@@ -72,7 +72,6 @@ const ProductsModal = ({ data }) => {
                                   hsnCode: '',
                                   price: '',
                                   details: '',
-                                  checked: '',
                                   isSell: '',
                                   isBuy: '',
                                   incomeCategory: '',
@@ -106,12 +105,11 @@ const ProductsModal = ({ data }) => {
                                 <div>
                                     <label className="font-weight-bold">Income Category</label>
                                     <Field className="form-control" name="incomeCategory" as="select">
-                                        {getAllCategories &&
-                                            getAllCategories?.map((val) => {
-                                                if (val.type === 'Income') {
-                                                    return <option key={val?._id}>{val?.name}</option>;
-                                                }
-                                            })}
+                                        {getAllData?.map((val) => {
+                                            if (val.type === 'Income') {
+                                                return <option key={val?._id}>{val?.name}</option>;
+                                            }
+                                        })}
                                     </Field>
                                 </div>
                             ) : null}
@@ -127,12 +125,11 @@ const ProductsModal = ({ data }) => {
                                 <div>
                                     <label className="font-weight-bold">Expense Category</label>
                                     <Field className="form-control" name="expenseCategory" as="select">
-                                        {getAllCategories &&
-                                            getAllCategories?.map((val) => {
-                                                if (val.type === 'Expense') {
-                                                    return <option key={val?._id}>{val?.name}</option>;
-                                                }
-                                            })}
+                                        {getAllData?.map((val) => {
+                                            if (val.type === 'Expense') {
+                                                return <option key={val?._id}>{val?.name}</option>;
+                                            }
+                                        })}
                                     </Field>
                                 </div>
                             ) : null}

@@ -17,7 +17,10 @@ import {
 //INITIAL STATES
 const initialState = {
     isLoading: false,
-    getAllProducts: []
+    getAllProducts: [],
+    updateData: {},
+    deleteData: {},
+    createData: {}
 };
 
 //APICALL FOR CREATING PRODUCT USING THUNK
@@ -89,6 +92,7 @@ const productsSlice = createSlice({
             })
             .addCase(createProductApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.createData = action.payload;
             })
             .addCase(createProductApi.rejected, (state, action) => {
                 state.isLoading = false;
@@ -110,6 +114,7 @@ const productsSlice = createSlice({
             })
             .addCase(updateProductApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.updateData = action.payload;
             })
             .addCase(updateProductApi.rejected, (state, action) => {
                 state.isLoading = false;
@@ -120,6 +125,7 @@ const productsSlice = createSlice({
             })
             .addCase(deleteProductApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.deleteData = action.payload;
             })
             .addCase(deleteProductApi.rejected, (state, action) => {
                 state.isLoading = false;

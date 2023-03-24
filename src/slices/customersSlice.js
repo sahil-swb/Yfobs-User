@@ -17,7 +17,10 @@ import {
 //INITIAL STATES
 const initialState = {
     getAllCustomers: [],
-    isLoading: false
+    isLoading: false,
+    createCustomer: {},
+    deleteCustomer: {},
+    updateCustomer: {}
 };
 
 //APICALL FOR CREATING CUSTOMER USING THUNK
@@ -90,8 +93,9 @@ const customersSlice = createSlice({
             .addCase(createCustomerApi.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(createCustomerApi.fulfilled, (state) => {
+            .addCase(createCustomerApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.createCustomer = action.payload;
             })
             .addCase(createCustomerApi.rejected, (state) => {
                 state.isLoading = false;
@@ -111,8 +115,9 @@ const customersSlice = createSlice({
             .addCase(updateCustomerApi.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(updateCustomerApi.fulfilled, (state) => {
+            .addCase(updateCustomerApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.updateCustomer = action.payload;
             })
             .addCase(updateCustomerApi.rejected, (state) => {
                 state.isLoading = false;
@@ -121,8 +126,9 @@ const customersSlice = createSlice({
             .addCase(deleteCustomerApi.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(deleteCustomerApi.fulfilled, (state) => {
+            .addCase(deleteCustomerApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.deleteCustomer = action.payload;
             })
             .addCase(deleteCustomerApi.rejected, (state) => {
                 state.isLoading = false;

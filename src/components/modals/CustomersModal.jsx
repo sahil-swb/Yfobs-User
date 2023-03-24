@@ -16,7 +16,7 @@ import '../reactPhoneComponent.css';
 
 //MODAL COMPONENT FOR ADD AND EDIT CUSTOMER
 const CustomersModal = ({ data }) => {
-    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
+    const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
     const [customerPhoneNumber, setCustomerPhoneNumber] = useState();
     const [companyPhoneNumber, setCompanyPhoneNumber] = useState();
     const dispatch = useDispatch();
@@ -37,21 +37,18 @@ const CustomersModal = ({ data }) => {
             vatCode: values.vatCode
         };
         if (modalType === 'EDIT') {
-            payload.id = data?._id;
+            payload.id = rowData?._id;
             dispatch(updateCustomerApi({ payload }));
         } else {
             dispatch(createCustomerApi({ payload }));
         }
         dispatch(commonModalIsOpen(false));
-        setTimeout(() => {
-            dispatch(getAllCustomersApi());
-        }, 1000);
     };
 
     useEffect(() => {
         if (modalType === 'EDIT') {
-            setCustomerPhoneNumber(data?.phone);
-            setCompanyPhoneNumber(data?.businessNumber);
+            setCustomerPhoneNumber(rowData?.phone);
+            setCompanyPhoneNumber(rowData?.businessNumber);
         } else {
             setCustomerPhoneNumber('');
             setCompanyPhoneNumber('');
@@ -75,16 +72,16 @@ const CustomersModal = ({ data }) => {
                         initialValues={
                             modalType === 'EDIT'
                                 ? {
-                                      name: data?.name,
-                                      email: data?.email,
-                                      address: data?.address,
-                                      country: data?.country,
-                                      state: data?.state,
-                                      city: data?.city,
-                                      postalCode: data?.postalCode,
-                                      currency: data?.currency,
-                                      businessName: data?.businessName,
-                                      vatCode: data?.vatCode
+                                      name: rowData?.name,
+                                      email: rowData?.email,
+                                      address: rowData?.address,
+                                      country: rowData?.country,
+                                      state: rowData?.state,
+                                      city: rowData?.city,
+                                      postalCode: rowData?.postalCode,
+                                      currency: rowData?.currency,
+                                      businessName: rowData?.businessName,
+                                      vatCode: rowData?.vatCode
                                   }
                                 : {
                                       name: '',

@@ -7,6 +7,7 @@ import modalSlice from '../slices/modalSlice';
 import categoriesSlice from '../slices/categoriesSlice';
 import productsSlice from '../slices/productsSlice';
 import authSlice from '../slices/authSlice';
+import estimatesSlice from '../slices/estimatesSlice';
 
 const reducer = combineReducers({
     able: ableReducer,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
     modalReducer: modalSlice,
     categoriesReducer: categoriesSlice,
     productsReducer: productsSlice,
-    authReducer: authSlice
+    authReducer: authSlice,
+    estimateReducer: estimatesSlice
 });
 export const useSelector = createSelectorHook();
 export default reducer;

@@ -5,6 +5,7 @@ export const REGISTER_USER = 'userRegistration';
 export const LOGIN_USER = 'userLogin';
 export const CHANGE_USER_PASSWORD = 'changePassword/';
 export const FORGOT_USER_PASSWORD = 'forgotPassword';
+export const GET_SINGLE_AUTH_USER = 'getSingleUser/';
 
 //Customers Api
 export const USER_CREATE_CUSTOMER = 'customer/createCustomer';

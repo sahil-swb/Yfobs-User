@@ -7,34 +7,52 @@ import { Field, Form, Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+import '../../components/reactPhoneComponent.css';
+import { useState } from 'react';
+import history from '../../history';
 const Register = () => {
+    const [phoneValue, setPhoneValue] = useState('');
     const dispatch = useDispatch();
 
-    const handleRegister = (values) => {
+    const handleRegister = (values, resetForm) => {
         let payload = {
             name: values.name,
-            phone: values.phone,
+            phone: phoneValue,
             email: values.email,
             password: values.password
         };
         dispatch(registerUser({ payload }));
+        resetForm();
+        setPhoneValue('');
+        history.push('/');
+        window.location.reload();
     };
 
+    const handlePhone = (e) => {
+        console.log(e);
+        setPhoneValue(e);
+    };
     return (
         <AuthLayout>
             <div className="card-body">
                 <img src={logoDark} alt="" className="img-fluid mb-4" />
                 <h4 className="mb-3 f-w-400">Sign up</h4>
-                <Formik initialValues={{ name: '', phone: '', email: '', password: '' }} onSubmit={(values) => handleRegister(values)}>
+                <Formik
+                    initialValues={{ name: '', email: '', password: '' }}
+                    onSubmit={(values, { resetForm }) => handleRegister(values, resetForm)}
+                >
                     <Form>
                         <div className="form-group fill">
-                            <Field type="text" name="name" className="form-control" placeholder="Username" />
+                            <Field type="text" name="name" className="form-control" placeholder="Full Name" />
                         </div>
                         <div className="form-group fill">
                             <Field type="email" name="email" className="form-control" placeholder="Email Address" />
                         </div>
                         <div className="form-group fill">
-                            <Field type="phone" name="tel" className="form-control" placeholder="Phone" />
+                            {/* <Field type="phone" name="tel" className="form-control" placeholder="Phone" /> */}
+                            <PhoneInput name="phone" placeholder="Enter phone number" value={phoneValue} onChange={(e) => handlePhone(e)} />
                         </div>
                         <div className="form-group fill mb-4">
                             <Field name="password" type="password" className="form-control" placeholder="Password" />
