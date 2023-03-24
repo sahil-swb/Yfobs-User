@@ -13,12 +13,14 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import 'react-phone-number-input/style.css';
 import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
 import '../reactPhoneComponent.css';
+import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 
 //MODAL COMPONENT FOR ADD AND EDIT CUSTOMER
 const CustomersModal = ({ data }) => {
     const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
-    const [customerPhoneNumber, setCustomerPhoneNumber] = useState();
-    const [companyPhoneNumber, setCompanyPhoneNumber] = useState();
+    const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
+    const [customerPhoneNumber, setCustomerPhoneNumber] = useState('');
+    const [companyPhoneNumber, setCompanyPhoneNumber] = useState('');
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
@@ -27,11 +29,11 @@ const CustomersModal = ({ data }) => {
             email: values.email,
             phone: customerPhoneNumber,
             address: values.address,
-            country: values.country,
+            countryName: values.countryName,
             state: values.state,
             city: values.city,
             postalCode: values.postalCode,
-            currency: values.currency,
+            currencyName: values.currencyName,
             businessName: values.businessName,
             businessNumber: companyPhoneNumber,
             vatCode: values.vatCode
@@ -53,7 +55,14 @@ const CustomersModal = ({ data }) => {
             setCustomerPhoneNumber('');
             setCompanyPhoneNumber('');
         }
-    });
+    }, []);
+
+    useEffect(() => {
+        dispatch(getAllCountriesApi());
+        dispatch(getAllStatesApi());
+    }, []);
+
+    console.log(getAllCountries);
 
     return (
         <>
@@ -75,11 +84,11 @@ const CustomersModal = ({ data }) => {
                                       name: rowData?.name,
                                       email: rowData?.email,
                                       address: rowData?.address,
-                                      country: rowData?.country,
+                                      countryName: rowData?.countryName,
                                       state: rowData?.state,
                                       city: rowData?.city,
                                       postalCode: rowData?.postalCode,
-                                      currency: rowData?.currency,
+                                      currencyName: rowData?.currencyName,
                                       businessName: rowData?.businessName,
                                       vatCode: rowData?.vatCode
                                   }
@@ -87,11 +96,11 @@ const CustomersModal = ({ data }) => {
                                       name: '',
                                       email: '',
                                       address: '',
-                                      country: '',
+                                      countryName: '',
                                       state: '',
                                       city: '',
                                       postalCode: '',
-                                      currency: '',
+                                      currencyName: '',
                                       businessName: '',
                                       vatCode: ''
                                   }
@@ -114,7 +123,6 @@ const CustomersModal = ({ data }) => {
                                             <div className="mb-2">
                                                 <label>Phone</label>
                                                 <PhoneInput
-                                                    reset
                                                     placeholder="Enter phone number"
                                                     name="phone"
                                                     // value={customerPhoneNumber && formatPhoneNumberIntl(customerPhoneNumber)}
@@ -141,13 +149,33 @@ const CustomersModal = ({ data }) => {
                                         <Col>
                                             <div className="mb-2">
                                                 <label>Country</label>
-                                                <Field className="form-control" name="country" as="select" />
+                                                <Field className="form-control" name="countryName" as="select">
+                                                    <option>Select Country</option>
+                                                    {getAllCountries &&
+                                                        getAllCountries?.map((val) => {
+                                                            return (
+                                                                <option key={val?._id} value={val?.countryName}>
+                                                                    {val?.countryName}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                </Field>
                                             </div>
                                         </Col>
                                         <Col>
                                             <div className="mb-2">
                                                 <label>State</label>
-                                                <Field className="form-control" name="state" as="select" />
+                                                <Field className="form-control" name="state" as="select">
+                                                    <option>Select State</option>
+                                                    {getAllStates &&
+                                                        getAllStates?.map((val) => {
+                                                            return (
+                                                                <option key={val?._id} value={val?.name}>
+                                                                    {val?.name}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                </Field>
                                             </div>
                                         </Col>
                                     </Row>
@@ -162,7 +190,19 @@ const CustomersModal = ({ data }) => {
                                         <Col>
                                             <div className="mb-2">
                                                 <label>Currency</label>
-                                                <Field className="form-control" name="currency" as="select" />
+                                                <Field className="form-control" name="currencyName" as="select">
+                                                    <option>Select Currency</option>
+                                                    {getAllCountries &&
+                                                        getAllCountries?.map((val) => {
+                                                            return (
+                                                                <option key={val?._id} value={val?.currencyName}>
+                                                                    {val?.currencySymbol}
+                                                                    &nbsp; &nbsp; &nbsp;
+                                                                    {val?.currencyName}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                </Field>
                                             </div>
                                         </Col>
                                     </Row>
@@ -177,9 +217,10 @@ const CustomersModal = ({ data }) => {
                                                 <PhoneInput
                                                     placeholder="Enter phone number"
                                                     name="businessNumber"
-                                                    value={companyPhoneNumber && formatPhoneNumberIntl(companyPhoneNumber)}
+                                                    value={companyPhoneNumber}
                                                     onChange={(e) => {
                                                         setCompanyPhoneNumber(e);
+                                                        console.log(e);
                                                     }}
                                                 />
                                             </div>

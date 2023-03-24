@@ -10,6 +10,6 @@ const route = [
     { path: '/register', exact: true, name: 'Register', component: Register },
     { path: '/forgot_password', exact: true, name: 'ForgotPassword', component: ForgotPassword },
     { path: '/change_password', exact: true, name: 'ChangePassword', component: ChangePassword },
-    { path: '/estimates/estimates_preview', exact: true, name: 'EstimatePreview', component: EstimatePreview }
+    { path: '/estimates_preview', exact: true, name: 'EstimatePreview', component: EstimatePreview }
 ];
 export default route;

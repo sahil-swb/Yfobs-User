@@ -30,7 +30,7 @@ const EstimateDetails = () => {
                                 <Dropdown.Item href="#/action-2">Convert to Invoice</Dropdown.Item>
                                 <Dropdown.Item href="#/action-3">Export as PDF</Dropdown.Item>
                                 <Dropdown.Item href="#/action-3">Send</Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/estimates/estimates_preview">
+                                <Dropdown.Item as={Link} target="_blank" to="/estimates_preview">
                                     Preview as a Customer
                                 </Dropdown.Item>
                                 <Dropdown.Item href="#/action-3">Delete</Dropdown.Item>

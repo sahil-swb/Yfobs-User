@@ -9,6 +9,7 @@ import { getAllCustomersApi } from '../../slices/customersSlice';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import favicon from '../../assets/images/favicon-32x32.png';
 import JoditEditor from 'jodit-react';
+import { createEstimateApi } from '../../slices/estimatesSlice';
 
 const CreateEstimate = () => {
     const [modalOpenType, setModalTypeOpen] = useState('');
@@ -19,11 +20,46 @@ const CreateEstimate = () => {
     useEffect(() => {
         dispatch(getAllCustomersApi());
     }, []);
-    console.log(getAllCustomers);
 
     const handleFooterText = (e) => {
         const fText = e;
         setFooterText(fText);
+    };
+
+    const handleSubmit = (values, resetForm) => {
+        const payload = {
+            businessId: values?.businessId,
+            title: values?.title,
+            type: values?.type,
+            recurring: values?.recurring,
+            parentId: values?.parentId,
+            summary: values?.summary,
+            number: values?.number,
+            posoNumber: values?.posoNumber,
+            challanNo: values?.challanNo,
+            isBankDetails: values?.isBankDetails,
+            customerId: values?.customerId,
+            date: values?.date,
+            discount: values?.discount,
+            expireOn: values?.expireOn,
+            footerNote: values?.footerNote,
+            subTotal: values?.subTotal,
+            tax: values?.tax,
+            grandTotal: values?.grandTotal,
+            convertTotal: values?.convertTotal,
+            status: values?.status,
+            ccMail: values?.ccMail,
+            isAttchpdf: values?.isAttchpdf,
+            isSent: values?.isSent,
+            isCompleted: values?.isCompleted,
+            sentDate: values?.sentDate,
+            nextPayment: values?.nextPayment,
+            frequencyCount: values?.frequencyCount,
+            autoSend: values?.autoSend,
+            sendMyself: values?.sendMyself
+        };
+
+        dispatch(createEstimateApi({ payload }));
     };
 
     console.log(footerText);
@@ -40,18 +76,20 @@ const CreateEstimate = () => {
                     <div>
                         <Formik
                             initialValues={{
-                                isBankDetails: '',
-                                isAttchPdf: '',
                                 businessId: '',
                                 title: '',
                                 type: '',
                                 recurring: '',
+                                parentId: '',
                                 summary: '',
                                 number: '',
                                 posoNumber: '',
-                                isBankdetails: '',
+                                challanNo: '',
+                                isBankDetails: '',
+                                customerId: '',
                                 date: '',
                                 discount: '',
+                                expireOn: '',
                                 footerNote: '',
                                 subTotal: '',
                                 tax: '',
@@ -62,10 +100,13 @@ const CreateEstimate = () => {
                                 isAttchpdf: '',
                                 isSent: '',
                                 isCompleted: '',
+                                sentDate: '',
+                                nextPayment: '',
                                 frequencyCount: '',
                                 autoSend: '',
-                                customers: ''
+                                sendMyself: ''
                             }}
+                            onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
                             <Form>
                                 <Accordion defaultActiveKey="0">
@@ -228,6 +269,10 @@ const CreateEstimate = () => {
                                         <JoditEditor value={footerText} onChange={handleFooterText} />
                                     </Card.Body>
                                 </Card>
+
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Button type="submit">Save Estimate</Button>
+                                </div>
                             </Form>
                         </Formik>
                     </div>

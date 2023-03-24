@@ -12,7 +12,7 @@ import {
 const initialState = {
     isLoading: false,
     getAllEstimates: [],
-    createEstimate: []
+    createEstimate: {}
 };
 
 export const createEstimateApi = createAsyncThunk('user/createEstimate', async ({ payload }, { rejectWithValue }) => {

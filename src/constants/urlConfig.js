@@ -30,3 +30,7 @@ export const USER_CREATE_ESTIMATES = 'Estimates/createEstimates';
 export const USER_GET_ALL_ESTIMATES = 'Estimates/getAllEstimates';
 export const USER_UPDATE_ESTIMATES = 'Estimates/updateEstimates/';
 export const USER_DELETE_ESTIMATES = 'Estimates/deleteEstimates/';
+
+//Countries Api
+export const USER_GETALL_COUNTRIES = 'Country/getAllCountry';
+export const USER_GETALL_STATES = 'state/getAllState';
