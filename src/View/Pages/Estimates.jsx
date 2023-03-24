@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, ButtonGroup, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CommonDataTable from '../../components/CommonDataTable';
@@ -33,19 +33,9 @@ const Estimates = () => {
             selector: (row) => {
                 return (
                     <div>
-                        <i
-                            onClick={() => handleEdit(row)}
-                            className="icon feather icon-edit f-22 text-c-blue mr-3"
-                            role="button"
-                            aria-hidden="true"
-                        />
-
-                        <i
-                            onClick={() => handleDelete(row)}
-                            className="icon feather icon-trash-2 f-22 text-c-red"
-                            role="button"
-                            aria-hidden="true"
-                        />
+                        <Link to="/estimates/estimates_details">
+                            <Button>View</Button>
+                        </Link>
                     </div>
                 );
             }

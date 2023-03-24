@@ -45,6 +45,10 @@ const App = () => {
                         <AdminLayout />
                     </Route>
 
+                    {/* <Route path="/estimates/estimates_preview">
+                        <EstimatePreview />
+                    </Route> */}
+
                     {/* <Route path={'/'} exact>
                         <Redirect to={Config.defaultPath} />
                     </Route> */}

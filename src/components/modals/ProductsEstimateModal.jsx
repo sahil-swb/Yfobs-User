@@ -13,7 +13,6 @@ const ProductsEstimateModal = () => {
 
     const handleChange = (e) => {
         let keyword = e.target.value;
-
         if (keyword !== '') {
             const results = getAllProducts.filter((val) => {
                 return val?.name.toLowerCase().startsWith(keyword.toLowerCase());
@@ -29,7 +28,7 @@ const ProductsEstimateModal = () => {
         dispatch(getAllProductsApi());
     }, []);
 
-    console.log(foundItems);
+    console.log('foundItems', foundItems);
     return (
         <Modal
             show={modalIsOpen}
