@@ -41,10 +41,8 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
         response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
 
         if (response?.data?.status) {
-            // successPNotify(response?.data?.message);
-            console.log(response?.data?.token);
             localStorage.setItem('authToken', response?.data?.token);
-            // history.push('/dashboard');
+            history.push('/dashboard');
             // navigate('/dashboard');
             return response?.data;
         } else {
