@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, ButtonGroup, Card, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CommonDataTable from '../../components/CommonDataTable';
@@ -10,16 +10,26 @@ const Estimates = () => {
     const columns = [
         {
             name: 'Status',
-            selector: (row) => row.status,
+            selector: (row) =>
+                row?.status === 'expire' ? (
+                    <Badge className="bg-danger text-white">{row?.status.toUpperCase()}</Badge>
+                ) : (
+                    <Badge className="bg-primary text-white">{row?.status.toUpperCase()}</Badge>
+                ),
             sortable: true
         },
         {
-            name: 'Name',
+            name: 'Date',
             selector: (row) => row.date,
             sortable: true
         },
         {
             name: 'Estimate No',
+            selector: (row) => row.number,
+            sortable: true
+        },
+        {
+            name: 'Customer',
             selector: (row) => row.number,
             sortable: true
         },
@@ -42,19 +52,11 @@ const Estimates = () => {
         }
     ];
 
-    const { getAllEstimates, createEstimate } = useSelector((state) => state.estimateReducer);
+    const { getAllEstimates, createEstimate, deleteEstimate, updateEstimate } = useSelector((state) => state.estimateReducer);
     const dispatch = useDispatch();
-    const handleEdit = () => {
-        console.log('handleEdit');
-    };
-
-    const handleDelete = () => {
-        console.log('handleDelete');
-    };
-
     useEffect(() => {
         dispatch(getAllEstimatesApi());
-    }, []);
+    }, [createEstimate, deleteEstimate, updateEstimate]);
     return (
         <Card>
             <Card.Header className="d-flex justify-content-between align-items-center">

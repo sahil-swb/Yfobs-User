@@ -14,12 +14,12 @@ import { createEstimateApi } from '../../slices/estimatesSlice';
 const CreateEstimate = () => {
     const [modalOpenType, setModalTypeOpen] = useState('');
     const [footerText, setFooterText] = useState('');
-    const { getAllCustomers } = useSelector((state) => state.customers);
+    const { getAllCustomers, createCustomer } = useSelector((state) => state.customers);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getAllCustomersApi());
-    }, []);
+    }, [createCustomer]);
 
     const handleFooterText = (e) => {
         const fText = e;
@@ -30,36 +30,17 @@ const CreateEstimate = () => {
         const payload = {
             businessId: values?.businessId,
             title: values?.title,
-            type: values?.type,
-            recurring: values?.recurring,
-            parentId: values?.parentId,
             summary: values?.summary,
+            ccMail: values?.ccMail,
             number: values?.number,
             posoNumber: values?.posoNumber,
-            challanNo: values?.challanNo,
-            isBankDetails: values?.isBankDetails,
-            customerId: values?.customerId,
             date: values?.date,
-            discount: values?.discount,
             expireOn: values?.expireOn,
-            footerNote: values?.footerNote,
-            subTotal: values?.subTotal,
-            tax: values?.tax,
-            grandTotal: values?.grandTotal,
-            convertTotal: values?.convertTotal,
-            status: values?.status,
-            ccMail: values?.ccMail,
-            isAttchpdf: values?.isAttchpdf,
-            isSent: values?.isSent,
-            isCompleted: values?.isCompleted,
-            sentDate: values?.sentDate,
-            nextPayment: values?.nextPayment,
-            frequencyCount: values?.frequencyCount,
-            autoSend: values?.autoSend,
-            sendMyself: values?.sendMyself
+            subTotal: values?.subTotal
         };
 
         dispatch(createEstimateApi({ payload }));
+        resetForm({ payload: '' });
     };
 
     console.log(footerText);
@@ -78,33 +59,14 @@ const CreateEstimate = () => {
                             initialValues={{
                                 businessId: '',
                                 title: '',
-                                type: '',
-                                recurring: '',
-                                parentId: '',
                                 summary: '',
+                                select_customer: '',
+                                ccMail: '',
                                 number: '',
                                 posoNumber: '',
-                                challanNo: '',
-                                isBankDetails: '',
-                                customerId: '',
                                 date: '',
-                                discount: '',
                                 expireOn: '',
-                                footerNote: '',
-                                subTotal: '',
-                                tax: '',
-                                grandTotal: '',
-                                convertTotal: '',
-                                status: '',
-                                ccMail: '',
-                                isAttchpdf: '',
-                                isSent: '',
-                                isCompleted: '',
-                                sentDate: '',
-                                nextPayment: '',
-                                frequencyCount: '',
-                                autoSend: '',
-                                sendMyself: ''
+                                subTotal: ''
                             }}
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
@@ -154,10 +116,15 @@ const CreateEstimate = () => {
                                             <Col>
                                                 <div className="w-50">
                                                     <div className="mb-3">
-                                                        <Field className="form-control mb-3 border rounded" name="customers" as="select">
-                                                            {getAllCustomers.map((val) => {
-                                                                return <option key={val?._id}>{val?.name}</option>;
-                                                            })}
+                                                        <Field
+                                                            className="form-control mb-3 border rounded"
+                                                            name="select_customer"
+                                                            as="select"
+                                                        >
+                                                            <option>Select Customer</option>
+                                                            {getAllCustomers.map((val) => (
+                                                                <option key={val?._id}>{val?.name}</option>
+                                                            ))}
                                                         </Field>
                                                         <Button
                                                             onClick={() => {
@@ -174,6 +141,7 @@ const CreateEstimate = () => {
                                                         <label>Other E-mail Send</label>
                                                         <Field className="form-control border rounded" name="ccMail" type="email" />
                                                     </div>
+                                                    <div>{/* <h3>{}</h3> */}</div>
                                                 </div>
                                             </Col>
                                             <Col>
@@ -184,15 +152,15 @@ const CreateEstimate = () => {
                                                     </div>
                                                     <div>
                                                         <label>P.O./S.O. number</label>
-                                                        <Field className="form-control border rounded" name="number" type="number" />
+                                                        <Field className="form-control border rounded" name="posoNumber" type="number" />
                                                     </div>
                                                     <div>
                                                         <label>Estimate date</label>
-                                                        <Field className="form-control border rounded" name="number" type="number" />
+                                                        <Field className="form-control border rounded" name="date" type="date" />
                                                     </div>
                                                     <div>
                                                         <label>Expires on</label>
-                                                        <Field className="form-control border rounded" name="number" type="number" />
+                                                        <Field className="form-control border rounded" name="expireOn" type="date" />
                                                     </div>
                                                 </div>
                                             </Col>
