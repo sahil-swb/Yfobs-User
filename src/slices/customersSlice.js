@@ -11,13 +11,18 @@ import {
     USER_CREATE_CUSTOMER,
     USER_DELETE_CUSTOMER,
     USER_GET_ALL_CUSTOMERS,
+    USER_GET_CUSTOMER_BYID,
     USER_UPDATE_CUSTOMER
 } from '../constants/urlConfig';
 
 //INITIAL STATES
 const initialState = {
     getAllCustomers: [],
-    isLoading: false
+    isLoading: false,
+    createCustomer: {},
+    deleteCustomer: {},
+    updateCustomer: {},
+    getSingleCustomerData: {}
 };
 
 //APICALL FOR CREATING CUSTOMER USING THUNK
@@ -80,6 +85,21 @@ export const deleteCustomerApi = createAsyncThunk('user/deleteCustomer', async (
     }
 });
 
+export const getCustomerById = createAsyncThunk('user/getCustomerById', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_CUSTOMER_BYID}${payload._id}`, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+        console.log(response?.data?.message);
+        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        console.log(error?.response?.data);
+        return rejectWithValue(error.response.data);
+    }
+});
+
 //CUSTOMER SLICE
 const customersSlice = createSlice({
     name: 'customerSlice',
@@ -90,8 +110,9 @@ const customersSlice = createSlice({
             .addCase(createCustomerApi.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(createCustomerApi.fulfilled, (state) => {
+            .addCase(createCustomerApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.createCustomer = action.payload;
             })
             .addCase(createCustomerApi.rejected, (state) => {
                 state.isLoading = false;
@@ -111,8 +132,9 @@ const customersSlice = createSlice({
             .addCase(updateCustomerApi.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(updateCustomerApi.fulfilled, (state) => {
+            .addCase(updateCustomerApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.updateCustomer = action.payload;
             })
             .addCase(updateCustomerApi.rejected, (state) => {
                 state.isLoading = false;
@@ -121,10 +143,21 @@ const customersSlice = createSlice({
             .addCase(deleteCustomerApi.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(deleteCustomerApi.fulfilled, (state) => {
+            .addCase(deleteCustomerApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.deleteCustomer = action.payload;
             })
             .addCase(deleteCustomerApi.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(getCustomerById.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getCustomerById.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getSingleCustomerData = action.payload;
+            })
+            .addCase(getCustomerById.rejected, (state) => {
                 state.isLoading = false;
             });
     }

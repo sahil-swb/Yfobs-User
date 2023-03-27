@@ -17,7 +17,10 @@ import {
 //INITIAL STATES
 const initialState = {
     isLoading: false,
-    getAllCategories: []
+    getAllData: [],
+    updateData: {},
+    deleteData: {},
+    createData: {}
 };
 
 //APICALL FOR CREATING CATEGORY USING THUNK
@@ -90,7 +93,7 @@ const categoriesSlice = createSlice({
             })
             .addCase(createCategoryApi.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.createCategory = action.payload;
+                state.createData = action.payload;
             })
             .addCase(createCategoryApi.rejected, (state, action) => {
                 state.isLoading = false;
@@ -101,7 +104,7 @@ const categoriesSlice = createSlice({
             })
             .addCase(getAllCategoriesApi.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.getAllCategories = action.payload;
+                state.getAllData = action.payload;
             })
             .addCase(getAllCategoriesApi.rejected, (state, action) => {
                 state.isLoading = false;
@@ -112,6 +115,7 @@ const categoriesSlice = createSlice({
             })
             .addCase(updateCategoryApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.updateData = action.payload;
             })
             .addCase(updateCategoryApi.rejected, (state, action) => {
                 state.isLoading = false;
@@ -119,14 +123,13 @@ const categoriesSlice = createSlice({
             //CASES FOR DELETING CATEGORY
             .addCase(deleteCategoryApi.pending, (state, action) => {
                 state.isLoading = true;
-                state.deleteIsLoading = false;
             })
             .addCase(deleteCategoryApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.deleteData = action.payload;
             })
             .addCase(deleteCategoryApi.rejected, (state, action) => {
                 state.isLoading = false;
-                state.deleteIsLoading = false;
             });
     }
 });

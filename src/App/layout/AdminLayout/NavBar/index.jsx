@@ -6,7 +6,7 @@ import NavLeft from './NavLeft';
 import NavRight from './NavRight';
 import DEMO from '../../../../store/constant';
 import * as actionTypes from '../../../../store/actions';
-import logo from '../../../../assets/images/logo.png';
+import logo from '../../../../assets/images/logo-yFobs.png';
 const NavBar = () => {
     const dispatch = useDispatch();
     const { windowWidth } = useWindowSize();
@@ -64,7 +64,7 @@ const NavBar = () => {
                     <span />
                 </a>
                 <a href={DEMO.BLANK_LINK} className="b-brand">
-                    <img id="main-logo" src={mainLogo} alt="" className="logo" />
+                    <img id="main-logo" src={mainLogo} alt="" className="logo" width={100} />
                 </a>
                 <a className="mob-toggler" href={DEMO.BLANK_LINK} onClick={() => setRightToggle(!rightToggle)}>
                     <i className="feather icon-more-vertical" />

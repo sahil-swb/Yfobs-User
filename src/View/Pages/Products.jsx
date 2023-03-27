@@ -55,12 +55,12 @@ const Products = () => {
     ];
 
     const [rowData, setRowData] = useState(null);
-    const { getAllProducts } = useSelector((state) => state.productsReducer);
+    const { getAllProducts, updateData, deleteData, createData } = useSelector((state) => state.productsReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getAllProductsApi());
-    }, []);
+    }, [updateData, deleteData, createData]);
 
     const handleDelete = (row) => {
         setRowData(row);
@@ -84,7 +84,7 @@ const Products = () => {
                             dispatch(commonModalType(!'EDIT'));
                         }}
                         size="sm"
-                        className="d-flex align-items-center"
+                        className="d-flex align-items-center p-2"
                     >
                         <i className="feather icon-plus f-20" />
                         <div>New Product</div>

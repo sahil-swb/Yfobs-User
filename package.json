@@ -93,7 +93,7 @@
         "react-stickies": "0.0.16",
         "react-tag-autocomplete": "^6.3.0",
         "react-text-mask": "^5.4.3",
-        "react-to-print": "^2.14.4",
+        "react-to-print": "^2.14.12",
         "react-toast-notifications": "^2.5.1",
         "react-toastify": "^9.1.1",
         "react-useinterval": "^1.0.2",

@@ -20,6 +20,9 @@ const AdminLayout = lazy(() => import('./layout/AdminLayout'));
 const App = () => {
     const location = useLocation();
 
+    let loginData = localStorage.getItem('authToken');
+    console.log(loginData);
+
     return (
         <>
             <ScrollToTop>
@@ -38,23 +41,17 @@ const App = () => {
                             })}
                         </Switch>
                     </Route>
-
-                    {/* <Route path={routes.map((x) => x.path)}>
-                        <AdminLayout />
-                    </Route>
-
-                    <Route path="/">
-                        <Login />
-                        <Register />
-                        <ForgotPassword />
-                        <ChangePassword />
-                    </Route> */}
                     <Route path={routes.map((x) => x.path)}>
                         <AdminLayout />
                     </Route>
-                    <Route path={'/'} exact>
+
+                    {/* <Route path="/estimates/estimates_preview">
+                        <EstimatePreview />
+                    </Route> */}
+
+                    {/* <Route path={'/'} exact>
                         <Redirect to={Config.defaultPath} />
-                    </Route>
+                    </Route> */}
                 </Suspense>
             </ScrollToTop>
             <div className="backdrop" />

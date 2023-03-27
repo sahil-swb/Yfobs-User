@@ -1,11 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import React from 'react';
-import { USER_CREATE_ESTIMATES, USER_DELETE_ESTIMATES, USER_GET_ALL_ESTIMATES, USER_UPDATE_ESTIMATES } from '../constants/UrlConfig';
+import {
+    BASE_URL_FOR_USER,
+    USER_CREATE_ESTIMATES,
+    USER_DELETE_ESTIMATES,
+    USER_GET_ALL_ESTIMATES,
+    USER_UPDATE_ESTIMATES
+} from '../constants/urlConfig';
 
 const initialState = {
     isLoading: false,
     getAllEstimates: [],
-    createEstimate: []
+    createEstimate: {},
+    deleteEstimate: {},
+    updateEstimate: {}
 };
 
 export const createEstimateApi = createAsyncThunk('user/createEstimate', async ({ payload }, { rejectWithValue }) => {
@@ -14,7 +23,7 @@ export const createEstimateApi = createAsyncThunk('user/createEstimate', async (
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
-        return response?.data;
+        return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
         return rejectWithValue(error?.response?.data);
@@ -38,7 +47,7 @@ export const updateEstimateApi = createAsyncThunk('user/updateEstimate', async (
         const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_ESTIMATES}${payload.id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
+        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error.response);
@@ -91,6 +100,7 @@ const estimatesSlice = createSlice({
             })
             .addCase(updateEstimateApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.updateEstimate = action.payload;
             })
             .addCase(updateEstimateApi.rejected, (state, action) => {
                 state.isLoading = false;
@@ -101,6 +111,7 @@ const estimatesSlice = createSlice({
             })
             .addCase(deleteEstimateApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.deleteEstimate = action.payload;
             })
             .addCase(deleteEstimateApi.rejected, (state, action) => {
                 state.isLoading = false;
