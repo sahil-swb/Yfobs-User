@@ -25,6 +25,7 @@ export const USER_CREATE_PRODUCTS = 'Product/createProduct';
 export const USER_GET_ALL_PRODUCTS = 'Product/getAllProduct';
 export const USER_UPDATE_PRODUCTS = 'Product/updateProduct/';
 export const USER_DELETE_PRODUCTS = 'Product/deleteProduct/';
+export const USER_GETBYID_PRODUCTS = 'Product/getProduct/';
 
 //Estimates Api
 export const USER_CREATE_ESTIMATES = 'Estimates/createEstimates';

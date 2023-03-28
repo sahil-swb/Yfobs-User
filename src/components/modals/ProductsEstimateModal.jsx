@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Badge, ListGroup, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
-import { getAllProductsApi } from '../../slices/productsSlice';
+import { getAllProductsApi, getSingleProductApi } from '../../slices/productsSlice';
+import { getCustomerById } from '../../slices/customersSlice';
 
 const ProductsEstimateModal = () => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
-    const { getAllProducts } = useSelector((state) => state.productsReducer);
+    const { getAllProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const [itemName, setItemName] = useState('');
     const [foundItems, setFoundItems] = useState(getAllProducts);
     const dispatch = useDispatch();
@@ -24,11 +25,19 @@ const ProductsEstimateModal = () => {
         setItemName(keyword);
     };
 
+    const handleSubmit = (id) => {
+        console.log(id);
+        const payload = {
+            _id: id
+        };
+        dispatch(getSingleProductApi({ payload }));
+    };
+
+    console.log(getSingleProduct);
+
     useEffect(() => {
         dispatch(getAllProductsApi());
     }, []);
-
-    console.log('foundItems', foundItems);
     return (
         <Modal
             show={modalIsOpen}
@@ -56,7 +65,7 @@ const ProductsEstimateModal = () => {
                     {foundItems && foundItems.length > 0 ? (
                         foundItems.map((val) => {
                             return (
-                                <ListGroup.Item action variant="light" key={val?._id}>
+                                <ListGroup.Item action variant="light" key={val?._id} onClick={() => handleSubmit(val._id)}>
                                     <div className="d-flex" style={{ justifyContent: 'space-between' }}>
                                         <div>
                                             <div className="font-weight-bold h5 text-dark">

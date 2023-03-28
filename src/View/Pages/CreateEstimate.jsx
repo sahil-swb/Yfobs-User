@@ -1,5 +1,5 @@
-import { Field, Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { Field, FieldArray, Form, Formik } from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, Badge, Button, Card, Col, ListGroup, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -18,9 +18,15 @@ const CreateEstimate = () => {
     const [currencySign, setCurrencySign] = useState('');
     const [countryId, setCountryId] = useState('');
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
+    const { getEstimateProducts } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
+    const [inputs, setInputs] = useState({});
+    const [quantity, setQuantity] = useState(1);
+    // const formikRef = useRef();
     const dispatch = useDispatch();
+
+    // const { setFieldValue } = useFormikContext();
 
     const handleSubmit = (values, resetForm) => {
         const payload = {
@@ -57,6 +63,18 @@ const CreateEstimate = () => {
         setFooterText(fText);
     };
 
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setInputs((values) => ({ ...values, [name]: value }));
+    };
+
+    const handleQuantity = (e) => {
+        setQuantity(e.target.value);
+    };
+
+    // console.log(quantity);
+
     useEffect(() => {
         dispatch(getAllCustomersApi());
     }, [createCustomer, getSingleCustomerData]);
@@ -75,7 +93,7 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
-    // console.log(countryPrefillValue);
+    console.log(getEstimateProducts);
     return (
         <>
             <Row>
@@ -98,218 +116,252 @@ const CreateEstimate = () => {
                                 date: '',
                                 expireOn: '',
                                 subTotal: ''
+                                // estimateProducts: getEstimateProducts
                             }}
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
-                            <Form>
-                                <Accordion defaultActiveKey="0">
+                            {({ values }) => (
+                                <Form>
+                                    {console.log(values.estimateProducts)}
+                                    <Accordion defaultActiveKey="0">
+                                        <Card>
+                                            <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
+                                                Business address and contact details, title, summary, and logo
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <Card.Body>
+                                                    <Row className="d-flex align-items-center">
+                                                        <Col>
+                                                            <div>
+                                                                <img src={favicon} width={40} alt="Company Logo" />
+                                                            </div>
+                                                            <div>
+                                                                <strong>SilverWebbuzz</strong>, india
+                                                            </div>
+                                                        </Col>
+                                                        <Col>
+                                                            <div className="mb-2">
+                                                                <Field
+                                                                    className="form-control border rounded"
+                                                                    name="title"
+                                                                    type="text"
+                                                                    placeholder="Title"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <Field
+                                                                    className="form-control border rounded"
+                                                                    name="summary"
+                                                                    type="text"
+                                                                    placeholder="Summary example: project name, description of estimate"
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+                                    </Accordion>
                                     <Card>
-                                        <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
-                                            Business address and contact details, title, summary, and logo
-                                        </Accordion.Toggle>
-                                        <Accordion.Collapse eventKey="0">
-                                            <Card.Body>
-                                                <Row className="d-flex align-items-center">
-                                                    <Col>
-                                                        <div>
-                                                            <img src={favicon} width={40} alt="Company Logo" />
+                                        <Card.Body>
+                                            <Row className="mb-4">
+                                                <Col>
+                                                    <div className="w-50">
+                                                        <div className="mb-3">
+                                                            <select
+                                                                className="form-control mb-3 border rounded"
+                                                                onChange={(e) => handleChangeCustomer(e)}
+                                                            >
+                                                                <option value="">Select Customer</option>
+                                                                {getAllCustomers.map((val) => (
+                                                                    <option value={val._id} key={val?._id}>
+                                                                        {val?.name}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    dispatch(commonModalIsOpen(true));
+                                                                    dispatch(commonModalType('ADD'));
+                                                                    setModalTypeOpen('CUSTOMERS');
+                                                                }}
+                                                                variant="outline-primary"
+                                                            >
+                                                                Add a customer
+                                                            </Button>
                                                         </div>
                                                         <div>
-                                                            <strong>SilverWebbuzz</strong>, india
+                                                            <label>Other E-mail Send</label>
+                                                            <Field className="form-control border rounded" name="ccMail" type="email" />
                                                         </div>
-                                                    </Col>
-                                                    <Col>
-                                                        <div className="mb-2">
+                                                        <div className="font-weight-bold">
+                                                            {getSingleCustomerData?._id && (
+                                                                <div>
+                                                                    <div className="my-3">
+                                                                        <span>
+                                                                            Currency: {getSingleCustomerData?.currencyName} - (
+                                                                            {currencySign})
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="my-3">
+                                                                        <span>Country: </span>
+                                                                        <select
+                                                                            className="form-control mb-3 border rounded mt-2"
+                                                                            onChange={(e) => handleCountryChange(e)}
+                                                                        >
+                                                                            <option value="">Select Country</option>
+                                                                            {getAllCountries?.map((val) => (
+                                                                                <option value={val._id} key={val?._id}>
+                                                                                    {val?.countryName}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                            {countryId && (
+                                                                <div className="my-3">
+                                                                    <span>State: </span>
+                                                                    <select className="form-control mb-3 border rounded mt-2">
+                                                                        <option value="">Select State</option>
+                                                                        {getAllStates?.map((val) => (
+                                                                            <option key={val?._id}>{val?.name}</option>
+                                                                        ))}
+                                                                    </select>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                                <Col>
+                                                    <div className="w-50 mr-0 ml-auto">
+                                                        <div className="">
+                                                            <label>Estimate number</label>
+                                                            <Field className="form-control border rounded" name="number" type="number" />
+                                                        </div>
+                                                        <div>
+                                                            <label>P.O./S.O. number</label>
                                                             <Field
                                                                 className="form-control border rounded"
-                                                                name="title"
-                                                                type="text"
-                                                                placeholder="Title"
+                                                                name="posoNumber"
+                                                                type="number"
                                                             />
                                                         </div>
                                                         <div>
-                                                            <Field
-                                                                className="form-control border rounded"
-                                                                name="summary"
-                                                                type="text"
-                                                                placeholder="Summary example: project name, description of estimate"
-                                                            />
+                                                            <label>Estimate date</label>
+                                                            <Field className="form-control border rounded" name="date" type="date" />
                                                         </div>
-                                                    </Col>
-                                                </Row>
-                                            </Card.Body>
-                                        </Accordion.Collapse>
-                                    </Card>
-                                </Accordion>
-                                <Card>
-                                    <Card.Body>
-                                        <Row className="mb-4">
-                                            <Col>
-                                                <div className="w-50">
-                                                    <div className="mb-3">
-                                                        <select
-                                                            className="form-control mb-3 border rounded"
-                                                            onChange={(e) => handleChangeCustomer(e)}
-                                                        >
-                                                            <option value="">Select Customer</option>
-                                                            {getAllCustomers.map((val) => (
-                                                                <option value={val._id} key={val?._id}>
-                                                                    {val?.name}
-                                                                </option>
-                                                            ))}
-                                                        </select>
+                                                        <div>
+                                                            <label>Expires on</label>
+                                                            <Field className="form-control border rounded" name="expireOn" type="date" />
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row className="">
+                                                <Col lg={{ span: 10, offset: 1 }}>
+                                                    <div>
+                                                        <Table responsive striped bordered hover size="sm">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Item</th>
+                                                                    <th>Price</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {getEstimateProducts?.map((val) => (
+                                                                    <tr>
+                                                                        <td>
+                                                                            <input
+                                                                                className="form-control border rounded"
+                                                                                type="text"
+                                                                                name="productName"
+                                                                                defaultValue={val.name}
+                                                                                onChange={handleChange}
+                                                                            />
+                                                                        </td>
+                                                                        <td>
+                                                                            <input
+                                                                                className="form-control border rounded"
+                                                                                type="number"
+                                                                                name="productPrice"
+                                                                                defaultValue={val.price}
+                                                                                onChange={handleChange}
+                                                                            />
+                                                                        </td>
+                                                                        <td>
+                                                                            <input
+                                                                                className="form-control border rounded"
+                                                                                type="number"
+                                                                                value={quantity}
+                                                                                onChange={handleQuantity}
+                                                                            />
+                                                                        </td>
+                                                                        <td>{val.price * quantity}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </Table>
                                                         <Button
                                                             onClick={() => {
                                                                 dispatch(commonModalIsOpen(true));
                                                                 dispatch(commonModalType('ADD'));
-                                                                setModalTypeOpen('CUSTOMERS');
+                                                                setModalTypeOpen('PRODUCTS');
                                                             }}
                                                             variant="outline-primary"
                                                         >
-                                                            Add a customer
+                                                            Add an Item
                                                         </Button>
                                                     </div>
-                                                    <div>
-                                                        <label>Other E-mail Send</label>
-                                                        <Field className="form-control border rounded" name="ccMail" type="email" />
+                                                    <div className="text-right font-weight-bold h5">
+                                                        <ListGroup variant="flush">
+                                                            <ListGroup.Item>
+                                                                <span className="mr-5">Sub Total</span> {currencySign} 0
+                                                            </ListGroup.Item>
+                                                            <ListGroup.Item>
+                                                                <label className="mr-3">Discount in %</label>
+                                                                <Field
+                                                                    className="mr-5 rounded p-1"
+                                                                    style={{ width: '40px' }}
+                                                                    name="discount"
+                                                                    type="number"
+                                                                />
+                                                                <span>{currencySign} 0</span>
+                                                            </ListGroup.Item>
+                                                            <ListGroup.Item>
+                                                                <label className="mr-3">Tax in %</label>
+                                                                <Field
+                                                                    className="mr-5 rounded p-1"
+                                                                    style={{ width: '40px' }}
+                                                                    name="tax"
+                                                                    type="number"
+                                                                />
+                                                                <span>{currencySign} 0</span>
+                                                            </ListGroup.Item>
+                                                            <ListGroup.Item>
+                                                                <span className="mr-5"> Grand Total</span>
+                                                                {currencySign} 0
+                                                            </ListGroup.Item>
+                                                        </ListGroup>
                                                     </div>
-                                                    <div className="font-weight-bold">
-                                                        {getSingleCustomerData?._id && (
-                                                            <div>
-                                                                <div className="my-3">
-                                                                    <span>
-                                                                        Currency: {getSingleCustomerData?.currencyName} - ({currencySign})
-                                                                    </span>
-                                                                </div>
-                                                                <div className="my-3">
-                                                                    <span>Country: </span>
-                                                                    <select
-                                                                        className="form-control mb-3 border rounded mt-2"
-                                                                        onChange={(e) => handleCountryChange(e)}
-                                                                    >
-                                                                        <option value="">Select Country</option>
-                                                                        {getAllCountries?.map((val) => (
-                                                                            <option value={val._id} key={val?._id}>
-                                                                                {val?.countryName}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        {countryId && (
-                                                            <div className="my-3">
-                                                                <span>State: </span>
-                                                                <select className="form-control mb-3 border rounded mt-2">
-                                                                    <option value="">Select State</option>
-                                                                    {getAllStates?.map((val) => (
-                                                                        <option key={val?._id}>{val?.name}</option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </Col>
-                                            <Col>
-                                                <div className="w-50 mr-0 ml-auto">
-                                                    <div className="">
-                                                        <label>Estimate number</label>
-                                                        <Field className="form-control border rounded" name="number" type="number" />
-                                                    </div>
-                                                    <div>
-                                                        <label>P.O./S.O. number</label>
-                                                        <Field className="form-control border rounded" name="posoNumber" type="number" />
-                                                    </div>
-                                                    <div>
-                                                        <label>Estimate date</label>
-                                                        <Field className="form-control border rounded" name="date" type="date" />
-                                                    </div>
-                                                    <div>
-                                                        <label>Expires on</label>
-                                                        <Field className="form-control border rounded" name="expireOn" type="date" />
-                                                    </div>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="">
-                                            <Col lg={{ span: 10, offset: 1 }}>
-                                                <div>
-                                                    <Table responsive striped bordered hover size="sm">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Item</th>
-                                                                <th>Price</th>
-                                                                <th>Quantity</th>
-                                                                <th>Total</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>1</td>
-                                                                <td>Mark</td>
-                                                                <td>Otto</td>
-                                                                <td>@mdo</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </Table>
-                                                    <Button
-                                                        onClick={() => {
-                                                            dispatch(commonModalIsOpen(true));
-                                                            dispatch(commonModalType('ADD'));
-                                                            setModalTypeOpen('PRODUCTS');
-                                                        }}
-                                                        variant="outline-primary"
-                                                    >
-                                                        Add an Item
-                                                    </Button>
-                                                </div>
-                                                <div className="text-right font-weight-bold h5">
-                                                    <ListGroup variant="flush">
-                                                        <ListGroup.Item>
-                                                            <span className="mr-5">Sub Total</span> {currencySign} 0
-                                                        </ListGroup.Item>
-                                                        <ListGroup.Item>
-                                                            <label className="mr-3">Discount in %</label>
-                                                            <Field
-                                                                className="mr-5 rounded p-1"
-                                                                style={{ width: '40px' }}
-                                                                name="discount"
-                                                                type="number"
-                                                            />
-                                                            <span>{currencySign} 0</span>
-                                                        </ListGroup.Item>
-                                                        <ListGroup.Item>
-                                                            <label className="mr-3">Tax in %</label>
-                                                            <Field
-                                                                className="mr-5 rounded p-1"
-                                                                style={{ width: '40px' }}
-                                                                name="tax"
-                                                                type="number"
-                                                            />
-                                                            <span>{currencySign} 0</span>
-                                                        </ListGroup.Item>
-                                                        <ListGroup.Item>
-                                                            <span className="mr-5"> Grand Total</span>
-                                                            {currencySign} 0
-                                                        </ListGroup.Item>
-                                                    </ListGroup>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Card.Body>
-                                </Card>
-                                <Card>
-                                    <Card.Header as="h4">Footer</Card.Header>
-                                    <Card.Body>
-                                        <JoditEditor value={footerText} onChange={handleFooterText} />
-                                    </Card.Body>
-                                </Card>
+                                                </Col>
+                                            </Row>
+                                        </Card.Body>
+                                    </Card>
+                                    <Card>
+                                        <Card.Header as="h4">Footer</Card.Header>
+                                        <Card.Body>
+                                            <JoditEditor value={footerText} onChange={handleFooterText} />
+                                        </Card.Body>
+                                    </Card>
 
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Button type="submit">Save Estimate</Button>
-                                </div>
-                            </Form>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <Button type="submit">Save Estimate</Button>
+                                    </div>
+                                </Form>
+                            )}
                         </Formik>
                     </div>
                     {modalOpenType === 'CUSTOMERS' ? <CustomersModal /> : modalOpenType === 'PRODUCTS' ? <ProductsEstimateModal /> : null}

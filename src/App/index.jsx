@@ -21,7 +21,6 @@ const App = () => {
     const location = useLocation();
 
     let loginData = localStorage.getItem('authToken');
-    console.log(loginData);
 
     return (
         <>

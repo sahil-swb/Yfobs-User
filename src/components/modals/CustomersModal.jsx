@@ -55,7 +55,7 @@ const CustomersModal = () => {
             setCustomerPhoneNumber('');
             setCompanyPhoneNumber('');
         }
-    }, [rowData]);
+    }, []);
 
     useEffect(() => {
         dispatch(getAllCountriesApi());

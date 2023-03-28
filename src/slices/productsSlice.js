@@ -10,6 +10,7 @@ import {
     BASE_URL_FOR_USER,
     USER_CREATE_PRODUCTS,
     USER_DELETE_PRODUCTS,
+    USER_GETBYID_PRODUCTS,
     USER_GET_ALL_PRODUCTS,
     USER_UPDATE_PRODUCTS
 } from '../constants/urlConfig';
@@ -20,7 +21,9 @@ const initialState = {
     getAllProducts: [],
     updateData: {},
     deleteData: {},
-    createData: {}
+    createData: {},
+    getEstimateProducts: [],
+    getSingleProduct: {}
 };
 
 //APICALL FOR CREATING PRODUCT USING THUNK
@@ -80,6 +83,19 @@ export const deleteProductApi = createAsyncThunk('user/deleteProduct', async ({ 
     }
 });
 
+export const getSingleProductApi = createAsyncThunk('user/getSingleProductApi', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GETBYID_PRODUCTS}${payload._id}`, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+        console.log(response?.data?.data);
+        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        return response?.data?.data;
+    } catch (error) {
+        return rejectWithValue(error.response);
+    }
+});
+
 //PRODUCT SLICE
 const productsSlice = createSlice({
     name: 'products',
@@ -128,6 +144,17 @@ const productsSlice = createSlice({
                 state.deleteData = action.payload;
             })
             .addCase(deleteProductApi.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(getSingleProductApi.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(getSingleProductApi.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getSingleProduct = action.payload;
+                state.getEstimateProducts.push(action.payload);
+            })
+            .addCase(getSingleProductApi.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }
