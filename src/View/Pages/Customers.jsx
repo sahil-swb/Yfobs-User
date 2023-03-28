@@ -91,7 +91,7 @@ const Customers = () => {
                     <Button
                         onClick={() => {
                             dispatch(commonModalIsOpen(true));
-                            dispatch(commonModalType(!'EDIT'));
+                            dispatch(commonModalType('ADD'));
                         }}
                         size="sm"
                         className="d-flex align-items-center p-2"

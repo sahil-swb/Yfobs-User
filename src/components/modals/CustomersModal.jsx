@@ -16,7 +16,7 @@ import '../reactPhoneComponent.css';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 
 //MODAL COMPONENT FOR ADD AND EDIT CUSTOMER
-const CustomersModal = ({ data }) => {
+const CustomersModal = () => {
     const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
     const [customerPhoneNumber, setCustomerPhoneNumber] = useState('');
@@ -55,14 +55,15 @@ const CustomersModal = ({ data }) => {
             setCustomerPhoneNumber('');
             setCompanyPhoneNumber('');
         }
-    }, []);
+    }, [rowData]);
 
     useEffect(() => {
         dispatch(getAllCountriesApi());
         dispatch(getAllStatesApi());
     }, []);
 
-    console.log(getAllCountries);
+    // console.log(modalType, rowData);
+    // console.log('customerPhoneNumber', customerPhoneNumber);
 
     return (
         <>
@@ -78,6 +79,7 @@ const CustomersModal = ({ data }) => {
                 </Modal.Header>
                 <Modal.Body className="modal-scrollable">
                     <Formik
+                        enableReinitialize
                         initialValues={
                             modalType === 'EDIT'
                                 ? {
@@ -220,7 +222,6 @@ const CustomersModal = ({ data }) => {
                                                     value={companyPhoneNumber}
                                                     onChange={(e) => {
                                                         setCompanyPhoneNumber(e);
-                                                        console.log(e);
                                                     }}
                                                 />
                                             </div>

@@ -12,7 +12,6 @@ export const getAllCountriesApi = createAsyncThunk('user/getAllCountriesApi', as
         const response = await axios.get(BASE_URL_FOR_USER + USER_GETALL_COUNTRIES, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
@@ -25,7 +24,6 @@ export const getAllStatesApi = createAsyncThunk('user/getAllStatesApi', async (_
         const response = await axios.get(BASE_URL_FOR_USER + USER_GETALL_STATES, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
