@@ -26,7 +26,6 @@ const ProductsEstimateModal = () => {
     };
 
     const handleSubmit = (id) => {
-        console.log(id);
         const payload = {
             _id: id
         };

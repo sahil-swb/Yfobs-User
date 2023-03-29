@@ -1,4 +1,4 @@
-import { Field, FieldArray, Form, Formik } from 'formik';
+import { Field, FieldArray, Form, Formik, useFormikContext } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, Badge, Button, Card, Col, ListGroup, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,13 +21,9 @@ const CreateEstimate = () => {
     const { getEstimateProducts } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
-    const [inputs, setInputs] = useState({});
-    const [quantity, setQuantity] = useState(1);
-    // const formikRef = useRef();
     const dispatch = useDispatch();
-
-    // const { setFieldValue } = useFormikContext();
-
+    // const formik = useFormik();
+    const { values, submitForm, setFieldValue } = useFormikContext();
     const handleSubmit = (values, resetForm) => {
         const payload = {
             businessId: values?.businessId,
@@ -63,18 +59,6 @@ const CreateEstimate = () => {
         setFooterText(fText);
     };
 
-    const handleChange = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        setInputs((values) => ({ ...values, [name]: value }));
-    };
-
-    const handleQuantity = (e) => {
-        setQuantity(e.target.value);
-    };
-
-    // console.log(quantity);
-
     useEffect(() => {
         dispatch(getAllCustomersApi());
     }, [createCustomer, getSingleCustomerData]);
@@ -85,6 +69,12 @@ const CreateEstimate = () => {
     }, []);
 
     useEffect(() => {
+        if (getEstimateProducts) {
+            setFieldValue('estimateProducts', getEstimateProducts);
+        }
+    }, [getEstimateProducts]);
+
+    useEffect(() => {
         getAllCountries.map((val) => {
             if (getSingleCustomerData?.currencyName === val?.currencyName) {
                 setCurrencySign(val?.currencySymbol);
@@ -93,7 +83,6 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
-    console.log(getEstimateProducts);
     return (
         <>
             <Row>
@@ -115,14 +104,14 @@ const CreateEstimate = () => {
                                 posoNumber: '',
                                 date: '',
                                 expireOn: '',
-                                subTotal: ''
-                                // estimateProducts: getEstimateProducts
+                                subTotal: '',
+                                estimateProducts: []
                             }}
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
                             {({ values }) => (
                                 <Form>
-                                    {console.log(values.estimateProducts)}
+                                    {console.log(values?.estimateProducts)}
                                     <Accordion defaultActiveKey="0">
                                         <Card>
                                             <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
@@ -271,37 +260,70 @@ const CreateEstimate = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {getEstimateProducts?.map((val) => (
+                                                                {/* {getEstimateProducts?.map((val) => (
                                                                     <tr>
                                                                         <td>
                                                                             <input
                                                                                 className="form-control border rounded"
                                                                                 type="text"
-                                                                                name="productName"
                                                                                 defaultValue={val.name}
-                                                                                onChange={handleChange}
                                                                             />
                                                                         </td>
                                                                         <td>
                                                                             <input
                                                                                 className="form-control border rounded"
                                                                                 type="number"
-                                                                                name="productPrice"
                                                                                 defaultValue={val.price}
-                                                                                onChange={handleChange}
                                                                             />
                                                                         </td>
                                                                         <td>
-                                                                            <input
-                                                                                className="form-control border rounded"
-                                                                                type="number"
-                                                                                value={quantity}
-                                                                                onChange={handleQuantity}
-                                                                            />
+                                                                            <input className="form-control border rounded" type="number" />
                                                                         </td>
-                                                                        <td>{val.price * quantity}</td>
+                                                                        <td></td>
                                                                     </tr>
-                                                                ))}
+                                                                ))} */}
+                                                                <FieldArray
+                                                                    name="estimateProducts"
+                                                                    render={(arrayHelpers) => (
+                                                                        <div>
+                                                                            {values &&
+                                                                                values?.estimateProducts.map((estimate, index) => (
+                                                                                    <div key={index}>
+                                                                                        {/** both these conventions do the same */}
+                                                                                        <Field
+                                                                                            className="form-control border rounded"
+                                                                                            name={`estimate[${index}].name`}
+                                                                                        />
+                                                                                        <Field
+                                                                                            className="form-control border rounded"
+                                                                                            name={`estimate.${index}.price`}
+                                                                                        />
+                                                                                        <Field
+                                                                                            className="form-control border rounded"
+                                                                                            name={`estimate[${index}].que`}
+                                                                                        />
+                                                                                        <Field
+                                                                                            className="form-control border rounded"
+                                                                                            name={`estimate.${index}.total`}
+                                                                                        />
+
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => arrayHelpers.remove(index)}
+                                                                                        >
+                                                                                            X
+                                                                                        </button>
+                                                                                    </div>
+                                                                                ))}
+                                                                            {/* <button
+                                                                                type="button"
+                                                                                onClick={() => arrayHelpers.push({ name: '', age: '' })}
+                                                                            >
+                                                                                +
+                                                                            </button> */}
+                                                                        </div>
+                                                                    )}
+                                                                />
                                                             </tbody>
                                                         </Table>
                                                         <Button
@@ -318,7 +340,7 @@ const CreateEstimate = () => {
                                                     <div className="text-right font-weight-bold h5">
                                                         <ListGroup variant="flush">
                                                             <ListGroup.Item>
-                                                                <span className="mr-5">Sub Total</span> {currencySign} 0
+                                                                <span className="mr-5">Sub Total</span> {currencySign} .00
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Discount in %</label>
@@ -342,7 +364,7 @@ const CreateEstimate = () => {
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <span className="mr-5"> Grand Total</span>
-                                                                {currencySign} 0
+                                                                {currencySign} .00
                                                             </ListGroup.Item>
                                                         </ListGroup>
                                                     </div>

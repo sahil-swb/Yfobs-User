@@ -86,11 +86,11 @@ const ProductsModal = ({ data }) => {
                             <Field className="form-control" type="text" name="name" />
                         </div>
                         <div className="mb-3">
-                            <label className="font-weight-bold">Price</label>
+                            <label className="font-weight-bold">HSN Code</label>
                             <Field className="form-control" type="number" name="hsnCode" />
                         </div>
                         <div className="mb-3">
-                            <label className="font-weight-bold">HSN Code</label>
+                            <label className="font-weight-bold">Price</label>
                             <Field className="form-control" type="number" name="price" />
                         </div>
 
