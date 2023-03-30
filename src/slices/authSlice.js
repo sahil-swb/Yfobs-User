@@ -44,12 +44,15 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
         });
 
         response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
-
+        let setAuthData = {
+            authToken: response?.data?.token,
+            userId: response?.data?.data?._id
+        };
         if (response?.data?.status) {
             console.log(response?.data);
-            localStorage.setItem('authToken', response?.data?.token);
+            localStorage.setItem('userData', JSON.stringify(setAuthData));
             history.push('/dashboard');
-            window.location.reload();
+            // window.location.reload();
             return response?.data?.data;
         } else {
             return response?.data?.data;
@@ -92,7 +95,7 @@ export const UserChangePassword = createAsyncThunk('user/UserChangePassword', as
 
 export const getSingleUser = createAsyncThunk('user/getSingleUser', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`${BASE_URL_FOR_USER + GET_SINGLE_AUTH_USER}${payload._id}`, payload, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + GET_SINGLE_AUTH_USER}${payload._id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 

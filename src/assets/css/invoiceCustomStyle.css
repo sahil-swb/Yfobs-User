@@ -1,0 +1,27 @@
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.eye-position-center{
+    cursor: pointer;
+    font-size: 2rem;
+    color: aliceblue;
+}
+
+.image-div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.1s;
+}
+
+.image-div:hover{
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(186, 194, 191, 0.493);
+}
