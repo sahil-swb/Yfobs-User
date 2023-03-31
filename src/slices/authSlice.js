@@ -8,7 +8,8 @@ import {
     FORGOT_USER_PASSWORD,
     GET_SINGLE_AUTH_USER,
     LOGIN_USER,
-    REGISTER_USER
+    REGISTER_USER,
+    UPDATE_PROFILE
 } from '../constants/urlConfig';
 import history from '../history';
 
@@ -19,7 +20,8 @@ const initialState = {
     isLogin: false,
     forgotPasswordData: {},
     changePasswordData: {},
-    getDataById: {}
+    getDataById: {},
+    updateProfile: {}
 };
 
 export const registerUser = createAsyncThunk('register/user', async ({ payload }, { rejectWithValue }) => {
@@ -52,7 +54,7 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
             console.log(response?.data);
             localStorage.setItem('userData', JSON.stringify(setAuthData));
             history.push('/dashboard');
-            // window.location.reload();
+            window.location.reload();
             return response?.data?.data;
         } else {
             return response?.data?.data;
@@ -99,6 +101,21 @@ export const getSingleUser = createAsyncThunk('user/getSingleUser', async ({ pay
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        console.log(error?.response?.data);
+        return rejectWithValue(error.response?.data?.message);
+    }
+});
+
+export const UserUpdateProfile = createAsyncThunk('user/UserUpdateProfile', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post(`${BASE_URL_FOR_USER + UPDATE_PROFILE}${payload._id}`, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+
+        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
@@ -165,6 +182,16 @@ const authSlice = createSlice({
                 state.getDataById = action.payload;
             })
             .addCase(getSingleUser.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(UserUpdateProfile.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(UserUpdateProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.updateProfile = action.payload;
+            })
+            .addCase(UserUpdateProfile.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

@@ -3,13 +3,13 @@ import reactCSS from 'reactcss';
 import JoditEditor from 'jodit-react';
 import React, { useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import invoiceImage from '../assets/images/widget/AUSTRALIA.jpg';
-import '../assets/css/invoiceCustomStyle.css';
-import InvoicesPreview from './InvoicesPreview';
+import invoiceImage from '../../assets/images/widget/AUSTRALIA.jpg';
+import '../../assets/css/invoiceCustomStyle.css';
+import InvoicesPreview from '../InvoicesPreview';
 import { useDispatch } from 'react-redux';
-import { commonModalIsOpen, commonModalType } from '../slices/modalSlice';
-import TemplateImage from './TemplateImage';
-import ColorPicker from './ColorPicker';
+import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+import TemplateImage from '../TemplateImage';
+import ColorPicker from '../ColorPicker';
 
 const InvoiceCustomization = () => {
     const [color, setColor] = useState('#fff');

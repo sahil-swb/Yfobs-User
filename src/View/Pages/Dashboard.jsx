@@ -1,16 +1,16 @@
 import React from 'react';
 import { Card, Col, Nav, Row, Tab, Tabs } from 'react-bootstrap';
-import Businesses from '../../components/Businesses';
-import ChangePassword from '../../components/ChangePassword';
-import GenaralSettings from '../../components/GenaralSettings';
-import InvoiceCustomization from '../../components/InvoiceCustomization';
+import Businesses from '../../components/settingsTabs/Businesses';
+import ChangePassword from '../../components/settingsTabs/ChangePassword';
+import GenaralSettings from '../../components/settingsTabs/GenaralSettings';
+import InvoiceCustomization from '../../components/settingsTabs/InvoiceCustomization';
 
 const Dashboard = () => {
     return (
         <>
             <Row>
                 <Col xl={10}>
-                    <Tab.Container defaultActiveKey="invoiceCustomization">
+                    <Tab.Container defaultActiveKey="generalSettings">
                         <Card>
                             <Card.Body>
                                 <Nav variant="pills" className="bg-nav-pills nav-justified mb-0">

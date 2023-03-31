@@ -1,11 +1,25 @@
 import React from 'react';
-import { Card, Table } from 'react-bootstrap';
+import { Button, Card, Table } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+import BusinessModal from '../modals/BusinessModal';
 
 const Businesses = () => {
+    const dispatch = useDispatch();
     return (
         <>
             <Card>
-                <Card.Header>Businesses</Card.Header>
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                    <h5>Businesses</h5>
+                    <Button
+                        onClick={() => {
+                            dispatch(commonModalIsOpen(true));
+                            dispatch(commonModalType('ADD'));
+                        }}
+                    >
+                        ADD BUSINESS
+                    </Button>
+                </Card.Header>
                 <Card.Body>
                     <Table striped bordered hover>
                         <thead>
@@ -38,6 +52,7 @@ const Businesses = () => {
                     </Table>
                 </Card.Body>
             </Card>
+            <BusinessModal />
         </>
     );
 };

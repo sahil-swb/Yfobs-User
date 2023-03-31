@@ -6,6 +6,7 @@ export const LOGIN_USER = 'userLogin';
 export const CHANGE_USER_PASSWORD = 'changePassword/';
 export const FORGOT_USER_PASSWORD = 'forgotPassword';
 export const GET_SINGLE_AUTH_USER = 'getSingleUser/';
+export const UPDATE_PROFILE = 'updateProfile/';
 
 //Customers Api
 export const USER_CREATE_CUSTOMER = 'customer/createCustomer';
@@ -36,3 +37,8 @@ export const USER_DELETE_ESTIMATES = 'Estimates/deleteEstimates/';
 //Countries Api
 export const USER_GETALL_COUNTRIES = 'Country/getAllCountry';
 export const USER_GETALL_STATES = 'state/getAllState';
+
+//Business Api
+export const USER_CREATE_BUSINESS = 'business/addBusiness';
+export const USER_GET_ALL_BUSINESS = 'business/getAllCategory';
+export const USER_UPDATE_BUSINESS = 'business/updateBusiness/';

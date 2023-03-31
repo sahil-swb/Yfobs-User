@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Row, Col, Card, Tab, Nav } from 'react-bootstrap';
 import Select from 'react-select';
 import { checkboxes } from '../constants/SettingsCheckbox';
-import GenaralSettings from './GenaralSettings';
+import GenaralSettings from './settingsTabs/GenaralSettings';
 import EmailSettings from './EmailSettings';
 import ReCaptchaSettings from './ReCaptchaSettings';
 import SocialSettings from './SocialSettings';

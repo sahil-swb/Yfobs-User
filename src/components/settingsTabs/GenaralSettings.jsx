@@ -2,8 +2,9 @@ import { Field, Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleUser } from '../slices/authSlice';
-import { getAllCountriesApi, getAllStatesApi } from '../slices/countryDetailSlice';
+import { userId } from '../../constants/userData';
+import { getSingleUser, UserUpdateProfile } from '../../slices/authSlice';
+import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 
 const GenaralSettings = () => {
     const { getDataById } = useSelector((state) => state.authReducer);
@@ -11,12 +12,20 @@ const GenaralSettings = () => {
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
-        console.log(values);
+        const payload = {
+            _id: getDataById?._id,
+            name: values?.name,
+            email: values?.email,
+            country_name: values?.country_name,
+            state: values?.state,
+            city: values?.city,
+            postcode: values?.postcode,
+            address: values?.address
+        };
+        dispatch(UserUpdateProfile({ payload }));
     };
 
     useEffect(() => {
-        const userData = localStorage.getItem('userData') ? localStorage.getItem('userData') : null;
-        const userId = JSON.parse(userData).userId;
         const payload = {
             _id: userId
         };
@@ -28,22 +37,22 @@ const GenaralSettings = () => {
     return (
         <>
             <Card>
-                <Card.Header>Personal Information</Card.Header>
-                <Card.Body>
-                    <Formik
-                        enableReinitialize
-                        initialValues={{
-                            name: getDataById?.name,
-                            email: getDataById?.email,
-                            country_name: '',
-                            state: '',
-                            city: '',
-                            postcode: '',
-                            address: ''
-                        }}
-                        onSubmit={(values) => handleSubmit(values)}
-                    >
-                        <Form>
+                <Formik
+                    enableReinitialize
+                    initialValues={{
+                        name: getDataById?.name,
+                        email: getDataById?.email,
+                        country_name: getDataById?.country_name,
+                        state: getDataById?.state,
+                        city: getDataById?.city,
+                        postcode: getDataById?.postcode,
+                        address: getDataById?.address
+                    }}
+                    onSubmit={(values) => handleSubmit(values)}
+                >
+                    <Form>
+                        <Card.Header>Personal Information</Card.Header>
+                        <Card.Body>
                             <div>
                                 <label>Name</label>
                                 <Field className="form-control" type="text" name="name" />
@@ -91,12 +100,12 @@ const GenaralSettings = () => {
                                 <label>Adderss</label>
                                 <Field className="form-control" type="text" name="address" />
                             </div>
-                        </Form>
-                    </Formik>
-                </Card.Body>
-                <Card.Footer>
-                    <Button type="submit">Submit</Button>
-                </Card.Footer>
+                        </Card.Body>
+                        <Card.Footer>
+                            <Button type="submit">Submit</Button>
+                        </Card.Footer>
+                    </Form>
+                </Formik>
             </Card>
         </>
     );
