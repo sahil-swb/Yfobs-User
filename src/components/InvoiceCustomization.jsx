@@ -1,17 +1,20 @@
 import { Field, Form, Formik } from 'formik';
+import reactCSS from 'reactcss';
 import JoditEditor from 'jodit-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import invoiceImage from '../assets/images/widget/AUSTRALIA.jpg';
 import '../assets/css/invoiceCustomStyle.css';
-import EditorJoditWYSIWYG from './EditorJoditWYSIWYG';
 import InvoicesPreview from './InvoicesPreview';
 import { useDispatch } from 'react-redux';
 import { commonModalIsOpen, commonModalType } from '../slices/modalSlice';
 import TemplateImage from './TemplateImage';
+import ColorPicker from './ColorPicker';
 
 const InvoiceCustomization = () => {
+    const [color, setColor] = useState('#fff');
     const dispatch = useDispatch();
+
     const handleSubmit = (values) => {
         console.log(values);
     };
@@ -20,11 +23,13 @@ const InvoiceCustomization = () => {
         <>
             <Card>
                 <Card.Header>Invoice Customization</Card.Header>
+
                 <Card.Body>
                     <Formik
                         enableReinitialize
                         initialValues={{
-                            template: ''
+                            template: '',
+                            colorCode: color
                         }}
                         onSubmit={(values) => handleSubmit(values)}
                     >
@@ -115,7 +120,14 @@ const InvoiceCustomization = () => {
                             </div>
                             <div className="mt-3">
                                 <label>Change Invoice Template Color</label>
-                                <Field className="form-control" type="text" name="newPassword" />
+                                <div className="d-flex align-items-center justify-between">
+                                    <div className="w-50 mr-2">
+                                        <Field className="form-control border" type="text" name="colorCode" />
+                                    </div>
+                                    <div>
+                                        <ColorPicker color={color} setColor={setColor} />
+                                    </div>
+                                </div>
                             </div>
                             <div className="mt-3">
                                 <label>Set default footer note for invoice</label>
