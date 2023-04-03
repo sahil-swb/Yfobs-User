@@ -1,0 +1,12 @@
+.business-image-main-div{
+    height: 170px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+.logoImage{
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+

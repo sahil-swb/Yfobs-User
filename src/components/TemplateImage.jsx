@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import invoiceImage from '../assets/images/widget/AUSTRALIA.jpg';
-import invoice from '../assets/images/Screenshot.png';
+import template2 from '../assets/images/invoiceTemplateImages/template-2.png';
 import { commonModalIsOpen } from '../slices/modalSlice';
 
 const TemplateImage = () => {
@@ -12,7 +12,11 @@ const TemplateImage = () => {
         <>
             <Modal
                 size="lg"
-                show={modalIsOpen}
+                show={
+                    modalType === 'INVOICE-1' || modalType === 'INVOICE-2' || modalType === 'INVOICE-3' || modalType === 'INVOICE-4'
+                        ? modalIsOpen
+                        : null
+                }
                 onHide={() => {
                     dispatch(commonModalIsOpen(false));
                 }}
@@ -32,7 +36,7 @@ const TemplateImage = () => {
                             modalType === 'INVOICE-1'
                                 ? invoiceImage
                                 : modalType === 'INVOICE-2'
-                                ? invoice
+                                ? template2
                                 : modalType === 'INVOICE-3'
                                 ? invoiceImage
                                 : invoiceImage

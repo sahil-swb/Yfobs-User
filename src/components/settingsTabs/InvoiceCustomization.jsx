@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import TemplateImage from '../TemplateImage';
 import ColorPicker from '../ColorPicker';
+import template2 from '../../assets/images/invoiceTemplateImages/template-2.png';
 
 const InvoiceCustomization = () => {
     const [color, setColor] = useState('#fff');
@@ -65,7 +66,7 @@ const InvoiceCustomization = () => {
                                                 }}
                                             >
                                                 <InvoicesPreview>
-                                                    <Card.Img className="cursor-pointer" variant="top" src={invoiceImage} />
+                                                    <Card.Img className="cursor-pointer" variant="top" src={template2} />
                                                 </InvoicesPreview>
                                             </div>
                                             <Card.Body>

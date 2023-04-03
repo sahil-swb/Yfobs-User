@@ -10,7 +10,7 @@ const Dashboard = () => {
         <>
             <Row>
                 <Col xl={10}>
-                    <Tab.Container defaultActiveKey="generalSettings">
+                    <Tab.Container defaultActiveKey="business">
                         <Card>
                             <Card.Body>
                                 <Nav variant="pills" className="bg-nav-pills nav-justified mb-0">

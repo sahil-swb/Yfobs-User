@@ -23,7 +23,7 @@ const CreateEstimate = () => {
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
     const dispatch = useDispatch();
     // const formik = useFormik();
-    const { values, submitForm, setFieldValue } = useFormikContext();
+    // const { values, submitForm, setFieldValue } = useFormikContext();
     const handleSubmit = (values, resetForm) => {
         const payload = {
             businessId: values?.businessId,
@@ -70,7 +70,7 @@ const CreateEstimate = () => {
 
     useEffect(() => {
         if (getEstimateProducts) {
-            setFieldValue('estimateProducts', getEstimateProducts);
+            // setFieldValue('estimateProducts', getEstimateProducts);
         }
     }, [getEstimateProducts]);
 
@@ -111,7 +111,7 @@ const CreateEstimate = () => {
                         >
                             {({ values }) => (
                                 <Form>
-                                    {console.log(values?.estimateProducts)}
+                                    {/* {console.log(values?.estimateProducts)} */}
                                     <Accordion defaultActiveKey="0">
                                         <Card>
                                             <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">

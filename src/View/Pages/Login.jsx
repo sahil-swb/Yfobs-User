@@ -17,12 +17,10 @@ const Login = () => {
     const dispatch = useDispatch();
 
     const handleLogin = (values) => {
-        console.log(values);
         let payload = {
             email: values.email,
             password: values.password
         };
-        console.log(payload);
         dispatch(setIsLogin(true));
         dispatch(loginUser({ payload }));
         // history.push('/dashboard');

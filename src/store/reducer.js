@@ -9,6 +9,7 @@ import productsSlice from '../slices/productsSlice';
 import authSlice from '../slices/authSlice';
 import estimatesSlice from '../slices/estimatesSlice';
 import countryDetailSlice from '../slices/countryDetailSlice';
+import settingsSlice from '../slices/settingsSlice';
 
 const reducer = combineReducers({
     able: ableReducer,
@@ -19,7 +20,8 @@ const reducer = combineReducers({
     productsReducer: productsSlice,
     authReducer: authSlice,
     estimateReducer: estimatesSlice,
-    countriesInfoReducer: countryDetailSlice
+    countriesInfoReducer: countryDetailSlice,
+    settingsReducer: settingsSlice
 });
 export const useSelector = createSelectorHook();
 export default reducer;
