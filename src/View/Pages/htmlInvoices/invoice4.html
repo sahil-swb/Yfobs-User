@@ -118,7 +118,7 @@
                                 <th>HSN/SAC</th>
                                 <th>QTY</th>
                                 <th>Rate</th>
-                                <th>Total</th>
+                                <th>Taxable Value</th>
                             </tr>
                             <tr style="height: 2rem; text-align: center">
                                 <td>1</td>
@@ -127,6 +127,30 @@
                                 <td>1</td>
                                 <td>€ 1000.00</td>
                                 <td style="text-align: right; padding: 0 0.5rem">€ 1000.00</td>
+                            </tr>
+                            <tr style="text-align: right; height: 2rem">
+                                <td style="border-bottom-color: white"></td>
+                                <td style="padding: 0 0.5rem; border-bottom-color: white">Sub Total</td>
+                                <td style="border-bottom-color: white"></td>
+                                <td style="border-bottom-color: white"></td>
+                                <td style="border-bottom-color: white"></td>
+                                <td style="padding: 0 0.5rem; border-bottom-color: white">€ 1000.00</td>
+                            </tr>
+                            <tr style="text-align: right; height: 2rem">
+                                <td style="border-bottom-color: white"></td>
+                                <td style="padding: 0 0.5rem; border-bottom-color: white">Discount [10%]</td>
+                                <td style="border-bottom-color: white"></td>
+                                <td style="border-bottom-color: white"></td>
+                                <td style="border-bottom-color: white"></td>
+                                <td style="padding: 0 0.5rem; border-bottom-color: white">€ 100.00</td>
+                            </tr>
+                            <tr style="text-align: right; height: 2rem">
+                                <td></td>
+                                <td style="padding: 0 0.5rem">IGST5 [5%]</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="padding: 0 0.5rem">€ 45.00</td>
                             </tr>
                             <tr style="height: 2rem; text-align: center">
                                 <td colspan="3" style="text-align: right; padding-right: 1rem">Total</td>
@@ -142,68 +166,81 @@
                 </tr>
                 <tr>
                     <td>
-                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; font-size: 14px">
-                            <div
-                                style="
-                                    display: grid;
-                                    grid-template-rows: 30px 40px 30px 150px 30px 100px;
-                                    text-align: center;
-                                    border: 1px solid black;
-                                "
-                            >
-                                <div style="border-bottom: 1px solid black"><b>Total in word </b></div>
-                                <div style="border-bottom: 1px solid black"><p>Nine Hundred and Forty Five</p></div>
-                                <div style="border-bottom: 1px solid black"><b>Bank Details</b></div>
-                                <div style="border-bottom: 1px solid black; display: flex; align-items: center; justify-content: center">
-                                    <p>Bank Details Not Found !</p>
-                                </div>
-                                <div style="border-bottom: 1px solid black"><b>Terms and Conditions </b></div>
-                                <div style="border-bottom: 1px solid black">
-                                    <p>This is an electronically generated document, no signature is required.</p>
+                        <table style="width: 100%; text-align: center; font-size: 14px">
+                            <tr>
+                                <td>Taxable Value</td>
+                                <td>Discount</td>
+                                <td>IGST5</td>
+                                <td>Total</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <div style="display: grid; grid-template-columns: 0.5fr 2fr">
+                                        <div style="border-right: 1px solid black">%</div>
+                                        <div>Amount</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display: grid; grid-template-columns: 0.5fr 2fr">
+                                        <div style="border-right: 1px solid black">%</div>
+                                        <div>Amount</div>
+                                    </div>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>€ 900.00</td>
+                                <td>
+                                    <div style="display: grid; grid-template-columns: 0.5fr 2fr">
+                                        <div style="border-right: 1px solid black">10</div>
+                                        <div>€100.00</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display: grid; grid-template-columns: 0.5fr 2fr">
+                                        <div style="border-right: 1px solid black">5</div>
+                                        <div>€ 45.00</div>
+                                    </div>
+                                </td>
+                                <td>€ 945.00</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="display: grid; grid-template-columns: auto auto; text-align: center; font-size: 14px">
+                            <div style="display: grid; border-right: 1px solid black">
+                                <div style="border-bottom: 1px solid black; padding: 0.5rem 0"><b>Bank Details </b></div>
+                                <div style="border-bottom: 1px solid black; padding: 0.5rem 0"><p>Bank Details Not Found !</p></div>
+                                <div style="border-bottom: 1px solid black; padding: 0.5rem 0"><b>Terms and Conditions </b></div>
+                                <div style="padding: 1rem 0 3rem 0">
+                                    <p>1. 10 days return policy</p>
+                                    <p>2. Damaged items won't be taken back Bill is compulsory for returning items.</p>
                                 </div>
                             </div>
-                            <div style="display: grid; border: 1px solid black">
-                                <div
-                                    style="border-bottom: 1px solid black; display: flex; justify-content: space-between; padding: 0 0.5rem"
-                                >
-                                    <span>Discount [10%]</span><span>€100.00 </span>
-                                </div>
-                                <div
-                                    style="border-bottom: 1px solid black; display: flex; justify-content: space-between; padding: 0 0.5rem"
-                                >
-                                    <span>Taxable Amount</span><span>€100.00 </span>
-                                </div>
-                                <div
-                                    style="border-bottom: 1px solid black; display: flex; justify-content: space-between; padding: 0 0.5rem"
-                                >
-                                    <span>Add: IGST5 [5%]</span><span>€100.00 </span>
-                                </div>
-                                <div style="border-bottom: 1px solid black; padding: 0 0.5rem">
-                                    <b style="display: flex; justify-content: space-between"
-                                        ><span>Total Amout After Tax</span><span>€100.00 </span></b
-                                    >
-                                </div>
-                                <div style="border-bottom: 1px solid black; display: flex; justify-content: end; padding: 0 0.5rem">
-                                    <span>(E & O.E.)</span>
-                                </div>
-                                <div
-                                    style="border-bottom: 1px solid black; display: flex; justify-content: space-between; padding: 0 0.5rem"
-                                >
-                                    <span>GST Payable on Reverse Charge.</span>
-                                    <span>N.A. </span>
-                                </div>
+                            <div style="display: grid">
                                 <div
                                     style="
+                                        border-bottom: 1px solid black;
                                         display: flex;
                                         flex-direction: column;
-                                        justify-content: center;
-                                        align-items: center;
-                                        line-height: 10;
+                                        justify-content: space-between;
+                                        padding: 0.5rem;
                                     "
                                 >
-                                    <p><b>FOR SilverWebbuzz </b></p>
+                                    <div>Certified that the particulars given above are true and correct</div>
+                                    <div><b>FOR SilverWebbuzz</b></div>
                                 </div>
-                                <div style="text-align: center"><p>Authorised Signature</p></div>
+                                <div style="border-bottom: 1px solid black">&nbsp;</div>
+                                <div style="display: flex; flex-direction: column; justify-content: space-between; padding: 0.5rem">
+                                    <div>This is an electronically generated document, no signature is required.</div>
+                                    <div>Authorised Signature</div>
+                                </div>
                             </div>
                         </div>
                     </td>

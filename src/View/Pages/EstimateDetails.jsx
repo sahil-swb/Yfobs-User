@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import Template1 from '../../components/invoiceTemplates/Template1';
 import Template2 from '../../components/invoiceTemplates/Template2';
+import Template4 from '../../components/invoiceTemplates/Template4';
 
 const EstimateDetails = () => {
     const componentRef = useRef();
@@ -46,7 +47,8 @@ const EstimateDetails = () => {
             <Row>
                 <Col md={{ span: 10, offset: 1 }}>
                     {/* <Template1 ref={componentRef} /> */}
-                    <Template2 ref={componentRef} />
+                    {/* <Template2 ref={componentRef} /> */}
+                    <Template4 ref={componentRef} />
                 </Col>
             </Row>
         </div>
