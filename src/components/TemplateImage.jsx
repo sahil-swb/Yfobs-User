@@ -1,8 +1,10 @@
 import React from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import invoiceImage from '../assets/images/widget/AUSTRALIA.jpg';
+import template1 from '../assets/images/invoiceTemplateImages/template-1.png';
 import template2 from '../assets/images/invoiceTemplateImages/template-2.png';
+import template3 from '../assets/images/invoiceTemplateImages/template-3.png';
+import template4 from '../assets/images/invoiceTemplateImages/template-4.png';
 import { commonModalIsOpen } from '../slices/modalSlice';
 
 const TemplateImage = () => {
@@ -34,12 +36,12 @@ const TemplateImage = () => {
                     <img
                         src={
                             modalType === 'INVOICE-1'
-                                ? invoiceImage
+                                ? template1
                                 : modalType === 'INVOICE-2'
                                 ? template2
                                 : modalType === 'INVOICE-3'
-                                ? invoiceImage
-                                : invoiceImage
+                                ? template3
+                                : template4
                         }
                         width={'100%'}
                         alt=""

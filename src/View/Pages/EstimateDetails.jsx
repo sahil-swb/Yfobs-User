@@ -5,6 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import Template1 from '../../components/invoiceTemplates/Template1';
 import Template2 from '../../components/invoiceTemplates/Template2';
 import Template4 from '../../components/invoiceTemplates/Template4';
+import Template3 from '../../components/invoiceTemplates/Template3';
 
 const EstimateDetails = () => {
     const componentRef = useRef();
@@ -48,6 +49,7 @@ const EstimateDetails = () => {
                 <Col md={{ span: 10, offset: 1 }}>
                     {/* <Template1 ref={componentRef} /> */}
                     {/* <Template2 ref={componentRef} /> */}
+                    {/* <Template3 ref={componentRef} /> */}
                     <Template4 ref={componentRef} />
                 </Col>
             </Row>

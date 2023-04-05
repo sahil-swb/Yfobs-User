@@ -3,14 +3,16 @@ import reactCSS from 'reactcss';
 import JoditEditor from 'jodit-react';
 import React, { useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import invoiceImage from '../../assets/images/widget/AUSTRALIA.jpg';
 import '../../assets/css/invoiceCustomStyle.css';
 import InvoicesPreview from '../InvoicesPreview';
 import { useDispatch } from 'react-redux';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import TemplateImage from '../TemplateImage';
 import ColorPicker from '../ColorPicker';
+import template1 from '../../assets/images/invoiceTemplateImages/template-1.png';
 import template2 from '../../assets/images/invoiceTemplateImages/template-2.png';
+import template3 from '../../assets/images/invoiceTemplateImages/template-3.png';
+import template4 from '../../assets/images/invoiceTemplateImages/template-4.png';
 
 const InvoiceCustomization = () => {
     const [color, setColor] = useState('#fff');
@@ -46,7 +48,7 @@ const InvoiceCustomization = () => {
                                                 }}
                                             >
                                                 <InvoicesPreview>
-                                                    <Card.Img className="cursor-pointer" variant="top" src={invoiceImage} />
+                                                    <Card.Img className="cursor-pointer" variant="top" src={template1} />
                                                 </InvoicesPreview>
                                             </div>
                                             <Card.Body>
@@ -86,7 +88,7 @@ const InvoiceCustomization = () => {
                                                 }}
                                             >
                                                 <InvoicesPreview>
-                                                    <Card.Img className="cursor-pointer" variant="top" src={invoiceImage} />
+                                                    <Card.Img className="cursor-pointer" variant="top" src={template3} />
                                                 </InvoicesPreview>
                                             </div>
                                             <Card.Body>
@@ -106,7 +108,7 @@ const InvoiceCustomization = () => {
                                                 }}
                                             >
                                                 <InvoicesPreview>
-                                                    <Card.Img className="cursor-pointer" variant="top" src={invoiceImage} />
+                                                    <Card.Img className="cursor-pointer" variant="top" src={template4} />
                                                 </InvoicesPreview>
                                             </div>
                                             <Card.Body>

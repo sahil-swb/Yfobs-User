@@ -1,7 +1,7 @@
 import React from 'react';
 import yfobsLogo from '../../assets/images/official-yfobs-logo.png';
 
-const Template4 = React.forwardRef((props, ref) => {
+const Template3 = React.forwardRef((props, ref) => {
     return (
         <>
             <meta charSet="UTF-8" />
@@ -167,7 +167,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                             gridTemplateColumns: '1fr 1fr'
                                                         }}
                                                     >
-                                                        <b>Invoice number :</b>
+                                                        <b>Invoice no :</b>
                                                         <span>752</span>
                                                     </li>
                                                     <li
@@ -185,7 +185,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                             gridTemplateColumns: '1fr 1fr'
                                                         }}
                                                     >
-                                                        <b>P.O./S.O. number :</b>
+                                                        <b>P.O./S.O. no :</b>
                                                         <span>856</span>
                                                     </li>
                                                     <li
@@ -219,13 +219,13 @@ const Template4 = React.forwardRef((props, ref) => {
                                 <td>
                                     <table style={{ width: '100%', fontSize: 14 }}>
                                         <tbody>
-                                            <tr style={{ height: '2rem', textAlign: 'center', background: '#f1f1f1' }}>
+                                            <tr style={{ height: '2rem', background: '#f1f1f1', textAlign: 'center' }}>
                                                 <th>Sr.No.</th>
                                                 <th>Name of Product / Service</th>
                                                 <th>HSN/SAC</th>
                                                 <th>QTY</th>
                                                 <th>Rate</th>
-                                                <th>Taxable Value</th>
+                                                <th>Total</th>
                                             </tr>
                                             <tr style={{ height: '2rem', textAlign: 'center' }}>
                                                 <td>1</td>
@@ -233,35 +233,9 @@ const Template4 = React.forwardRef((props, ref) => {
                                                 <td>8798797</td>
                                                 <td>1</td>
                                                 <td>€ 1000.00</td>
-                                                <td style={{ textAlign: 'right', padding: '0 0.5rem' }}>€ 1000.00</td>
-                                            </tr>
-                                            <tr style={{ textAlign: 'right', height: '2rem' }}>
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ padding: '0 0.5rem', borderBottomColor: 'white' }}>Sub Total</td>
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ padding: '0 0.5rem', borderBottomColor: 'white', background: '#f1f1f1' }}>
+                                                <td style={{ textAlign: 'right', padding: '0 0.5rem', background: '#f1f1f1' }}>
                                                     € 1000.00
                                                 </td>
-                                            </tr>
-                                            <tr style={{ textAlign: 'right', height: '2rem' }}>
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ padding: '0 0.5rem', borderBottomColor: 'white' }}>Discount [10%]</td>
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ padding: '0 0.5rem', borderBottomColor: 'white', background: '#f1f1f1' }}>
-                                                    € 100.00
-                                                </td>
-                                            </tr>
-                                            <tr style={{ textAlign: 'right', height: '2rem' }}>
-                                                <td />
-                                                <td style={{ padding: '0 0.5rem' }}>IGST5 [5%]</td>
-                                                <td />
-                                                <td />
-                                                <td />
-                                                <td style={{ padding: '0 0.5rem', background: '#f1f1f1' }}>€ 45.00</td>
                                             </tr>
                                             <tr style={{ height: '2rem', textAlign: 'center', background: '#f1f1f1' }}>
                                                 <td colSpan={3} style={{ textAlign: 'right', paddingRight: '1rem' }}>
@@ -280,139 +254,131 @@ const Template4 = React.forwardRef((props, ref) => {
                             </tr>
                             <tr>
                                 <td>
-                                    <table style={{ width: '100%', textAlign: 'center', fontSize: 14 }}>
-                                        <tbody>
-                                            <tr>
-                                                <td>Taxable Value</td>
-                                                <td>Discount</td>
-                                                <td>IGST5</td>
-                                                <td>Total</td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>
-                                                    <div
-                                                        style={{
-                                                            display: 'grid',
-                                                            gridTemplateColumns: '0.5fr 2fr'
-                                                        }}
-                                                    >
-                                                        <div style={{ borderRight: '1px solid black' }}>%</div>
-                                                        <div>Amount</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        style={{
-                                                            display: 'grid',
-                                                            gridTemplateColumns: '0.5fr 2fr'
-                                                        }}
-                                                    >
-                                                        <div style={{ borderRight: '1px solid black' }}>%</div>
-                                                        <div>Amount</div>
-                                                    </div>
-                                                </td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <tr>
-                                                <td>€ 900.00</td>
-                                                <td>
-                                                    <div
-                                                        style={{
-                                                            display: 'grid',
-                                                            gridTemplateColumns: '0.5fr 2fr'
-                                                        }}
-                                                    >
-                                                        <div style={{ borderRight: '1px solid black' }}>10</div>
-                                                        <div>€100.00</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        style={{
-                                                            display: 'grid',
-                                                            gridTemplateColumns: '0.5fr 2fr'
-                                                        }}
-                                                    >
-                                                        <div style={{ borderRight: '1px solid black' }}>5</div>
-                                                        <div>€ 45.00</div>
-                                                    </div>
-                                                </td>
-                                                <td>€ 945.00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td>
                                     <div
                                         style={{
                                             display: 'grid',
-                                            gridTemplateColumns: 'auto auto',
-                                            textAlign: 'center',
+                                            gridTemplateColumns: '1.5fr 1fr',
                                             fontSize: 14
                                         }}
                                     >
-                                        <div style={{ display: 'grid', borderRight: '1px solid black' }}>
-                                            <div
-                                                style={{
-                                                    borderBottom: '1px solid black',
-                                                    padding: '0.5rem 0'
-                                                }}
-                                            >
-                                                <b>Bank Details </b>
+                                        <div
+                                            style={{
+                                                display: 'grid',
+                                                gridTemplateRows: '30px 40px 30px 150px 30px 100px',
+                                                textAlign: 'center',
+                                                border: '1px solid black'
+                                            }}
+                                        >
+                                            <div style={{ borderBottom: '1px solid black' }}>
+                                                <b>Total in word </b>
+                                            </div>
+                                            <div style={{ borderBottom: '1px solid black' }}>
+                                                <p>Nine Hundred and Forty Five</p>
+                                            </div>
+                                            <div style={{ borderBottom: '1px solid black' }}>
+                                                <b>Bank Details</b>
                                             </div>
                                             <div
                                                 style={{
                                                     borderBottom: '1px solid black',
-                                                    padding: '0.5rem 0'
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center'
                                                 }}
                                             >
                                                 <p>Bank Details Not Found !</p>
                                             </div>
-                                            <div
-                                                style={{
-                                                    borderBottom: '1px solid black',
-                                                    padding: '0.5rem 0'
-                                                }}
-                                            >
+                                            <div style={{ borderBottom: '1px solid black' }}>
                                                 <b>Terms and Conditions </b>
                                             </div>
-                                            <div style={{ padding: '1rem 0 3rem 0', textAlign: 'left', padding: '1rem' }}>
-                                                <p>1. 10 days return policy</p>
-                                                <p>2. Damaged items won't be taken back Bill is compulsory for returning items.</p>
+                                            <div style={{ borderBottom: '1px solid black' }}>
+                                                <p>This is an electronically generated document, no signature is required.</p>
                                             </div>
                                         </div>
-                                        <div style={{ display: 'grid' }}>
+                                        <div style={{ display: 'grid', border: '1px solid black' }}>
                                             <div
                                                 style={{
                                                     borderBottom: '1px solid black',
                                                     display: 'flex',
-                                                    flexDirection: 'column',
                                                     justifyContent: 'space-between',
-                                                    padding: '0.5rem'
+                                                    padding: '0 0.5rem'
                                                 }}
                                             >
-                                                <div>Certified that the particulars given above are true and correct</div>
-                                                <div>
-                                                    <b>FOR SilverWebbuzz</b>
-                                                </div>
+                                                <span>Discount [10%]</span>
+                                                <span>€100.00 </span>
                                             </div>
-                                            <div style={{ borderBottom: '1px solid black' }}>&nbsp;</div>
+                                            <div
+                                                style={{
+                                                    borderBottom: '1px solid black',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    padding: '0 0.5rem',
+                                                    background: '#f1f1f1'
+                                                }}
+                                            >
+                                                <span>Taxable Amount</span>
+                                                <span>€100.00 </span>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    borderBottom: '1px solid black',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    padding: '0 0.5rem'
+                                                }}
+                                            >
+                                                <span>Add: IGST5 [5%]</span>
+                                                <span>€100.00 </span>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    borderBottom: '1px solid black',
+                                                    padding: '0 0.5rem',
+                                                    background: '#f1f1f1'
+                                                }}
+                                            >
+                                                <b style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <span>Total Amout After Tax</span>
+                                                    <span>€100.00 </span>
+                                                </b>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    borderBottom: '1px solid black',
+                                                    display: 'flex',
+                                                    justifyContent: 'end',
+                                                    padding: '0 0.5rem',
+                                                    background: '#f1f1f1'
+                                                }}
+                                            >
+                                                <span>(E &amp; O.E.)</span>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    borderBottom: '1px solid black',
+                                                    display: 'grid',
+                                                    justifyContent: 'space-between',
+                                                    gridTemplateColumns: '1fr 0.5fr'
+                                                }}
+                                            >
+                                                <div>GST Payable on Reverse Charge.</div>
+                                                <div style={{ background: '#f1f1f1', textAlign: 'end', padding: '0 0.5rem' }}>N.A.</div>
+                                            </div>
                                             <div
                                                 style={{
                                                     display: 'flex',
                                                     flexDirection: 'column',
-                                                    justifyContent: 'space-between',
-                                                    padding: '0.5rem'
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    lineHeight: 10
                                                 }}
                                             >
-                                                <div>This is an electronically generated document, no signature is required.</div>
-                                                <div>Authorised Signature</div>
+                                                <p>
+                                                    <b>FOR SilverWebbuzz </b>
+                                                </p>
+                                            </div>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <p>Authorised Signature</p>
                                             </div>
                                         </div>
                                     </div>
@@ -426,4 +392,4 @@ const Template4 = React.forwardRef((props, ref) => {
     );
 });
 
-export default Template4;
+export default Template3;

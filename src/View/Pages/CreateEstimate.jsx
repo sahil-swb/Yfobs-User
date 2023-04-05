@@ -340,7 +340,7 @@ const CreateEstimate = () => {
                                                     <div className="text-right font-weight-bold h5">
                                                         <ListGroup variant="flush">
                                                             <ListGroup.Item>
-                                                                <span className="mr-5">Sub Total</span> {currencySign} .00
+                                                                <span className="mr-5">Sub Total</span> {currencySign}.00
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Discount in %</label>
@@ -350,7 +350,7 @@ const CreateEstimate = () => {
                                                                     name="discount"
                                                                     type="number"
                                                                 />
-                                                                <span>{currencySign} 0</span>
+                                                                <span>{currencySign}.00</span>
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Tax in %</label>
@@ -360,7 +360,7 @@ const CreateEstimate = () => {
                                                                     name="tax"
                                                                     type="number"
                                                                 />
-                                                                <span>{currencySign} 0</span>
+                                                                <span>{currencySign}.00</span>
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <span className="mr-5"> Grand Total</span>
