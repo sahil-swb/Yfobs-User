@@ -18,9 +18,15 @@ const CreateEstimate = () => {
     const [currencySign, setCurrencySign] = useState('');
     const [countryId, setCountryId] = useState('');
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
-    const { getEstimateProducts } = useSelector((state) => state.productsReducer);
+    const { getEstimateProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
+    const { defaultQuantity, setDefaultQuantity } = useState(1);
+    const { defaultTotal, setDefaultTotal } = useState(2);
+    const { defaultPrice, setDefaultPrice } = useState(2);
+
+    //Array Field
+
     const dispatch = useDispatch();
     // const formik = useFormik();
     // const { values, submitForm, setFieldValue } = useFormikContext();
@@ -83,6 +89,20 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
+    // const handleQuantity = (e) => {
+    //     let newQty = e.target.value;
+    //     console.log(newQty);
+    //     setDefaultQuantity(e.target.value);
+    // };
+
+    // useEffect(() => {
+    //     setDefaultTotal(45);
+    // }, [defaultTotal]);
+
+    // const handleCalculation = (e) => {
+    //     console.log(e.target.value);
+    // };
+
     return (
         <>
             <Row>
@@ -104,14 +124,12 @@ const CreateEstimate = () => {
                                 posoNumber: '',
                                 date: '',
                                 expireOn: '',
-                                subTotal: '',
-                                estimateProducts: []
+                                estimateProducts: getEstimateProducts
                             }}
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
                             {({ values }) => (
                                 <Form>
-                                    {/* {console.log(values?.estimateProducts)} */}
                                     <Accordion defaultActiveKey="0">
                                         <Card>
                                             <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
@@ -260,68 +278,61 @@ const CreateEstimate = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {/* {getEstimateProducts?.map((val) => (
-                                                                    <tr>
-                                                                        <td>
-                                                                            <input
-                                                                                className="form-control border rounded"
-                                                                                type="text"
-                                                                                defaultValue={val.name}
-                                                                            />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input
-                                                                                className="form-control border rounded"
-                                                                                type="number"
-                                                                                defaultValue={val.price}
-                                                                            />
-                                                                        </td>
-                                                                        <td>
-                                                                            <input className="form-control border rounded" type="number" />
-                                                                        </td>
-                                                                        <td></td>
-                                                                    </tr>
-                                                                ))} */}
                                                                 <FieldArray
                                                                     name="estimateProducts"
                                                                     render={(arrayHelpers) => (
-                                                                        <div>
-                                                                            {values &&
-                                                                                values?.estimateProducts.map((estimate, index) => (
-                                                                                    <div key={index}>
-                                                                                        {/** both these conventions do the same */}
-                                                                                        <Field
-                                                                                            className="form-control border rounded"
-                                                                                            name={`estimate[${index}].name`}
-                                                                                        />
-                                                                                        <Field
-                                                                                            className="form-control border rounded"
-                                                                                            name={`estimate.${index}.price`}
-                                                                                        />
-                                                                                        <Field
-                                                                                            className="form-control border rounded"
-                                                                                            name={`estimate[${index}].que`}
-                                                                                        />
-                                                                                        <Field
-                                                                                            className="form-control border rounded"
-                                                                                            name={`estimate.${index}.total`}
-                                                                                        />
-
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            onClick={() => arrayHelpers.remove(index)}
-                                                                                        >
-                                                                                            X
-                                                                                        </button>
-                                                                                    </div>
-                                                                                ))}
-                                                                            {/* <button
-                                                                                type="button"
-                                                                                onClick={() => arrayHelpers.push({ name: '', age: '' })}
-                                                                            >
-                                                                                +
-                                                                            </button> */}
-                                                                        </div>
+                                                                        <>
+                                                                            {values?.estimateProducts.map((estimate, index) => {
+                                                                                return (
+                                                                                    <tr key={estimate?._id}>
+                                                                                        <td>
+                                                                                            <Field
+                                                                                                className="form-control border rounded"
+                                                                                                name={`estimateProducts[${index}].name`}
+                                                                                            />
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <Field
+                                                                                                className="form-control border rounded"
+                                                                                                name={`estimateProducts[${index}].price`}
+                                                                                            />
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <Field
+                                                                                                type="number"
+                                                                                                className="form-control border rounded"
+                                                                                                name={defaultQuantity}
+                                                                                            />
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div
+                                                                                                className="d-flex"
+                                                                                                style={{
+                                                                                                    alignItems: 'center',
+                                                                                                    justifyContent: 'space-between'
+                                                                                                }}
+                                                                                            >
+                                                                                                <b>TTTTT</b>
+                                                                                                <button
+                                                                                                    type="button"
+                                                                                                    className="btn btn-primary btn-sm ml-3"
+                                                                                                    onClick={() =>
+                                                                                                        arrayHelpers.remove(index)
+                                                                                                    }
+                                                                                                >
+                                                                                                    x
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                );
+                                                                            })}
+                                                                            {modalOpenType === 'CUSTOMERS' ? (
+                                                                                <CustomersModal />
+                                                                            ) : modalOpenType === 'PRODUCTS' ? (
+                                                                                <ProductsEstimateModal addHelper={arrayHelpers} />
+                                                                            ) : null}
+                                                                        </>
                                                                     )}
                                                                 />
                                                             </tbody>
@@ -386,7 +397,6 @@ const CreateEstimate = () => {
                             )}
                         </Formik>
                     </div>
-                    {modalOpenType === 'CUSTOMERS' ? <CustomersModal /> : modalOpenType === 'PRODUCTS' ? <ProductsEstimateModal /> : null}
                 </Col>
             </Row>
         </>

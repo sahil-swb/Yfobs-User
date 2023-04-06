@@ -5,9 +5,9 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import { getAllProductsApi, getSingleProductApi } from '../../slices/productsSlice';
 import { getCustomerById } from '../../slices/customersSlice';
 
-const ProductsEstimateModal = () => {
+const ProductsEstimateModal = ({ addHelper }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
-    const { getAllProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
+    const { getAllProducts, getSingleProduct, getEstimateProducts } = useSelector((state) => state.productsReducer);
     const [itemName, setItemName] = useState('');
     const [foundItems, setFoundItems] = useState(getAllProducts);
     const dispatch = useDispatch();
@@ -32,11 +32,19 @@ const ProductsEstimateModal = () => {
         dispatch(getSingleProductApi({ payload }));
     };
 
-    console.log(getSingleProduct);
+    useEffect(() => {
+        if (getSingleProduct?._id) {
+            addHelper.push({
+                name: getSingleProduct?.name,
+                price: getSingleProduct?.price
+            });
+        }
+    }, [getSingleProduct]);
 
     useEffect(() => {
         dispatch(getAllProductsApi());
     }, []);
+
     return (
         <Modal
             show={modalIsOpen}
