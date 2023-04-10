@@ -1,10 +1,23 @@
 import * as React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import DEMO from '../../../../../store/constant';
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
+import { Link } from 'react-router-dom';
+import history from '../../../../../history';
+import { getSingleUser } from '../../../../../slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { userId } from '../../../../../constants/userData';
 const NavRight = (props) => {
+    const { getDataById } = useSelector((state) => state.authReducer);
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        const payload = {
+            _id: userId
+        };
+        dispatch(getSingleUser({ payload }));
+    }, []);
     return (
         <>
             <ul className="navbar-nav ml-auto">
@@ -108,10 +121,19 @@ const NavRight = (props) => {
                         <Dropdown.Menu alignRight className="profile-notification">
                             <div className="pro-head bg-dark">
                                 <img src={Avatar1} className="img-radius" alt="User Profile" />
-                                <span>John Doe</span>
-                                <a href={DEMO.BLANK_LINK} className="dud-logout" title="Logout">
+                                <span>{getDataById?.name}</span>
+                                <Button
+                                    variant="link"
+                                    onClick={() => {
+                                        localStorage.removeItem('userData');
+                                        history.push('/');
+                                        window.location.reload();
+                                    }}
+                                    className="dud-logout"
+                                    title="Logout"
+                                >
                                     <i className="feather icon-log-out" />
-                                </a>
+                                </Button>
                             </div>
                             <ul className="pro-body">
                                 <li>

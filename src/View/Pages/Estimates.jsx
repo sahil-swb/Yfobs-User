@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import CommonDataTable from '../../components/CommonDataTable';
 import { getAllEstimatesApi } from '../../slices/estimatesSlice';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
@@ -43,7 +43,7 @@ const Estimates = () => {
             selector: (row) => {
                 return (
                     <div>
-                        <Link to="/estimates/estimates_details">
+                        <Link to={`/estimates/estimates_details/${row._id}`}>
                             <Button>View</Button>
                         </Link>
                     </div>

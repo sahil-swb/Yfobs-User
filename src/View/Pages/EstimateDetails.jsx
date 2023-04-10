@@ -1,18 +1,30 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import Template1 from '../../components/invoiceTemplates/Template1';
 import Template2 from '../../components/invoiceTemplates/Template2';
 import Template4 from '../../components/invoiceTemplates/Template4';
 import Template3 from '../../components/invoiceTemplates/Template3';
+import { useDispatch } from 'react-redux';
+import { getEstimateById } from '../../slices/estimatesSlice';
 
 const EstimateDetails = () => {
+    const { _id } = useParams();
+    const dispatch = useDispatch();
+    console.log(_id);
     const componentRef = useRef();
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current
     });
+
+    useEffect(() => {
+        let payload = {
+            _id: _id
+        };
+        dispatch(getEstimateById({ payload }));
+    }, []);
     return (
         <div>
             {/* <h1>invoicePage</h1> */}
@@ -47,10 +59,10 @@ const EstimateDetails = () => {
             </Row>
             <Row>
                 <Col md={{ span: 10, offset: 1 }}>
-                    {/* <Template1 ref={componentRef} /> */}
+                    <Template1 ref={componentRef} />
                     {/* <Template2 ref={componentRef} /> */}
                     {/* <Template3 ref={componentRef} /> */}
-                    <Template4 ref={componentRef} />
+                    {/* <Template4 ref={componentRef} /> */}
                 </Col>
             </Row>
         </div>

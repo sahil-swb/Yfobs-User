@@ -5,7 +5,7 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import { getAllProductsApi, getSingleProductApi } from '../../slices/productsSlice';
 import { getCustomerById } from '../../slices/customersSlice';
 
-const ProductsEstimateModal = ({ addHelper }) => {
+const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllProducts, getSingleProduct, getEstimateProducts } = useSelector((state) => state.productsReducer);
     const [itemName, setItemName] = useState('');
@@ -25,6 +25,8 @@ const ProductsEstimateModal = ({ addHelper }) => {
         setItemName(keyword);
     };
 
+    console.log(defaultQuantity);
+
     const handleSubmit = (id) => {
         const payload = {
             _id: id
@@ -36,7 +38,8 @@ const ProductsEstimateModal = ({ addHelper }) => {
         if (getSingleProduct?._id) {
             addHelper.push({
                 name: getSingleProduct?.name,
-                price: getSingleProduct?.price
+                price: parseInt(getSingleProduct?.price),
+                quantity: defaultQuantity
             });
         }
     }, [getSingleProduct]);

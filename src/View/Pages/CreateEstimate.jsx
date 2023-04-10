@@ -21,15 +21,22 @@ const CreateEstimate = () => {
     const { getEstimateProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
-    const { defaultQuantity, setDefaultQuantity } = useState(1);
-    const { defaultTotal, setDefaultTotal } = useState(2);
-    const { defaultPrice, setDefaultPrice } = useState(2);
+    const [defaultQuantity, setDefaultQuantity] = useState(1);
+    const [defaultTotal, setDefaultTotal] = useState(0);
+    const [defaultDiscount, setDefaultDiscount] = useState(0);
+    const [defaultTax, setDefaultTax] = useState(0);
 
     //Array Field
 
     const dispatch = useDispatch();
     // const formik = useFormik();
     // const { values, submitForm, setFieldValue } = useFormikContext();
+
+    let discountValue = (defaultTotal * defaultDiscount) / 100;
+    let discountAmount = defaultTotal - (defaultTotal * defaultDiscount) / 100;
+    let taxValue = (discountAmount * defaultTax) / 100;
+    let grandTotal = (discountAmount * defaultTax) / 100 + discountAmount;
+
     const handleSubmit = (values, resetForm) => {
         const payload = {
             businessId: values?.businessId,
@@ -40,11 +47,14 @@ const CreateEstimate = () => {
             posoNumber: values?.posoNumber,
             date: values?.date,
             expireOn: values?.expireOn,
-            subTotal: values?.subTotal
+            discount: defaultDiscount,
+            tax: defaultTax,
+            subTotal: defaultTotal,
+            grandTotal: grandTotal
         };
 
         dispatch(createEstimateApi({ payload }));
-        resetForm({ payload: '' });
+        // resetForm({ payload: '' });
     };
 
     const handleChangeCustomer = (e) => {
@@ -75,12 +85,6 @@ const CreateEstimate = () => {
     }, []);
 
     useEffect(() => {
-        if (getEstimateProducts) {
-            // setFieldValue('estimateProducts', getEstimateProducts);
-        }
-    }, [getEstimateProducts]);
-
-    useEffect(() => {
         getAllCountries.map((val) => {
             if (getSingleCustomerData?.currencyName === val?.currencyName) {
                 setCurrencySign(val?.currencySymbol);
@@ -88,20 +92,6 @@ const CreateEstimate = () => {
             }
         });
     }, [getSingleCustomerData, countryPrefillValue]);
-
-    // const handleQuantity = (e) => {
-    //     let newQty = e.target.value;
-    //     console.log(newQty);
-    //     setDefaultQuantity(e.target.value);
-    // };
-
-    // useEffect(() => {
-    //     setDefaultTotal(45);
-    // }, [defaultTotal]);
-
-    // const handleCalculation = (e) => {
-    //     console.log(e.target.value);
-    // };
 
     return (
         <>
@@ -285,14 +275,17 @@ const CreateEstimate = () => {
                                                                             {values?.estimateProducts.map((estimate, index) => {
                                                                                 return (
                                                                                     <tr key={estimate?._id}>
+                                                                                        {console.log(estimate)}
                                                                                         <td>
                                                                                             <Field
+                                                                                                type="text"
                                                                                                 className="form-control border rounded"
                                                                                                 name={`estimateProducts[${index}].name`}
                                                                                             />
                                                                                         </td>
                                                                                         <td>
                                                                                             <Field
+                                                                                                type="number"
                                                                                                 className="form-control border rounded"
                                                                                                 name={`estimateProducts[${index}].price`}
                                                                                             />
@@ -301,7 +294,7 @@ const CreateEstimate = () => {
                                                                                             <Field
                                                                                                 type="number"
                                                                                                 className="form-control border rounded"
-                                                                                                name={defaultQuantity}
+                                                                                                name={`estimateProducts[${index}].quantity`}
                                                                                             />
                                                                                         </td>
                                                                                         <td>
@@ -312,7 +305,12 @@ const CreateEstimate = () => {
                                                                                                     justifyContent: 'space-between'
                                                                                                 }}
                                                                                             >
-                                                                                                <b>TTTTT</b>
+                                                                                                {/* <Field
+                                                                                                disabled
+                                                                                                className="form-control border rounded"
+                                                                                                /> */}
+                                                                                                {currencySign}{' '}
+                                                                                                {estimate?.price * estimate?.quantity}
                                                                                                 <button
                                                                                                     type="button"
                                                                                                     className="btn btn-primary btn-sm ml-3"
@@ -330,7 +328,10 @@ const CreateEstimate = () => {
                                                                             {modalOpenType === 'CUSTOMERS' ? (
                                                                                 <CustomersModal />
                                                                             ) : modalOpenType === 'PRODUCTS' ? (
-                                                                                <ProductsEstimateModal addHelper={arrayHelpers} />
+                                                                                <ProductsEstimateModal
+                                                                                    addHelper={arrayHelpers}
+                                                                                    defaultQuantity={defaultQuantity}
+                                                                                />
                                                                             ) : null}
                                                                         </>
                                                                     )}
@@ -351,31 +352,42 @@ const CreateEstimate = () => {
                                                     <div className="text-right font-weight-bold h5">
                                                         <ListGroup variant="flush">
                                                             <ListGroup.Item>
-                                                                <span className="mr-5">Sub Total</span> {currencySign}.00
+                                                                <span className="mr-5">Sub Total</span> {currencySign}{' '}
+                                                                {values.estimateProducts.reduce((acc, val) => {
+                                                                    let subTotalAmount = acc + val.price * val.quantity;
+                                                                    setDefaultTotal(subTotalAmount);
+                                                                    return subTotalAmount;
+                                                                }, 0)}
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Discount in %</label>
                                                                 <Field
                                                                     className="mr-5 rounded p-1"
-                                                                    style={{ width: '40px' }}
+                                                                    style={{ width: '50px' }}
                                                                     name="discount"
                                                                     type="number"
+                                                                    onChange={(e) => setDefaultDiscount(e.target.value)}
                                                                 />
-                                                                <span>{currencySign}.00</span>
+                                                                <span>
+                                                                    {currencySign} {discountValue}
+                                                                </span>
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Tax in %</label>
                                                                 <Field
                                                                     className="mr-5 rounded p-1"
-                                                                    style={{ width: '40px' }}
+                                                                    style={{ width: '50px' }}
                                                                     name="tax"
                                                                     type="number"
+                                                                    onChange={(e) => setDefaultTax(e.target.value)}
                                                                 />
-                                                                <span>{currencySign}.00</span>
+                                                                <span>
+                                                                    {currencySign} {taxValue}
+                                                                </span>
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <span className="mr-5"> Grand Total</span>
-                                                                {currencySign} .00
+                                                                {currencySign} {grandTotal}
                                                             </ListGroup.Item>
                                                         </ListGroup>
                                                     </div>

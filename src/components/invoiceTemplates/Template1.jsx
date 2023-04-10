@@ -1,7 +1,9 @@
 import React from 'react';
 import yfobsLogo from '../../assets/images/official-yfobs-logo.png';
+import { useSelector } from 'react-redux';
 
 const Template1 = React.forwardRef((props, ref) => {
+    const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
     return (
         <>
             <meta charSet="UTF-8" />
@@ -35,8 +37,8 @@ const Template1 = React.forwardRef((props, ref) => {
                                 <img src={yfobsLogo} alt="yfobs-logo" width="100%" />
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <h2 style={{ textTransform: 'uppercase' }}>Lorem ipsum dolor sit amet.</h2>
-                                <p style={{ margin: '1.5rem 0' }}>Lorem, ipsum dolor.</p>
+                                <h2 style={{ textTransform: 'uppercase' }}>{getSingleEstimate?.title}</h2>
+                                <p style={{ margin: '1.5rem 0' }}>{getSingleEstimate?.summary}</p>
                                 <p style={{ marginBottom: '1rem', lineHeight: '1.5rem' }}>
                                     <strong>SilverWebbuzz.</strong> <br />
                                     Lorem, ipsum dolor.

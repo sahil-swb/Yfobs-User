@@ -6,6 +6,7 @@ import {
     USER_CREATE_ESTIMATES,
     USER_DELETE_ESTIMATES,
     USER_GET_ALL_ESTIMATES,
+    USER_GET_ESTIMATE_BYID,
     USER_UPDATE_ESTIMATES
 } from '../constants/urlConfig';
 
@@ -14,7 +15,8 @@ const initialState = {
     getAllEstimates: [],
     createEstimate: {},
     deleteEstimate: {},
-    updateEstimate: {}
+    updateEstimate: {},
+    getSingleEstimate: {}
 };
 
 export const createEstimateApi = createAsyncThunk('user/createEstimate', async ({ payload }, { rejectWithValue }) => {
@@ -67,6 +69,18 @@ export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async (
     }
 });
 
+export const getEstimateById = createAsyncThunk('user/getEstimateById', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ESTIMATE_BYID}${payload._id}`, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        return rejectWithValue(error.response);
+    }
+});
+
 const estimatesSlice = createSlice({
     name: 'estimates',
     initialState,
@@ -114,6 +128,17 @@ const estimatesSlice = createSlice({
                 state.deleteEstimate = action.payload;
             })
             .addCase(deleteEstimateApi.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            //GETBYID
+            .addCase(getEstimateById.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(getEstimateById.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getSingleEstimate = action.payload;
+            })
+            .addCase(getEstimateById.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

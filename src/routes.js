@@ -16,6 +16,6 @@ const routes = [
     { path: '/products', exact: true, name: 'Products', component: Products },
     { path: '/estimates', exact: true, name: 'Estimates', component: Estimates },
     { path: '/estimates/create_estimates', exact: true, name: 'CreateEstimate', component: CreateEstimate },
-    { path: '/estimates/estimates_details', exact: true, name: 'EstimateDetails', component: EstimateDetails }
+    { path: '/estimates/estimates_details/:_id', exact: true, name: 'EstimateDetails', component: EstimateDetails }
 ];
 export default routes;

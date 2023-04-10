@@ -33,6 +33,7 @@ export const USER_CREATE_ESTIMATES = 'Estimates/createEstimates';
 export const USER_GET_ALL_ESTIMATES = 'Estimates/getAllEstimates';
 export const USER_UPDATE_ESTIMATES = 'Estimates/updateEstimates/';
 export const USER_DELETE_ESTIMATES = 'Estimates/deleteEstimates/';
+export const USER_GET_ESTIMATE_BYID = 'Estimates/getEstimate/';
 
 //Countries Api
 export const USER_GETALL_COUNTRIES = 'Country/getAllCountry';

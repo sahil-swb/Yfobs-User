@@ -55,7 +55,7 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
             console.log(response?.data);
             localStorage.setItem('userData', JSON.stringify(setAuthData));
             history.push('/dashboard');
-            // window.location.reload();
+            window.location.reload();
             return response?.data?.data;
         } else {
             return response?.data?.data;

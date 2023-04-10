@@ -40,17 +40,17 @@ const App = () => {
                             })}
                         </Switch>
                     </Route>
-                    <Route path={routes.map((x) => x.path)}>
-                        <AdminLayout />
-                    </Route>
 
                     {/* <Route path="/estimates/estimates_preview">
                         <EstimatePreview />
                     </Route> */}
 
-                    {/* <Route path={'/'} exact>
+                    <Route path={routes.map((x) => x.path)}>
+                        <AdminLayout />
+                    </Route>
+                    <Route path={'/'} exact>
                         <Redirect to={Config.defaultPath} />
-                    </Route> */}
+                    </Route>
                 </Suspense>
             </ScrollToTop>
             <div className="backdrop" />
