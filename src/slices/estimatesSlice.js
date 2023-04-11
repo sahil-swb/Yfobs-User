@@ -7,6 +7,7 @@ import {
     USER_DELETE_ESTIMATES,
     USER_GET_ALL_ESTIMATES,
     USER_GET_ESTIMATE_BYID,
+    USER_SEND_ESTIMATE_MESSAGE,
     USER_UPDATE_ESTIMATES
 } from '../constants/urlConfig';
 
@@ -16,7 +17,8 @@ const initialState = {
     createEstimate: {},
     deleteEstimate: {},
     updateEstimate: {},
-    getSingleEstimate: {}
+    getSingleEstimate: {},
+    getSingleEstimateMessage: {}
 };
 
 export const createEstimateApi = createAsyncThunk('user/createEstimate', async ({ payload }, { rejectWithValue }) => {
@@ -56,9 +58,9 @@ export const updateEstimateApi = createAsyncThunk('user/updateEstimate', async (
     }
 });
 
-export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async ({ del_id }, { rejectWithValue }) => {
+export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_ESTIMATES}${del_id}`, {
+        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_ESTIMATES}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.message);
@@ -78,6 +80,19 @@ export const getEstimateById = createAsyncThunk('user/getEstimateById', async ({
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error.response);
+    }
+});
+
+export const sendEstimateMessage = createAsyncThunk('user/sendEstimateMessage', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post(BASE_URL_FOR_USER + USER_SEND_ESTIMATE_MESSAGE, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+        console.log(response?.data);
+        return response?.data?.data;
+    } catch (error) {
+        console.log(error?.response?.data);
+        return rejectWithValue(error?.response?.data);
     }
 });
 
@@ -139,6 +154,16 @@ const estimatesSlice = createSlice({
                 state.getSingleEstimate = action.payload;
             })
             .addCase(getEstimateById.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(sendEstimateMessage.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(sendEstimateMessage.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getSingleEstimateMessage = action.payload;
+            })
+            .addCase(sendEstimateMessage.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

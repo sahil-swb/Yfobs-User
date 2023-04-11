@@ -64,9 +64,9 @@ const Template1 = React.forwardRef((props, ref) => {
                                     <strong>GST No:</strong> Lorem, ipsum dolor.
                                 </div>
                                 <div style={{ maxWidth: '30%', position: 'absolute', right: 0 }}>
-                                    <p>Invoice Number : 3468</p>
-                                    <p>Invoice date : 30 Nov -0001</p>
-                                    <p>Due Date : 30 Nov -0001</p>
+                                    <p>Invoice Number : {getSingleEstimate?.number}</p>
+                                    <p>Invoice date : {getSingleEstimate?.date}</p>
+                                    <p>Due Date : {getSingleEstimate?.expireOn}</p>
                                     <p style={{ marginTop: 10 }}>Within 45 Days</p>
                                 </div>
                             </div>
@@ -115,22 +115,23 @@ const Template1 = React.forwardRef((props, ref) => {
                                     <li>
                                         <b>IGST2.5 [2.5%]: </b>
                                     </li>
+                                    <li>&nbsp;</li>
                                     <li>
                                         <b>Grand Total: </b>
                                     </li>
                                 </ul>
                                 <ul style={{ listStyle: 'none', lineHeight: 2, wordSpacing: '0.5rem' }}>
                                     <li>
-                                        <b> ₹ 50000.00</b>
+                                        <b> ₹ {getSingleEstimate?.subTotal}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ 5000.00</b>
+                                        <b> ₹ {getSingleEstimate?.discount}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ 1125.00</b>
+                                        <b> ₹ {getSingleEstimate?.tax}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ 1125.00</b>
+                                        <b> ₹ {getSingleEstimate?.tax}.00</b>
                                     </li>
                                     <li>
                                         <b>
@@ -138,7 +139,7 @@ const Template1 = React.forwardRef((props, ref) => {
                                         </b>
                                     </li>
                                     <li>
-                                        <b> ₹ 47250.00</b>
+                                        <b> ₹ {getSingleEstimate?.grandTotal}.00</b>
                                     </li>
                                 </ul>
                             </div>

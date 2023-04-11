@@ -14,7 +14,9 @@ import { useNavigate } from 'react-router';
 import Register from '../View/Pages/Register';
 import ForgotPassword from '../View/Pages/ForgotPassword';
 import ChangePassword from '../View/Pages/ChangePassword';
+// import EstimatePreview from '../View/Pages/EstimatePreview';
 const AdminLayout = lazy(() => import('./layout/AdminLayout'));
+const EstimatePreview = lazy(() => import('../View/Pages/EstimatePreview'));
 // const SignIn = lazy(() => import('../View/Pages/SignIn1'));
 
 const App = () => {
@@ -48,9 +50,13 @@ const App = () => {
                     <Route path={routes.map((x) => x.path)}>
                         <AdminLayout />
                     </Route>
-                    <Route path={'/'} exact>
+
+                    <Route path="/estimates/estimates_preview/:_id" exact={true} render={EstimatePreview} />
+                    {/* <EstimatePreview />
+                    </Route> */}
+                    {/* <Route path={'/'} exact>
                         <Redirect to={Config.defaultPath} />
-                    </Route>
+                    </Route> */}
                 </Suspense>
             </ScrollToTop>
             <div className="backdrop" />

@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react';
-import { Badge, Button, ButtonGroup, Card, Dropdown, DropdownButton } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import React from 'react';
+import { Badge, Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import CommonDataTable from '../../components/CommonDataTable';
-import { deleteEstimateApi, getAllEstimatesApi } from '../../slices/estimatesSlice';
-import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
-import EstimateSendModal from '../../components/modals/EstimateSendModal';
+import { useSelector } from 'react-redux';
 
-const Estimates = () => {
-    const history = useHistory();
+const Invoices = () => {
     const columns = [
         {
             name: 'Status',
@@ -45,7 +41,7 @@ const Estimates = () => {
             selector: (row) => {
                 return (
                     <div>
-                        <select name="" id="" className="form-control p-2" onClick={(e) => handleDeleteEstimate(e, row)}>
+                        <select name="" id="" className="form-control p-2" onClick={(e) => handleDeleteInvoice(e, row)}>
                             <option value="">Select</option>
                             <option value="VIEW">View</option>
                             <option value="SEND">Send</option>
@@ -62,36 +58,11 @@ const Estimates = () => {
     ];
 
     const { getAllEstimates, createEstimate, deleteEstimate, updateEstimate } = useSelector((state) => state.estimateReducer);
-    const dispatch = useDispatch();
 
-    const handleDeleteEstimate = (e, row) => {
-        let optionValue = e.target.value;
-        let payload = {
-            _id: row?._id
-        };
-
-        if (optionValue === 'VIEW' || optionValue === 'PRINT') {
-            history.push(`/estimates/estimates_details/${row._id}`);
-        } else if (optionValue === 'SEND') {
-            console.log('SEND');
-            dispatch(commonModalIsOpen(true));
-        } else if (optionValue === 'CONVERT_TO_INVOICE') {
-            console.log('CONVERT_TO_INVOICE');
-        } else if (optionValue === 'PREVIEW_AS_CUSTOMER') {
-            console.log('PREVIEW_AS_CUSTOMER');
-            history.push(`/estimates/estimates_preview/${row._id}`);
-        } else if (optionValue === 'EXPORT_AS_PDF') {
-            console.log('EXPORT_AS_PDF');
-        } else if (optionValue === 'DELETE') {
-            dispatch(deleteEstimateApi({ payload }));
-        } else {
-            return;
-        }
+    const handleDeleteInvoice = () => {
+        console.log('handleDeleteInvoice');
     };
 
-    useEffect(() => {
-        dispatch(getAllEstimatesApi());
-    }, [createEstimate, deleteEstimate, updateEstimate]);
     return (
         <>
             <Card>
@@ -108,9 +79,8 @@ const Estimates = () => {
                     <CommonDataTable columns={columns} data={getAllEstimates} />
                 </Card.Body>
             </Card>
-            <EstimateSendModal />
         </>
     );
 };
 
-export default Estimates;
+export default Invoices;

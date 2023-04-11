@@ -45,6 +45,14 @@ const chartData = {
                     url: '/estimates',
                     classes: 'nav-item',
                     icon: 'fa fa-cubes'
+                },
+                {
+                    id: 'invoices',
+                    title: 'Invoices',
+                    type: 'item',
+                    url: '/invoices',
+                    classes: 'nav-item',
+                    icon: 'fa fa-cubes'
                 }
             ]
         }

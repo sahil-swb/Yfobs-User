@@ -34,6 +34,7 @@ export const USER_GET_ALL_ESTIMATES = 'Estimates/getAllEstimates';
 export const USER_UPDATE_ESTIMATES = 'Estimates/updateEstimates/';
 export const USER_DELETE_ESTIMATES = 'Estimates/deleteEstimates/';
 export const USER_GET_ESTIMATE_BYID = 'Estimates/getEstimate/';
+export const USER_SEND_ESTIMATE_MESSAGE = 'Estimates/SendEmailCustomer';
 
 //Countries Api
 export const USER_GETALL_COUNTRIES = 'Country/getAllCountry';
@@ -45,3 +46,10 @@ export const USER_GET_ALL_BUSINESS = 'business/getAllBusiness';
 export const USER_UPDATE_BUSINESS = 'business/updateBusiness/';
 export const USER_UPLOAD_UPIQRCODE = 'business/upiQRCodeImage';
 export const USER_UPLOAD_LOGO = 'business/uploadLogo';
+
+//Invoice Api
+export const USER_CREATE_INVOICE = 'Invoice/createInvoice';
+export const USER_GETALL_INVOICES = 'Invoice/getAllInvoice';
+export const USER_UPDATE_INVOICE = 'Invoice/updateInvoice/';
+export const USER_DELETE_INVOICE = 'Invoice/deleteInvoice/';
+export const USER_GET_SINGLE_INVOICE = 'Invoice/getInvoiceById/';
