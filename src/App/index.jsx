@@ -51,7 +51,6 @@ const App = () => {
                         <AdminLayout />
                     </Route>
 
-                    <Route path="/estimates/estimates_preview/:_id" exact={true} render={EstimatePreview} />
                     {/* <EstimatePreview />
                     </Route> */}
                     {/* <Route path={'/'} exact>
@@ -59,6 +58,8 @@ const App = () => {
                     </Route> */}
                 </Suspense>
             </ScrollToTop>
+            {/* <Route path="/estimates/estimates_preview/:_id" exact={true} component={EstimatePreview} />
+            <Route path="/invoices/invoice_preview/:_id" exact={true} component={InvoicePagePreview} /> */}
             <div className="backdrop" />
         </>
     );

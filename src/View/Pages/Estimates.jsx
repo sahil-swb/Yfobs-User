@@ -45,7 +45,7 @@ const Estimates = () => {
             selector: (row) => {
                 return (
                     <div>
-                        <select name="" id="" className="form-control p-2" onClick={(e) => handleDeleteEstimate(e, row)}>
+                        <select name="" id="" className="form-control" onClick={(e) => handleDeleteEstimate(e, row)}>
                             <option value="">Select</option>
                             <option value="VIEW">View</option>
                             <option value="SEND">Send</option>

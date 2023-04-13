@@ -1,0 +1,10 @@
+.invoice-card-div{
+    pointer-events: none;
+    border-radius: 0.5rem;
+    margin-top: 3rem;
+    padding: 0.5rem 0;
+}
+
+.invoice-card-body-div{
+    opacity: 0.5;
+}

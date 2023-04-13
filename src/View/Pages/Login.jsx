@@ -9,12 +9,12 @@ import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, setIsLogin } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
-import history from '../../history';
-// import history from '../../history';
+// import { accessToken } from '../../constants/userData';
 
 const Login = () => {
-    const { loginData, isLogin } = useSelector((state) => state.authReducer);
+    const { loginData } = useSelector((state) => state.authReducer);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleLogin = (values) => {
         let payload = {
@@ -23,8 +23,13 @@ const Login = () => {
         };
         dispatch(setIsLogin(true));
         dispatch(loginUser({ payload }));
-        // history.push('/dashboard');
     };
+
+    React.useEffect(() => {
+        if (loginData?.token) {
+            history.push('/dashboard');
+        }
+    }, [loginData]);
 
     return (
         <>

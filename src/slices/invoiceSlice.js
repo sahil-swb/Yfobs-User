@@ -18,7 +18,7 @@ const initialState = {
     getSingleInvoice: {}
 };
 
-const setCreateInvoice = createAsyncThunk('user/setCreateInvoice', async ({ payload }, { rejectWithValue }) => {
+export const setCreateInvoice = createAsyncThunk('user/setCreateInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.post(BASE_URL_FOR_USER + USER_CREATE_INVOICE, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
@@ -29,40 +29,43 @@ const setCreateInvoice = createAsyncThunk('user/setCreateInvoice', async ({ payl
     }
 });
 
-const setGetAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (_, { rejectWithValue }) => {
+export const setGetAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (_, { rejectWithValue }) => {
     try {
         const response = await axios.post(BASE_URL_FOR_USER + USER_GETALL_INVOICES, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
+        console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-const setGetSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', async ({ payload }, { rejectWithValue }) => {
+export const setGetSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_INVOICE}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
+        console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-const setUpdateInvoice = createAsyncThunk('user/setUpdateInvoice', async ({ payload }, { rejectWithValue }) => {
+export const setUpdateInvoice = createAsyncThunk('user/setUpdateInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_INVOICE}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
+        console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-const setDeleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ payload }, { rejectWithValue }) => {
+export const setDeleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_INVOICE}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }

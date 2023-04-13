@@ -1,23 +1,22 @@
 import React from 'react';
 import logoDark from '../../assets/images/logo-dark.png';
 import Breadcrumb from '../../App/layout/AdminLayout/Breadcrumb';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleUser, UserForgotPassword } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
-import history from '../../history';
 
 const ForgotPassword = () => {
     const { forgotPasswordData } = useSelector((state) => state.authReducer);
     const dispatch = useDispatch();
+    const history = useHistory();
     const handleForgotPassword = (values) => {
         let payload = {
             email: values.email
         };
         dispatch(UserForgotPassword({ payload }));
         history.push('/change_password');
-        window.location.reload();
     };
     console.log(forgotPasswordData);
     return (

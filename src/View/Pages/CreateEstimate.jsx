@@ -29,9 +29,6 @@ const CreateEstimate = () => {
     //Array Field
 
     const dispatch = useDispatch();
-    // const formik = useFormik();
-    // const { values, submitForm, setFieldValue } = useFormikContext();
-
     let discountValue = (defaultTotal * defaultDiscount) / 100;
     let discountAmount = defaultTotal - (defaultTotal * defaultDiscount) / 100;
     let taxValue = (discountAmount * defaultTax) / 100;

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-import { successPNotify, warningPNotify, errorPNotify } from '../components/alertMsg';
+import { successPNotify, errorPNotify } from '../components/alertMsg';
 import {
     BASE_URL_FOR_USER,
     CHANGE_USER_PASSWORD,
@@ -11,7 +10,6 @@ import {
     REGISTER_USER,
     UPDATE_PROFILE
 } from '../constants/urlConfig';
-import history from '../history';
 
 const initialState = {
     isLoading: false,
@@ -45,7 +43,6 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response);
-
         response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
         let setAuthData = {
             authToken: response?.data?.token,
@@ -54,9 +51,7 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
         if (response?.data?.status) {
             console.log(response?.data);
             localStorage.setItem('userData', JSON.stringify(setAuthData));
-            history.push('/dashboard');
-            window.location.reload();
-            return response?.data?.data;
+            return response?.data;
         } else {
             return response?.data?.data;
         }

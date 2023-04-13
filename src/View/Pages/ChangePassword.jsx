@@ -5,9 +5,10 @@ import { Field, Form, Formik } from 'formik';
 import { UserChangePassword } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthLayout from '../../components/AuthLayout';
-import history from '../../history';
+import { useHistory } from 'react-router-dom';
 
 const ChangePassword = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const handleChangePassword = (values) => {
         let payload = {
@@ -18,7 +19,6 @@ const ChangePassword = () => {
         if (values.newPassword === values.confPassword) {
             dispatch(UserChangePassword({ payload }));
             history.push('/');
-            window.location.reload();
         } else {
             alert('Password Not Matched');
         }

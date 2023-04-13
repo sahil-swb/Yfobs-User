@@ -56,7 +56,8 @@ const AdminLayout = () => {
                                                     />
                                                 ) : null;
                                             })}
-                                            <Redirect from="/" to={defaultPath} />
+
+                                            {/* <Redirect from="/" to={defaultPath} /> */}
                                         </Switch>
                                     </Suspense>
                                 </div>
