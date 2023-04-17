@@ -8,9 +8,10 @@ import config from './config';
 import './assets/scss/style.scss';
 const app = (
     <Provider store={store}>
-        <BrowserRouter basename={config.basename}>
+        <BrowserRouter>
             <App />
         </BrowserRouter>
     </Provider>
 );
+// basename={config.basename}
 ReactDOM.render(app, document.getElementById('root'));

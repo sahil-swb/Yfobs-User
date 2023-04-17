@@ -8,8 +8,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { getSingleUser } from '../../../../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { userId } from '../../../../../constants/userData';
+import { useState } from 'react';
+import { useEffect } from 'react';
 const NavRight = (props) => {
     const { getDataById } = useSelector((state) => state.authReducer);
+    const [currentLogout, setCurrentLogout] = useState(false);
     const dispatch = useDispatch();
     const history = useHistory();
     React.useEffect(() => {
@@ -18,6 +21,19 @@ const NavRight = (props) => {
         };
         dispatch(getSingleUser({ payload }));
     }, []);
+
+    const handleLogout = () => {
+        // localStorage.removeItem('userData');
+        setCurrentLogout(true);
+    };
+
+    useEffect(() => {
+        console.log(currentLogout);
+        if (currentLogout) {
+            history.push('/');
+        }
+    }, [currentLogout]);
+
     return (
         <>
             <ul className="navbar-nav ml-auto">
@@ -114,7 +130,7 @@ const NavRight = (props) => {
                     </Dropdown>
                 </li>
                 <li>
-                    <Dropdown drop={!props.rtlLayout ? 'left' : 'right'} className="dropdown" alignRight={!props.rtlLayout}>
+                    <Dropdown className="dropdown">
                         <Dropdown.Toggle variant={'link'} id="dropdown-basic">
                             <i className="icon feather icon-user" />
                         </Dropdown.Toggle>
@@ -122,19 +138,11 @@ const NavRight = (props) => {
                             <div className="pro-head bg-dark">
                                 <img src={Avatar1} className="img-radius" alt="User Profile" />
                                 <span>{getDataById?.name}</span>
-                                <Button
-                                    variant="link"
-                                    onClick={() => {
-                                        localStorage.removeItem('userData');
-                                        history.push('/');
-                                    }}
-                                    className="dud-logout"
-                                    title="Logout"
-                                >
+                                <Button variant="link" onClick={() => handleLogout()} className="dud-logout" title="Logout">
                                     <i className="feather icon-log-out" />
                                 </Button>
                             </div>
-                            <ul className="pro-body">
+                            {/* <ul className="pro-body">
                                 <li>
                                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
                                         <i className="feather icon-settings" /> Settings
@@ -155,7 +163,7 @@ const NavRight = (props) => {
                                         <i className="feather icon-lock" /> Lock Screen
                                     </a>
                                 </li>
-                            </ul>
+                            </ul> */}
                         </Dropdown.Menu>
                     </Dropdown>
                 </li>
