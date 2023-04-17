@@ -1,25 +1,24 @@
 import * as React from 'react';
 import { useEffect, Suspense } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigation from './Navigation';
 import NavBar from './NavBar';
 import Breadcrumb from './Breadcrumb';
-import Configuration from './Configuration';
 import Loader from '../Loader';
 import routes from '../../../routes';
 import useWindowSize from '../../../hooks/useWindowSize';
 import * as actionTypes from '../../../store/actions';
 //import '../../../app.scss';
-const AdminLayout = () => {
+const AdminLayout = ({ data }) => {
     const { windowWidth } = useWindowSize();
+    const location = useLocation();
     const dispatch = useDispatch();
     const defaultPath = useSelector((state) => state.able.defaultPath);
     const collapseMenu = useSelector((state) => state.able.collapseMenu);
-    const layout = useSelector((state) => state.able.layout);
-    const subLayout = useSelector((state) => state.able.subLayout);
+
     useEffect(() => {
-        if (windowWidth > 992 && windowWidth <= 1024 && layout !== 'horizontal') {
+        if (windowWidth > 992 && windowWidth <= 1024) {
             dispatch({ type: actionTypes.COLLAPSE_MENU });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,16 +28,13 @@ const AdminLayout = () => {
             dispatch({ type: actionTypes.COLLAPSE_MENU });
         }
     };
-    let mainClass = ['pcoded-wrapper'];
-    if (layout === 'horizontal' && subLayout === 'horizontal-2') {
-        mainClass = [...mainClass, 'container'];
-    }
+
     return (
         <>
             <Navigation />
             <NavBar />
             <div className="pcoded-main-container" onClick={() => mobileOutClickHandler}>
-                <div className={mainClass.join(' ')}>
+                <div>
                     <div className="pcoded-content">
                         <div className="pcoded-inner-content">
                             <Breadcrumb />
@@ -57,7 +53,7 @@ const AdminLayout = () => {
                                                 ) : null;
                                             })}
 
-                                            {/* <Redirect from="/" to={defaultPath} /> */}
+                                            {/* <Redirect from="/" to={'/'} /> */}
                                         </Switch>
                                     </Suspense>
                                 </div>
@@ -66,7 +62,6 @@ const AdminLayout = () => {
                     </div>
                 </div>
             </div>
-            <Configuration />
         </>
     );
 };

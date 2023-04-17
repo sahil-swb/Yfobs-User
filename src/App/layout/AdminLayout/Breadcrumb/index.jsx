@@ -41,7 +41,7 @@ const Breadcrumb = (props) => {
         console.log(main, item);
         main_ = (
             <li className="breadcrumb-item">
-                <a href={DEMO.BLANK_LINK}>{main.title}</a>
+                <Link>{main.title}</Link>
             </li>
         );
     }
@@ -49,7 +49,7 @@ const Breadcrumb = (props) => {
         title = item.title;
         item_ = (
             <li className="breadcrumb-item">
-                <a href={DEMO.BLANK_LINK}>{title}</a>
+                <Link>{title}</Link>
             </li>
         );
         if (item.breadcrumbs !== false) {

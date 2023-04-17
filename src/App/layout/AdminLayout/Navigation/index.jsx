@@ -17,24 +17,7 @@ const Navigation = () => {
     const navFixedLayout = useSelector((state) => state.able.navFixedLayout);
     const headerFixedLayout = useSelector((state) => state.able.headerFixedLayout);
     const boxLayout = useSelector((state) => state.able.boxLayout);
-    const onChangeLayout = (layout) => dispatch({ type: actionTypes.CHANGE_LAYOUT, layout: layout });
-    const resize = () => {
-        const rootDom = document.getElementById('root');
-        if (rootDom) {
-            const contentWidth = rootDom.clientWidth;
-            if (layout === 'horizontal' && contentWidth < 992) {
-                onChangeLayout('vertical');
-            }
-        }
-    };
-    useEffect(() => {
-        resize();
-        window.addEventListener('resize', resize);
-        return () => {
-            window.removeEventListener('resize', resize);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+
     const scroll = () => {
         if (navFixedLayout && !headerFixedLayout) {
             const el = document.querySelector('.pcoded-navbar.menupos-fixed');

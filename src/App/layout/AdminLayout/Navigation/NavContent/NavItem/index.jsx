@@ -10,7 +10,6 @@ const NavItem = (props) => {
     const dispatch = useDispatch();
     const layout = useSelector((state) => state.able.layout);
     const onItemClick = () => dispatch({ type: actionTypes.COLLAPSE_MENU });
-    const onItemLeave = () => dispatch({ type: actionTypes.NAV_CONTENT_LEAVE });
     let itemTitle = props.item.title;
     if (props.item.icon) {
         itemTitle = <span className="pcoded-mtext">{props.item.title}</span>;
@@ -39,7 +38,7 @@ const NavItem = (props) => {
     }
     let mainContent;
     if (layout === 'horizontal') {
-        mainContent = <li onClick={onItemLeave}>{subContent}</li>;
+        mainContent = <li>{subContent}</li>;
     } else {
         if (windowWidth < 992) {
             mainContent = (

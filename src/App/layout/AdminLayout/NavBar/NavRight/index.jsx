@@ -23,7 +23,7 @@ const NavRight = (props) => {
     }, []);
 
     const handleLogout = () => {
-        // localStorage.removeItem('userData');
+        localStorage.removeItem('userData');
         setCurrentLogout(true);
     };
 
@@ -142,7 +142,7 @@ const NavRight = (props) => {
                                     <i className="feather icon-log-out" />
                                 </Button>
                             </div>
-                            {/* <ul className="pro-body">
+                            <ul className="pro-body">
                                 <li>
                                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
                                         <i className="feather icon-settings" /> Settings
@@ -163,7 +163,7 @@ const NavRight = (props) => {
                                         <i className="feather icon-lock" /> Lock Screen
                                     </a>
                                 </li>
-                            </ul> */}
+                            </ul>
                         </Dropdown.Menu>
                     </Dropdown>
                 </li>

@@ -6,16 +6,16 @@ import Loader from './layout/Loader';
 import ScrollToTop from './layout/ScrollToTop';
 import routesOnePage from '../route';
 import routes from '../routes';
-// import EstimatePreview from '../View/Pages/EstimatePreview';
+// import { userData } from '../constants/userData';
 const AdminLayout = lazy(() => import('./layout/AdminLayout'));
-const EstimatePreview = lazy(() => import('../View/Pages/EstimatePreview'));
-// const SignIn = lazy(() => import('../View/Pages/SignIn1'));
 
 const App = () => {
+    let data = localStorage.getItem('userData');
     const location = useLocation();
-
-    let loginData = localStorage.getItem('authToken');
-
+    // const ans = userData;
+    // console.log(userData);
+    console.log(data);
+    console.log(location);
     return (
         <>
             <ScrollToTop>
@@ -35,23 +35,15 @@ const App = () => {
                         </Switch>
                     </Route>
 
-                    {/* <Route path="/estimates/estimates_preview">
-                        <EstimatePreview />
-                    </Route> */}
-
-                    <Route path={routes.map((x) => x.path)}>
-                        <AdminLayout />
-                    </Route>
-
-                    {/* <EstimatePreview />
-                    </Route> */}
-                    {/* <Route path={'/'} exact>
-                        <Redirect to={Config.defaultPath} />
-                    </Route> */}
+                    {data !== null ? (
+                        <Route path={routes.map((x) => x.path)}>
+                            <AdminLayout data={data} />
+                        </Route>
+                    ) : (
+                        <Redirect from="/" to={'/'} />
+                    )}
                 </Suspense>
             </ScrollToTop>
-            {/* <Route path="/estimates/estimates_preview/:_id" exact={true} component={EstimatePreview} />
-            <Route path="/invoices/invoice_preview/:_id" exact={true} component={InvoicePagePreview} /> */}
             <div className="backdrop" />
         </>
     );
