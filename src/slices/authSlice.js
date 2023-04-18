@@ -42,7 +42,6 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
         const response = await axios.post(BASE_URL_FOR_USER + LOGIN_USER, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response);
         response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
         let setAuthData = {
             authToken: response?.data?.token,
@@ -53,7 +52,7 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
             localStorage.setItem('userData', JSON.stringify(setAuthData));
             return response?.data;
         } else {
-            return response?.data?.data;
+            return response?.data;
         }
     } catch (error) {
         console.log(error?.response?.data);

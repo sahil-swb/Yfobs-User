@@ -26,10 +26,12 @@ const Login = () => {
     };
 
     React.useEffect(() => {
-        if (loginData?.token) {
+        if (loginData?.status) {
             history.push('/dashboard');
         }
     }, [loginData]);
+
+    console.log(loginData);
 
     return (
         <>

@@ -10,7 +10,7 @@ import routes from '../../../routes';
 import useWindowSize from '../../../hooks/useWindowSize';
 import * as actionTypes from '../../../store/actions';
 //import '../../../app.scss';
-const AdminLayout = ({ data }) => {
+const AdminLayout = ({ storageObject }) => {
     const { windowWidth } = useWindowSize();
     const location = useLocation();
     const dispatch = useDispatch();
