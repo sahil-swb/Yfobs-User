@@ -44,8 +44,9 @@ export const USER_GETALL_STATES = 'state/getAllState';
 export const USER_CREATE_BUSINESS = 'business/addBusiness';
 export const USER_GET_ALL_BUSINESS = 'business/getAllBusiness';
 export const USER_UPDATE_BUSINESS = 'business/updateBusiness/';
-export const USER_UPLOAD_UPIQRCODE = 'business/upiQRCodeImage';
-export const USER_UPLOAD_LOGO = 'business/uploadLogo';
+export const USER_UPLOAD_UPIQRCODE = 'business/upiQRCodeImage/';
+export const USER_UPLOAD_LOGO = 'business/uploadLogo/';
+export const USER_GET_SINGLE_BUSINESS = 'business/getSingleBusiness/';
 
 //Invoice Api
 export const USER_CREATE_INVOICE = 'Invoice/createInvoice';
@@ -53,3 +54,16 @@ export const USER_GETALL_INVOICES = 'Invoice/getAllInvoice';
 export const USER_UPDATE_INVOICE = 'Invoice/updateInvoice/';
 export const USER_DELETE_INVOICE = 'Invoice/deleteInvoice/';
 export const USER_GET_SINGLE_INVOICE = 'Invoice/getInvoiceById/';
+
+//Expense Api
+export const USER_CREATE_EXPENSE = 'Expense/createExpense';
+export const USER_GETALL_EXPENSES = 'Expense/getAllExpense';
+export const USER_UPDATE_EXPENSE = 'Expense/updateExpense/';
+export const USER_DELETE_EXPENSE = 'Expense/deleteExpense/';
+export const USER_GET_SINGLE_EXPENSE = 'Expense/getExpense/';
+
+//Vendors Api
+export const USER_CREATE_VENDOR = 'vendor/createVendor';
+export const USER_GETALL_VENDORS = 'vendor/getAllVendor';
+export const USER_UPDATE_VENDOR = 'vendor/updateVendor/';
+export const USER_GET_SINGLE_VENDOR = 'vendor/getVendorById/';

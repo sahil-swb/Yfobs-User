@@ -26,7 +26,7 @@ const Login = () => {
     };
 
     React.useEffect(() => {
-        if (loginData?.status) {
+        if (loginData?._id) {
             history.push('/dashboard');
         }
     }, [loginData]);

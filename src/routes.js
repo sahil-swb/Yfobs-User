@@ -10,6 +10,7 @@ const CreateEstimate = React.lazy(() => import('./View/Pages/CreateEstimate'));
 const EstimateDetails = React.lazy(() => import('./View/Pages/EstimateDetails'));
 const Invoices = React.lazy(() => import('./View/Pages/Invoices'));
 const InvoiceDetails = React.lazy(() => import('./View/Pages/InvoiceDetails'));
+const Expense = React.lazy(() => import('./View/Pages/Expense'));
 
 // const EstimatePreview = React.lazy(() => import('../src/View/Pages/EstimatePreview'));
 
@@ -23,7 +24,8 @@ const routes = [
     { path: '/invoices/create_invoices', exact: true, name: 'CreateInvoice', component: CreateEstimate },
     { path: '/estimates/estimates_details/:_id', exact: true, name: 'EstimateDetails', component: EstimateDetails },
     { path: '/invoices', exact: true, name: 'Invoices', component: Invoices },
-    { path: '/invoices/invoice_details/:_id', exact: true, name: 'InvoiceDetails', component: InvoiceDetails }
+    { path: '/invoices/invoice_details/:_id', exact: true, name: 'InvoiceDetails', component: InvoiceDetails },
+    { path: '/expense', exact: true, name: 'Expense', component: Expense }
     // { path: '/estimates/estimates_preview/:_id', exact: true, name: 'EstimatePreview', component: EstimatePreview }
 ];
 export default routes;

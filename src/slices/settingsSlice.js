@@ -1,21 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import React from 'react';
 import {
     BASE_URL_FOR_USER,
     USER_CREATE_BUSINESS,
     USER_GET_ALL_BUSINESS,
+    USER_GET_SINGLE_BUSINESS,
     USER_UPLOAD_LOGO,
     USER_UPLOAD_UPIQRCODE
 } from '../constants/urlConfig';
+import { errorPNotify, successPNotify } from '../components/alertMsg';
 
 const initialState = {
     isLoading: false,
     createBusiness: {},
-    updateBusiness: {},
+    updateBusinessData: {},
     getAllBusinessesData: [],
-    logoData: '',
-    upiQRData: ''
+    logoData: {},
+    upiQRData: {},
+    getSingleBusinessData: {},
+    ID: ''
 };
 
 export const createBusinessesApi = createAsyncThunk('createBusinessApi', async ({ payload }, { rejectWithValue }) => {
@@ -24,9 +27,10 @@ export const createBusinessesApi = createAsyncThunk('createBusinessApi', async (
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
-        console.log(response?.data?.data);
+        successPNotify('Created Bussiness Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -37,86 +41,138 @@ export const getAllBusinessesApi = createAsyncThunk('getAllBusinessesApi', async
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
-        console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-export const uploadLogoApi = createAsyncThunk('uploadLogoApi', async ({ payloadImage }, { rejectWithValue }) => {
+export const uploadLogoApi = createAsyncThunk('uploadLogoApi', async ({ payloadLogoImage }, { rejectWithValue }) => {
     try {
-        const response = await axios.post(BASE_URL_FOR_USER + USER_UPLOAD_LOGO, payloadImage, {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
-        });
-        console.log(response?.data);
-        return response?.data;
+        const response = await axios.post(
+            `${BASE_URL_FOR_USER + USER_UPLOAD_LOGO}${payloadLogoImage?._id ? payloadLogoImage?._id : null}`,
+            payloadLogoImage,
+            {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        );
+        console.log(response?.data?.data);
+        return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-export const uploadUpiQRCodeApi = createAsyncThunk('uploadUpiQRCodeApi', async ({ payload }, { rejectWithValue }) => {
+export const uploadUpiQRCodeApi = createAsyncThunk('uploadUpiQRCodeApi', async ({ payloadUpiImage }, { rejectWithValue }) => {
     try {
-        const response = await axios.post(BASE_URL_FOR_USER + USER_UPLOAD_UPIQRCODE, payload, {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
-        });
-        console.log(response);
-        return response?.data;
+        const response = await axios.post(
+            `${BASE_URL_FOR_USER + USER_UPLOAD_UPIQRCODE}${payloadUpiImage?._id ? payloadUpiImage?._id : null}`,
+            payloadUpiImage,
+            {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            }
+        );
+        console.log(response?.data?.data);
+        return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-const settingsSlice = () =>
-    createSlice({
-        name: 'settingsSlice',
-        initialState,
-        extraReducers: (builder) => {
-            builder
-                .addCase(createBusinessesApi.pending, (state, action) => {
-                    state.isLoading = true;
-                })
-                .addCase(createBusinessesApi.fulfilled, (state, action) => {
-                    state.isLoading = false;
-                    state.createBusiness = action.payload;
-                })
-                .addCase(createBusinessesApi.rejected, (state, action) => {
-                    state.isLoading = false;
-                })
-                .addCase(getAllBusinessesApi.pending, (state, action) => {
-                    state.isLoading = true;
-                })
-                .addCase(getAllBusinessesApi.fulfilled, (state, action) => {
-                    state.isLoading = false;
-                    state.getAllBusinessesData = action.payload;
-                })
-                .addCase(getAllBusinessesApi.rejected, (state, action) => {
-                    state.isLoading = false;
-                })
-                .addCase(uploadLogoApi.pending, (state, action) => {
-                    state.isLoading = true;
-                })
-                .addCase(uploadLogoApi.fulfilled, (state, action) => {
-                    state.isLoading = false;
-                    state.logoData = action.payload;
-                })
-                .addCase(uploadLogoApi.rejected, (state, action) => {
-                    state.isLoading = false;
-                })
-                .addCase(uploadUpiQRCodeApi.pending, (state, action) => {
-                    state.isLoading = true;
-                })
-                .addCase(uploadUpiQRCodeApi.fulfilled, (state, action) => {
-                    state.isLoading = false;
-                    state.logoData = action.payload;
-                })
-                .addCase(uploadUpiQRCodeApi.rejected, (state, action) => {
-                    state.isLoading = false;
-                });
-        }
-    });
+export const getSingleBusiness = createAsyncThunk('getSingleBusiness', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_BUSINESS}${payload?._id}`, {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        });
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        return rejectWithValue(error?.response?.data);
+    }
+});
+
+export const updateBusiness = createAsyncThunk('updateBusiness', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_BUSINESS}${payload?._id}`, {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        });
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        return rejectWithValue(error?.response?.data);
+    }
+});
+
+const settingsSlice = createSlice({
+    name: 'settingsSlice',
+    initialState,
+    extraReducers: (builder) => {
+        builder
+            .addCase(createBusinessesApi.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(createBusinessesApi.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.createBusiness = action.payload;
+            })
+            .addCase(createBusinessesApi.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(getAllBusinessesApi.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(getAllBusinessesApi.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getAllBusinessesData = action.payload;
+            })
+            .addCase(getAllBusinessesApi.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(uploadLogoApi.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(uploadLogoApi.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.logoData = action.payload;
+            })
+            .addCase(uploadLogoApi.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(uploadUpiQRCodeApi.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(uploadUpiQRCodeApi.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.logoData = action.payload;
+            })
+            .addCase(uploadUpiQRCodeApi.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(getSingleBusiness.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(getSingleBusiness.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.getSingleBusinessData = action.payload;
+            })
+            .addCase(getSingleBusiness.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(updateBusiness.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(updateBusiness.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.updateBusinessData = action.payload;
+            })
+            .addCase(updateBusiness.rejected, (state, action) => {
+                state.isLoading = false;
+            });
+    }
+});
 
 export default settingsSlice.reducer;

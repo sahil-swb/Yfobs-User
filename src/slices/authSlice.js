@@ -28,12 +28,11 @@ export const registerUser = createAsyncThunk('register/user', async ({ payload }
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
-        console.log(response?.data);
+        successPNotify('Registered Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
-        return rejectWithValue(error.response);
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response?.data);
     }
 });
 
@@ -42,21 +41,18 @@ export const loginUser = createAsyncThunk('login/user', async ({ payload }, { re
         const response = await axios.post(BASE_URL_FOR_USER + LOGIN_USER, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
+
         let setAuthData = {
-            authToken: response?.data?.token,
-            userId: response?.data?.data?._id
+            authToken: response?.data?.data?.token,
+            userId: response?.data?.data?.checkuser?._id
         };
-        if (response?.data?.status) {
-            console.log(response?.data);
-            localStorage.setItem('userData', JSON.stringify(setAuthData));
-            return response?.data;
-        } else {
-            return response?.data;
-        }
+
+        successPNotify('LoggedIn Successfully');
+        localStorage.setItem('userData', JSON.stringify(setAuthData));
+        return response?.data?.data?.checkuser;
     } catch (error) {
-        console.log(error?.response?.data);
-        return rejectWithValue(error.response);
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response?.data);
     }
 });
 
@@ -65,12 +61,10 @@ export const UserForgotPassword = createAsyncThunk('user/UserForgotPassword', as
         const response = await axios.post(BASE_URL_FOR_USER + FORGOT_USER_PASSWORD, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-
-        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
-        console.log(response?.data?.data);
+        successPNotify(response?.data?.message);
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response?.data?.message);
     }
 });
@@ -81,11 +75,10 @@ export const UserChangePassword = createAsyncThunk('user/UserChangePassword', as
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
-        console.log(response?.data?.data);
+        successPNotify(response?.data?.message);
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response?.data?.message);
     }
 });
@@ -109,11 +102,12 @@ export const UserUpdateProfile = createAsyncThunk('user/UserUpdateProfile', asyn
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify(response?.data?.message) : errorPNotify(response?.data?.message);
-        console.log(response?.data?.data);
+        console.log(response);
+        successPNotify('Profile Updated Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        console.log(error?.response);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response?.data?.message);
     }
 });

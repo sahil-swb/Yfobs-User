@@ -1,21 +1,23 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import Breadcrumb from '../../App/layout/AdminLayout/Breadcrumb';
 import '../../assets/scss/style.scss';
 import logoDark from '../../assets/images/logo-dark.png';
 import { Field, Form, Formik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import '../../components/reactPhoneComponent.css';
 import { useState } from 'react';
-import history from '../../history';
+import { useEffect } from 'react';
+
 const Register = () => {
+    const { registerData } = useSelector((state) => state.authReducer);
     const [phoneValue, setPhoneValue] = useState('');
     const dispatch = useDispatch();
-
+    const history = useHistory();
     const handleRegister = (values, resetForm) => {
         let payload = {
             name: values.name,
@@ -26,14 +28,18 @@ const Register = () => {
         dispatch(registerUser({ payload }));
         resetForm();
         setPhoneValue('');
-        history.push('/');
-        window.location.reload();
     };
 
     const handlePhone = (e) => {
         console.log(e);
         setPhoneValue(e);
     };
+
+    useEffect(() => {
+        if (registerData?._id) {
+            history.push('/');
+        }
+    }, [registerData]);
     return (
         <AuthLayout>
             <div className="card-body">

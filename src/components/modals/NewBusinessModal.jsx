@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Modal, Row } from 'react-bootstrap';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,13 +6,14 @@ import { Formik } from 'formik';
 import { Form } from 'formik';
 import { Field } from 'formik';
 import { Button } from 'react-bootstrap';
-import { createBusinessesApi, uploadLogoApi } from '../../slices/settingsSlice';
+import { createBusinessesApi, getSingleBusiness, updateBusiness, uploadLogoApi, uploadUpiQRCodeApi } from '../../slices/settingsSlice';
 import '../../assets/css/businessModalStyle.css';
 import uploadIcon from '../../assets/images/upload-icon.png';
 
 const NewBusinessModal = () => {
-    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
+    const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
+    const { getSingleBusinessData, logoData, upiQRData, updateBusinessData } = useSelector((state) => state.settingsReducer);
     const [logoImage, setLogoImage] = useState('');
     const [upiImage, setUpiImage] = useState('');
     const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const NewBusinessModal = () => {
     };
 
     const handleSubmit = (values) => {
-        const payload = {
+        let payload = {
             businessName: values?.businessName,
             businessTitle: values?.businessTitle,
             businessNumber: values?.businessNumber,
@@ -62,36 +63,95 @@ const NewBusinessModal = () => {
             businessCategory: values?.businessCategory
         };
 
-        const payloadImage = {
-            type: 'logo',
+        if (logoData?._id || upiQRData?._id) {
+            payload._id = logoData?._id ? logoData?._id : upiQRData?._id;
+            dispatch(updateBusiness({ payload }));
+        }
+
+        if (modalType === 'EDIT_BUSSINESS') {
+            payload._id = getSingleBusinessData?._id;
+            dispatch(updateBusiness({ payload }));
+        }
+
+        dispatch(createBusinessesApi({ payload }));
+    };
+
+    useEffect(() => {
+        let payload = {
+            _id: rowData
+        };
+
+        dispatch(getSingleBusiness({ payload }));
+    }, [rowData]);
+
+    useEffect(() => {
+        const payloadLogoImage = {
+            _id: logoData?._id ? logoData?._id : upiQRData?._id,
             file: logoImage
         };
-        dispatch(createBusinessesApi({ payload }));
-        dispatch(uploadLogoApi({ payloadImage }));
-    };
+
+        const payloadUpiImage = {
+            _id: upiQRData?._id ? upiQRData?._id : logoData?._id,
+            file: upiImage
+        };
+
+        dispatch(uploadUpiQRCodeApi({ payloadUpiImage }));
+        dispatch(uploadLogoApi({ payloadLogoImage }));
+    }, [logoImage, upiImage]);
+
+    console.log(logoData);
+    console.log(upiQRData);
+    console.log(getSingleBusinessData);
     return (
         <>
-            <Modal size="lg" show={modalType === 'ADD_NEW_BUSSINESS' && modalIsOpen} onHide={() => dispatch(commonModalIsOpen(false))}>
+            <Modal
+                size="lg"
+                show={modalType === 'ADD_NEW_BUSSINESS' || modalType === 'EDIT_BUSSINESS' ? modalIsOpen : null}
+                onHide={() => dispatch(commonModalIsOpen(false))}
+            >
                 <Formik
-                    initialValues={{
-                        businessName: '',
-                        businessTitle: '',
-                        businessNumber: '',
-                        amountType: '',
-                        vatCode: '',
-                        country: '',
-                        address: '',
-                        postCode: '',
-                        isRegisteredGst: '',
-                        stateId: '',
-                        city: '',
-                        bankName: '',
-                        accountNumber: '',
-                        branchName: '',
-                        bankIfscCode: '',
-                        gstRegisterDate: '',
-                        businessCategory: ''
-                    }}
+                    enableReinitialize
+                    initialValues={
+                        modalType === 'EDIT_BUSSINESS'
+                            ? {
+                                  businessName: getSingleBusinessData?.businessName,
+                                  businessTitle: getSingleBusinessData?.businessTitle,
+                                  businessNumber: getSingleBusinessData?.businessNumber,
+                                  amountType: getSingleBusinessData?.amountType,
+                                  vatCode: getSingleBusinessData?.vatCode,
+                                  country: getSingleBusinessData?.country,
+                                  address: getSingleBusinessData?.address,
+                                  postCode: getSingleBusinessData?.postCode,
+                                  isRegisteredGst: getSingleBusinessData?.isRegisteredGst,
+                                  stateId: getSingleBusinessData?.stateId,
+                                  city: getSingleBusinessData?.city,
+                                  bankName: getSingleBusinessData?.bankName,
+                                  accountNumber: getSingleBusinessData?.accountNumber,
+                                  branchName: getSingleBusinessData?.branchName,
+                                  bankIfscCode: getSingleBusinessData?.bankIfscCode,
+                                  gstRegisterDate: getSingleBusinessData?.gstRegisterDate,
+                                  businessCategory: getSingleBusinessData?.businessCategory
+                              }
+                            : {
+                                  businessName: '',
+                                  businessTitle: '',
+                                  businessNumber: '',
+                                  amountType: '',
+                                  vatCode: '',
+                                  country: '',
+                                  address: '',
+                                  postCode: '',
+                                  isRegisteredGst: '',
+                                  stateId: '',
+                                  city: '',
+                                  bankName: '',
+                                  accountNumber: '',
+                                  branchName: '',
+                                  bankIfscCode: '',
+                                  gstRegisterDate: '',
+                                  businessCategory: ''
+                              }
+                    }
                     onSubmit={(values) => handleSubmit(values)}
                 >
                     <Form>

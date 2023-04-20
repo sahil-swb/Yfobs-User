@@ -53,6 +53,14 @@ const chartData = {
                     url: '/invoices',
                     classes: 'nav-item',
                     icon: 'fa fa-cubes'
+                },
+                {
+                    id: 'expense',
+                    title: 'Expense',
+                    type: 'item',
+                    url: '/Expense',
+                    classes: 'nav-item',
+                    icon: 'fa fa-cubes'
                 }
             ]
         }
