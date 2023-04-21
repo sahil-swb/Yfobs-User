@@ -25,6 +25,8 @@ const CreateEstimate = () => {
     const [defaultTotal, setDefaultTotal] = useState(0);
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
+    // const [productArrayId, setProductArrayId] = useState([]);
+    let productArrayId = [];
 
     //Array Field
 
@@ -43,6 +45,7 @@ const CreateEstimate = () => {
             number: values?.number,
             posoNumber: values?.posoNumber,
             date: values?.date,
+            productId: productArrayId,
             expireOn: values?.expireOn,
             discount: defaultDiscount,
             tax: defaultTax,
@@ -90,6 +93,10 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
+    getEstimateProducts?.map((val) => {
+        productArrayId.push(val?._id);
+    });
+
     return (
         <>
             <Row>
@@ -103,7 +110,6 @@ const CreateEstimate = () => {
                     <div>
                         <Formik
                             initialValues={{
-                                businessId: '',
                                 title: '',
                                 summary: '',
                                 ccMail: '',
@@ -272,7 +278,6 @@ const CreateEstimate = () => {
                                                                             {values?.estimateProducts.map((estimate, index) => {
                                                                                 return (
                                                                                     <tr key={estimate?._id}>
-                                                                                        {console.log(estimate)}
                                                                                         <td>
                                                                                             <Field
                                                                                                 type="text"
@@ -311,9 +316,11 @@ const CreateEstimate = () => {
                                                                                                 <button
                                                                                                     type="button"
                                                                                                     className="btn btn-primary btn-sm ml-3"
-                                                                                                    onClick={() =>
-                                                                                                        arrayHelpers.remove(index)
-                                                                                                    }
+                                                                                                    onClick={() => {
+                                                                                                        console.log(estimate?._id);
+
+                                                                                                        arrayHelpers.remove(index);
+                                                                                                    }}
                                                                                                 >
                                                                                                     x
                                                                                                 </button>

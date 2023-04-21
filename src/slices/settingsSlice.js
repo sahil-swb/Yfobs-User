@@ -3,8 +3,10 @@ import axios from 'axios';
 import {
     BASE_URL_FOR_USER,
     USER_CREATE_BUSINESS,
+    USER_DELETE_BUSINESS,
     USER_GET_ALL_BUSINESS,
     USER_GET_SINGLE_BUSINESS,
+    USER_UPDATE_BUSINESS,
     USER_UPLOAD_LOGO,
     USER_UPLOAD_UPIQRCODE
 } from '../constants/urlConfig';
@@ -18,7 +20,8 @@ const initialState = {
     logoData: {},
     upiQRData: {},
     getSingleBusinessData: {},
-    ID: ''
+    ID: '',
+    deleteBusinessData: {}
 };
 
 export const createBusinessesApi = createAsyncThunk('createBusinessApi', async ({ payload }, { rejectWithValue }) => {
@@ -96,7 +99,20 @@ export const getSingleBusiness = createAsyncThunk('getSingleBusiness', async ({ 
 
 export const updateBusiness = createAsyncThunk('updateBusiness', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_BUSINESS}${payload?._id}`, {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_BUSINESS}${payload?._id}`, payload, {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        });
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        return rejectWithValue(error?.response?.data);
+    }
+});
+
+export const deleteBusiness = createAsyncThunk('deleteBusiness', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_BUSINESS}${payload?._id}`, {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
@@ -170,6 +186,16 @@ const settingsSlice = createSlice({
                 state.updateBusinessData = action.payload;
             })
             .addCase(updateBusiness.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(deleteBusiness.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteBusiness.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.deleteBusinessData = action.payload;
+            })
+            .addCase(deleteBusiness.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

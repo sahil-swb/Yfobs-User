@@ -3,22 +3,24 @@ import { Button, Card, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen, commonModalType, setRowData } from '../../slices/modalSlice';
 import NewBusinessModal from '../modals/NewBusinessModal';
-import { getAllBusinessesApi } from '../../slices/settingsSlice';
+import { deleteBusiness, getAllBusinessesApi } from '../../slices/settingsSlice';
 
 const Businesses = () => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
-    const { getAllBusinessesData, createBusiness, updateBusiness } = useSelector((state) => state.settingsReducer);
+    const { getAllBusinessesData, createBusiness, updateBusinessData, deleteBusinessData } = useSelector((state) => state.settingsReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getAllBusinessesApi());
-    }, [createBusiness, updateBusiness]);
+    }, [createBusiness, updateBusinessData, deleteBusinessData]);
 
+    console.log(getAllBusinessesData);
     return (
         <>
             {/* <div className="bg-danger d-flex justify-content-center align-items-center flex-column">
                 <p>sdfsdvf</p>
             </div> */}
+
             <div
                 className="mb-3 rounded"
                 style={{
@@ -35,6 +37,7 @@ const Businesses = () => {
                 </p>
                 <Button>Upgrade Your Plan</Button>
             </div>
+
             <Card>
                 <Card.Header className="d-flex justify-content-between align-items-center">
                     <h5>Businesses</h5>
@@ -62,7 +65,9 @@ const Businesses = () => {
                                 return (
                                     <tr key={detail?._id}>
                                         <td>{index + 1}</td>
-                                        <td>Mark</td>
+                                        <td>
+                                            <img src={detail?.logo} alt="businessLogo" width={100} />
+                                        </td>
                                         <td>
                                             <div className="d-flex justify-content-between">
                                                 <span>{detail?.businessName}</span>
@@ -81,6 +86,17 @@ const Businesses = () => {
                                                 }}
                                             >
                                                 Edit
+                                            </Button>
+
+                                            <Button
+                                                className="ml-3"
+                                                size="sm"
+                                                onClick={() => {
+                                                    let payload = { _id: detail?._id };
+                                                    dispatch(deleteBusiness({ payload }));
+                                                }}
+                                            >
+                                                Delete
                                             </Button>
                                         </td>
                                     </tr>

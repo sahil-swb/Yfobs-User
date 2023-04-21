@@ -3,7 +3,7 @@ import axios from 'axios';
 // REDUX-TOOLKIT IMPORTS
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 //CUSTOM OR COMPONENTS IMPORTS
-import { successPNotify, warningPNotify } from '../components/alertMsg';
+import { errorPNotify, successPNotify, warningPNotify } from '../components/alertMsg';
 
 //API ENDPOINTS FOR PRODUCT
 import {
@@ -33,11 +33,12 @@ export const createProductApi = createAsyncThunk('user/createProduct', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
-        return response?.data;
+        successPNotify('Product Added Successfully');
+        return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
-        return rejectWithValue(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 
@@ -50,7 +51,7 @@ export const getAllProductsApi = createAsyncThunk('user/getAllProducts', async (
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
-        return rejectWithValue(error.response);
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 
@@ -60,11 +61,12 @@ export const updateProductApi = createAsyncThunk('user/updateProduct', async ({ 
         const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_PRODUCTS}${payload.id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        console.log(response?.data);
+        successPNotify('Product Updated Successfully');
         return response?.data?.data;
     } catch (error) {
-        return rejectWithValue(error.response);
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 
@@ -74,12 +76,11 @@ export const deleteProductApi = createAsyncThunk('user/deleteProduct', async ({ 
         const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_PRODUCTS}${del_id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        successPNotify('Product Deleted Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
-        return rejectWithValue(error.response);
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 
@@ -89,10 +90,11 @@ export const getSingleProductApi = createAsyncThunk('user/getSingleProductApi', 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        successPNotify('Product Fetched Successfully');
         return response?.data?.data;
     } catch (error) {
-        return rejectWithValue(error.response);
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 

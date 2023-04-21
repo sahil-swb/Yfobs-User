@@ -47,6 +47,7 @@ export const USER_UPDATE_BUSINESS = 'business/updateBusiness/';
 export const USER_UPLOAD_UPIQRCODE = 'business/upiQRCodeImage/';
 export const USER_UPLOAD_LOGO = 'business/uploadLogo/';
 export const USER_GET_SINGLE_BUSINESS = 'business/getSingleBusiness/';
+export const USER_DELETE_BUSINESS = 'business/deleteBusiness/';
 
 //Invoice Api
 export const USER_CREATE_INVOICE = 'Invoice/createInvoice';

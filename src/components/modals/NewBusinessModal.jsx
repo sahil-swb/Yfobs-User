@@ -18,16 +18,6 @@ const NewBusinessModal = () => {
     const [upiImage, setUpiImage] = useState('');
     const dispatch = useDispatch();
 
-    const handleLogo = async (e) => {
-        const file = e.target.files[0];
-        const base64 = await convertBase64(file);
-        setLogoImage(base64);
-    };
-    const handleUpi = async (e) => {
-        const file = e.target.files[0];
-        const base64 = await convertBase64(file);
-        setUpiImage(base64);
-    };
     const convertBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
@@ -41,6 +31,28 @@ const NewBusinessModal = () => {
                 reject(error);
             };
         });
+    };
+
+    const handleLogo = async (e) => {
+        const file = e.target.files[0];
+        const base64 = await convertBase64(file);
+        const payloadLogoImage = {
+            _id: logoData?._id ? logoData?._id : upiQRData?._id,
+            file: base64
+        };
+        setLogoImage(base64);
+        dispatch(uploadLogoApi({ payloadLogoImage }));
+    };
+
+    const handleUpi = async (e) => {
+        const file = e.target.files[0];
+        const base64 = await convertBase64(file);
+        const payloadUpiImage = {
+            _id: upiQRData?._id ? upiQRData?._id : logoData?._id,
+            file: base64
+        };
+        setUpiImage(base64);
+        dispatch(uploadUpiQRCodeApi({ payloadUpiImage }));
     };
 
     const handleSubmit = (values) => {
@@ -63,45 +75,33 @@ const NewBusinessModal = () => {
             businessCategory: values?.businessCategory
         };
 
-        if (logoData?._id || upiQRData?._id) {
-            payload._id = logoData?._id ? logoData?._id : upiQRData?._id;
-            dispatch(updateBusiness({ payload }));
+        if (modalType === 'ADD_NEW_BUSSINESS') {
+            if (logoData?._id || upiQRData?._id) {
+                payload._id = logoData?._id ? logoData?._id : upiQRData?._id;
+                console.log(payload);
+                dispatch(updateBusiness({ payload }));
+            } else {
+                dispatch(createBusinessesApi({ payload }));
+            }
         }
 
         if (modalType === 'EDIT_BUSSINESS') {
             payload._id = getSingleBusinessData?._id;
             dispatch(updateBusiness({ payload }));
         }
-
-        dispatch(createBusinessesApi({ payload }));
+        dispatch(commonModalIsOpen(false));
     };
 
     useEffect(() => {
-        let payload = {
-            _id: rowData
-        };
-
-        dispatch(getSingleBusiness({ payload }));
+        if (modalType === 'EDIT_BUSSINESS') {
+            let payload = {
+                _id: rowData
+            };
+            dispatch(getSingleBusiness({ payload }));
+        }
     }, [rowData]);
 
-    useEffect(() => {
-        const payloadLogoImage = {
-            _id: logoData?._id ? logoData?._id : upiQRData?._id,
-            file: logoImage
-        };
-
-        const payloadUpiImage = {
-            _id: upiQRData?._id ? upiQRData?._id : logoData?._id,
-            file: upiImage
-        };
-
-        dispatch(uploadUpiQRCodeApi({ payloadUpiImage }));
-        dispatch(uploadLogoApi({ payloadLogoImage }));
-    }, [logoImage, upiImage]);
-
-    console.log(logoData);
-    console.log(upiQRData);
-    console.log(getSingleBusinessData);
+    console.log('getSingleBusinessData', getSingleBusinessData);
     return (
         <>
             <Modal
@@ -161,14 +161,34 @@ const NewBusinessModal = () => {
                                 <div className="w-50">
                                     <label>Logo</label>
                                     <div className="business-image-main-div">
-                                        <img src={logoImage === '' ? uploadIcon : logoImage} alt="" className="logoImage" />
+                                        <img
+                                            src={
+                                                getSingleBusinessData?.logo
+                                                    ? getSingleBusinessData?.logo
+                                                    : logoImage
+                                                    ? logoImage
+                                                    : uploadIcon
+                                            }
+                                            alt=""
+                                            className="logoImage"
+                                        />
                                     </div>
                                     <input type="file" onChange={(e) => handleLogo(e)} className="w-75" />
                                 </div>
                                 <div className="w-50">
                                     <label>UPI QR Code</label>
                                     <div className="business-image-main-div">
-                                        <img src={upiImage === '' ? uploadIcon : upiImage} alt="" className="logoImage" />
+                                        <img
+                                            src={
+                                                getSingleBusinessData?.upiQRCode
+                                                    ? getSingleBusinessData?.upiQRCode
+                                                    : upiImage
+                                                    ? upiImage
+                                                    : uploadIcon
+                                            }
+                                            alt=""
+                                            className="logoImage"
+                                        />
                                     </div>
                                     <input type="file" onChange={(e) => handleUpi(e)} className="w-75" />
                                 </div>
