@@ -68,3 +68,4 @@ export const USER_CREATE_VENDOR = 'vendor/createVendor';
 export const USER_GETALL_VENDORS = 'vendor/getAllVendor';
 export const USER_UPDATE_VENDOR = 'vendor/updateVendor/';
 export const USER_GET_SINGLE_VENDOR = 'vendor/getVendorById/';
+export const USER_DELETE_VENDOR = 'vendor/deleteVendor/';

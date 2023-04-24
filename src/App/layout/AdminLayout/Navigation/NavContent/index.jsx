@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Card } from 'react-bootstrap';
 import NavGroup from './NavGroup';

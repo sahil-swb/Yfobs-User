@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategoriesApi } from '../../slices/categoriesSlice';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { createProductApi, getAllProductsApi, updateProductApi } from '../../slices/productsSlice';
+import { userId } from '../../constants/userData';
 
 const ProductsModal = ({ data }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
@@ -17,7 +18,7 @@ const ProductsModal = ({ data }) => {
 
     const handleSubmit = (values) => {
         let payload = {
-            userId: '63aa96e2e58e3b08f1746b39',
+            userId: userId,
             name: values.name,
             hsnCode: values.hsnCode,
             price: values.price,

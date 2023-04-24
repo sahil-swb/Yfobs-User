@@ -7,6 +7,7 @@ import { deleteCustomerApi, getAllCustomersApi } from '../../slices/customersSli
 import { commonDeleteModal } from '../../slices/modalSlice';
 import { deleteProductApi, getAllProductsApi } from '../../slices/productsSlice';
 import { deleteExpense } from '../../slices/expenseSlice';
+import { deleteVendor } from '../../slices/vendorsSlice';
 
 //COMPONENT FOR DELETE
 const DeleteConfModal = ({ type, del_id, title }) => {
@@ -23,6 +24,8 @@ const DeleteConfModal = ({ type, del_id, title }) => {
             dispatch(deleteProductApi({ del_id }));
         } else if (type === 'EXPENSE') {
             dispatch(deleteExpense({ del_id }));
+        } else if (type === 'VENDORS') {
+            dispatch(deleteVendor({ del_id }));
         }
         dispatch(commonDeleteModal(false));
     };

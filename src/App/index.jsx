@@ -6,18 +6,12 @@ import Loader from './layout/Loader';
 import ScrollToTop from './layout/ScrollToTop';
 import routesOnePage from '../route';
 import routes from '../routes';
-import { useEffect } from 'react';
-// import { userData } from '../constants/userData';
 const AdminLayout = lazy(() => import('./layout/AdminLayout'));
 
 const App = () => {
     let localStorageData = localStorage.getItem('userData');
     let storageObject = JSON.parse(localStorageData);
     const location = useLocation();
-    // const ans = userData;
-    // console.log(userData);
-    // console.log(storageObject);
-    // console.log(location);
 
     return (
         <>

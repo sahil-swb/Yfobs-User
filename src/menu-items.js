@@ -58,7 +58,15 @@ const chartData = {
                     id: 'expense',
                     title: 'Expense',
                     type: 'item',
-                    url: '/Expense',
+                    url: '/expense',
+                    classes: 'nav-item',
+                    icon: 'fa fa-cubes'
+                },
+                {
+                    id: 'vendors',
+                    title: 'Vendors',
+                    type: 'item',
+                    url: '/vendors',
                     classes: 'nav-item',
                     icon: 'fa fa-cubes'
                 }

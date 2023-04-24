@@ -71,9 +71,9 @@ const Businesses = () => {
                                         <td>
                                             <div className="d-flex justify-content-between">
                                                 <span>{detail?.businessName}</span>
-                                                <Button size="sm" variant="outline-info">
+                                                {/* <Button size="sm" variant="outline-info">
                                                     Default
-                                                </Button>
+                                                </Button> */}
                                             </div>
                                         </td>
                                         <td>

@@ -13,10 +13,10 @@ const Estimates = () => {
         {
             name: 'Status',
             selector: (row) =>
-                row?.status === 'expire' ? (
-                    <Badge className="bg-danger text-white">{row?.status.toUpperCase()}</Badge>
+                row?.status === '1' ? (
+                    <Badge className="bg-danger text-white">Expired</Badge>
                 ) : (
-                    <Badge className="bg-primary text-white">{row?.status.toUpperCase()}</Badge>
+                    <Badge className="bg-primary text-white">Save</Badge>
                 ),
             sortable: true
         },

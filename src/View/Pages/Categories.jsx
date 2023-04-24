@@ -11,7 +11,7 @@ const Categories = () => {
     const columns = [
         {
             name: '#',
-            selector: (row) => row.index,
+            selector: (row) => row?.index,
             sortable: true
         },
         {

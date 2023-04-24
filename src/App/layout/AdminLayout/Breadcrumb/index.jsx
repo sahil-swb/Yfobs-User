@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import config from '../../../../config';
 import navigation from '../../../../menu-items';
-import DEMO from '../../../../store/constant';
 const Breadcrumb = (props) => {
     // console.log(props);
     const [main, setMain] = useState();

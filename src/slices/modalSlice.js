@@ -6,7 +6,8 @@ const initialState = {
     deleteModal: false,
     modalIsOpen: false,
     modalType: '',
-    rowData: {}
+    rowData: {},
+    ID: ''
 };
 
 //MODAL SLICE
@@ -25,9 +26,12 @@ const modalSlice = createSlice({
         },
         setRowData: (state, action) => {
             state.rowData = action.payload;
+        },
+        setID: (state, action) => {
+            state.ID = action.payload;
         }
     }
 });
 
-export const { commonModalIsOpen, commonDeleteModal, commonModalType, setRowData } = modalSlice.actions;
+export const { commonModalIsOpen, commonDeleteModal, commonModalType, setRowData, setID } = modalSlice.actions;
 export default modalSlice.reducer;

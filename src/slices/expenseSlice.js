@@ -20,7 +20,7 @@ const initialState = {
 
 export const createExpense = createAsyncThunk('expense/createExpense', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = axios.post(BASE_URL_FOR_USER + USER_CREATE_EXPENSE, payload, {
+        const response = await axios.post(BASE_URL_FOR_USER + USER_CREATE_EXPENSE, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response.data);
@@ -44,11 +44,11 @@ export const getAllExpenses = createAsyncThunk('expense/getAllExpenses', async (
 
 export const updateExpense = createAsyncThunk('expense/updateExpense', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_EXPENSE}${payload?._id}`, payload, {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_EXPENSE}${payload?._id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data);
-        return response?.data;
+        console.log(response?.data?.data);
+        return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
@@ -56,11 +56,11 @@ export const updateExpense = createAsyncThunk('expense/updateExpense', async ({ 
 
 export const deleteExpense = createAsyncThunk('expense/deleteExpense', async ({ del_id }, { rejectWithValue }) => {
     try {
-        const response = axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_EXPENSE}${del_id}`, {
+        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_EXPENSE}${del_id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
-        return response?.data;
+        return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
@@ -68,7 +68,7 @@ export const deleteExpense = createAsyncThunk('expense/deleteExpense', async ({ 
 
 export const getSingleExpense = createAsyncThunk('expense/getSingleExpense', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_EXPENSE}${payload?._id}`, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_EXPENSE}${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);

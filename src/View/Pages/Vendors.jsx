@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { Button, Card } from 'react-bootstrap';
-import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
-import CommonDataTable from '../../components/CommonDataTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllExpenses } from '../../slices/expenseSlice';
-import ExpenseModal from '../../components/modals/ExpenseModal';
+import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
+import { getAllVendors } from '../../slices/vendorsSlice';
+import { Button, Card } from 'react-bootstrap';
+import CommonDataTable from '../../components/CommonDataTable';
+import VendorModal from '../../components/modals/VendorModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 
-const Expense = () => {
+const Vendors = () => {
     const columns = [
         {
             name: '#',
@@ -15,35 +15,21 @@ const Expense = () => {
             sortable: true
         },
         {
-            name: 'Date',
-            selector: (row) => row.date,
-            sortable: true
-        },
-        {
-            name: 'Amount',
-            selector: (row) => row.amount,
-            sortable: true
-        },
-        {
-            name: 'Client',
+            name: 'Name',
             selector: (row) => row.vendorName,
             sortable: true
         },
         {
-            name: 'Category',
-            selector: (row) => row.expenseCategory,
+            name: 'Phone',
+            selector: (row) => row.phone,
             sortable: true
         },
         {
-            name: 'Status',
-            selector: (row) => row.paymentStatus,
+            name: 'Email',
+            selector: (row) => row.email,
             sortable: true
         },
-        {
-            name: 'Notes',
-            selector: (row) => row.notes,
-            sortable: true
-        },
+
         {
             name: 'Action',
             selector: (row) => {
@@ -68,13 +54,15 @@ const Expense = () => {
         }
     ];
 
-    const { createExpenseData, getAllExpenseData, updateExpenseData, deleteExpenseData } = useSelector((state) => state.expenseReducer);
+    const { createVendorData, getAllVendorData, updateVendorData, deleteVendorData, getSingleVendorData } = useSelector(
+        (state) => state.vendorReducer
+    );
     const { rowData } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
 
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
-        dispatch(commonModalType('EDIT'));
+        dispatch(commonModalType('EDIT_VENDOR'));
         dispatch(setID(row?._id));
     };
     const handleDelete = (row) => {
@@ -82,14 +70,15 @@ const Expense = () => {
         dispatch(setRowData(row));
     };
     useEffect(() => {
-        dispatch(getAllExpenses());
-    }, [createExpenseData, updateExpenseData, deleteExpenseData]);
+        dispatch(getAllVendors());
+    }, [createVendorData, updateVendorData, deleteVendorData]);
+
     return (
         <>
             <div>
                 <Card>
                     <Card.Header className="d-flex justify-content-between align-items-center">
-                        <Card.Title className="m-0 font-weight-bold">All Expenses</Card.Title>
+                        <Card.Title className="m-0 font-weight-bold">All Vendors</Card.Title>
                         <Button
                             onClick={() => {
                                 dispatch(commonModalIsOpen(true));
@@ -99,18 +88,18 @@ const Expense = () => {
                             className="d-flex align-items-center p-2"
                         >
                             <i className="feather icon-plus f-20" />
-                            <div>New Expense</div>
+                            <div>New Vendor</div>
                         </Button>
                     </Card.Header>
                     <Card.Body>
-                        <CommonDataTable columns={columns} data={getAllExpenseData} />
+                        <CommonDataTable columns={columns} data={getAllVendorData} />
                     </Card.Body>
                 </Card>
-                <ExpenseModal data={rowData} />
-                <DeleteConfModal del_id={rowData?._id} type={'EXPENSE'} title={rowData?.notes} />
+                <VendorModal />
+                <DeleteConfModal del_id={rowData?._id} type={'VENDORS'} title={rowData?.vendorName} />
             </div>
         </>
     );
 };
 
-export default Expense;
+export default Vendors;

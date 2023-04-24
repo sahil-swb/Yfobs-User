@@ -4,7 +4,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import DEMO from '../../../../../store/constant';
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { getSingleUser } from '../../../../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { userId } from '../../../../../constants/userData';
@@ -15,12 +15,12 @@ const NavRight = (props) => {
     const [currentLogout, setCurrentLogout] = useState(false);
     const dispatch = useDispatch();
     const history = useHistory();
-    React.useEffect(() => {
+    useEffect(() => {
         const payload = {
             _id: userId
         };
         dispatch(getSingleUser({ payload }));
-    }, []);
+    }, [dispatch]);
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
@@ -32,7 +32,7 @@ const NavRight = (props) => {
         if (currentLogout) {
             history.push('/');
         }
-    }, [currentLogout]);
+    }, [currentLogout, dispatch, history]);
 
     return (
         <>

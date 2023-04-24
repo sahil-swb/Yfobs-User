@@ -1,24 +1,13 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import DEMO from '../../../../../../store/constant';
-import * as actionTypes from '../../../../../../store/actions';
-import NavIcon from './../NavIcon';
-import NavBadge from './../NavBadge';
 import NavItem from '../NavItem';
+import NavBadge from './../NavBadge';
+import NavIcon from './../NavIcon';
 import LoopNavCollapse from './index';
 const NavCollapse = (props) => {
-    const dispatch = useDispatch();
     const layout = useSelector((state) => state.able.layout);
 
-    useEffect(() => {
-        const currentIndex = document.location.pathname
-            .toString()
-            .split('/')
-            .findIndex((id) => id === props.collapse.id);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
     let navItems = '';
     if (props.collapse.children) {
         const collapses = props.collapse.children;

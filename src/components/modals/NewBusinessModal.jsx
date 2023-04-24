@@ -78,7 +78,6 @@ const NewBusinessModal = () => {
         if (modalType === 'ADD_NEW_BUSSINESS') {
             if (logoData?._id || upiQRData?._id) {
                 payload._id = logoData?._id ? logoData?._id : upiQRData?._id;
-                console.log(payload);
                 dispatch(updateBusiness({ payload }));
             } else {
                 dispatch(createBusinessesApi({ payload }));

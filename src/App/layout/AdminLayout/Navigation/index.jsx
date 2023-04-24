@@ -1,14 +1,11 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useWindowSize from '../../../../hooks/useWindowSize';
 import NavContent from './NavContent';
 import OutsideClick from './OutsideClick';
-import * as actionTypes from './../../../../store/actions';
 import navigation from '../../../../menu-items';
 const Navigation = () => {
     const { windowWidth } = useWindowSize();
-    const dispatch = useDispatch();
     const layout = useSelector((state) => state.able.layout);
     const subLayout = useSelector((state) => state.able.subLayout);
     const collapseMenu = useSelector((state) => state.able.collapseMenu);

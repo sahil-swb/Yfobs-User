@@ -1,22 +1,26 @@
 import { Field, Form, Formik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
-import { createExpense, updateExpense } from '../../slices/expenseSlice';
+import { createExpense, getSingleExpense, updateExpense } from '../../slices/expenseSlice';
 import { userId } from '../../constants/userData';
+import { getAllVendors } from '../../slices/vendorsSlice';
+import { getAllCategoriesApi } from '../../slices/categoriesSlice';
 
 const ExpenseModal = () => {
-    const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
+    const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
+    const { getAllVendorData } = useSelector((state) => state.vendorReducer);
+    const { getAllData } = useSelector((state) => state.categoriesReducer);
+    const { getSingleExpenseData } = useSelector((state) => state.expenseReducer);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
         const payload = {
             userId: userId,
-            businessId: values?.businessId,
+            businessId: '64425f6f462fed333aeedfad',
             vendorName: values?.vendorName,
             amount: values?.amount,
-            netAmount: values?.netAmount,
             tax: values?.tax,
             date: values?.date,
             expenseCategory: values?.expenseCategory,
@@ -25,13 +29,28 @@ const ExpenseModal = () => {
         };
 
         if (modalType === 'EDIT') {
-            payload._id = rowData?._id;
+            payload._id = getSingleExpenseData?._id;
             dispatch(updateExpense({ payload }));
         } else {
             dispatch(createExpense({ payload }));
         }
         dispatch(commonModalIsOpen(false));
     };
+
+    useEffect(() => {
+        dispatch(getAllVendors());
+        dispatch(getAllCategoriesApi());
+    }, []);
+
+    useEffect(() => {
+        if (modalType === 'EDIT') {
+            let payload = {
+                _id: ID
+            };
+            dispatch(getSingleExpense({ payload }));
+        }
+    }, [ID]);
+
     return (
         <>
             <Modal
@@ -45,22 +64,21 @@ const ExpenseModal = () => {
                 </Modal.Header>
                 <Modal.Body className="modal-scrollable">
                     <Formik
+                        enableReinitialize
                         initialValues={
                             modalType === 'EDIT'
                                 ? {
-                                      vendorName: rowData?.vendorName,
-                                      amount: rowData?.amount,
-                                      netAmount: rowData?.netAmount,
-                                      date: rowData?.date,
-                                      tax: rowData?.tax,
-                                      expenseCategory: rowData?.expenseCategory,
-                                      paymentStatus: rowData?.paymentStatus,
-                                      notes: rowData?.notes
+                                      vendorName: getSingleExpenseData?.vendorName || '',
+                                      amount: getSingleExpenseData?.amount || '',
+                                      date: getSingleExpenseData?.date || '',
+                                      tax: getSingleExpenseData?.tax || '',
+                                      expenseCategory: getSingleExpenseData?.expenseCategory || '',
+                                      paymentStatus: getSingleExpenseData?.paymentStatus || '',
+                                      notes: getSingleExpenseData?.notes || ''
                                   }
                                 : {
                                       vendorName: '',
                                       amount: '',
-                                      netAmount: '',
                                       tax: '',
                                       date: '',
                                       expenseCategory: '',
@@ -87,9 +105,16 @@ const ExpenseModal = () => {
                             <div className="mt-3">
                                 <label>Vendors</label>
                                 <Field className="form-control" as="select" name="vendorName">
-                                    <option value="paid">cdsf</option>
-                                    <option value="paid">cdsf</option>
-                                    <option value="paid">cdsf</option>
+                                    <option value="">Select</option>
+
+                                    {getAllVendorData &&
+                                        getAllVendorData?.map((data) => {
+                                            return (
+                                                <option key={data?._id} value={data?.vendorName}>
+                                                    {data?.vendorName}
+                                                </option>
+                                            );
+                                        })}
                                 </Field>
                             </div>
                             <div className="mt-3">
@@ -97,9 +122,16 @@ const ExpenseModal = () => {
                                     Expense Category <span className="text-danger">*</span>
                                 </label>
                                 <Field className="form-control" as="select" name="expenseCategory">
-                                    <option value="paid">cdsf</option>
-                                    <option value="paid">cdsf</option>
-                                    <option value="paid">cdsf</option>
+                                    <option value="">Select</option>
+                                    {getAllData.map((data) => {
+                                        if (data?.type === 'Expense' || data?.type === 'expense') {
+                                            return (
+                                                <option key={data?._id} value={data?.name}>
+                                                    {data?.name}
+                                                </option>
+                                            );
+                                        }
+                                    })}
                                 </Field>
                             </div>
                             <div className="mt-3">
@@ -113,9 +145,9 @@ const ExpenseModal = () => {
                                     Payment Status <span className="text-danger">*</span>
                                 </label>
                                 <Field className="form-control" as="select" name="paymentStatus">
-                                    <option value="paid">cdsf</option>
-                                    <option value="paid">cdsf</option>
-                                    <option value="paid">cdsf</option>
+                                    <option value="">Select</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="unpaid">Unpaid</option>
                                 </Field>
                             </div>
                             <div className="mt-3">
