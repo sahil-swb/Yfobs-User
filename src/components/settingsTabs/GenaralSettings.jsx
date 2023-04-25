@@ -40,13 +40,13 @@ const GenaralSettings = () => {
                 <Formik
                     enableReinitialize
                     initialValues={{
-                        name: getDataById?.name,
-                        email: getDataById?.email,
-                        country_name: getDataById?.country_name,
-                        state: getDataById?.state,
-                        city: getDataById?.city,
-                        postcode: getDataById?.postcode,
-                        address: getDataById?.address
+                        name: getDataById?.name || '',
+                        email: getDataById?.email || '',
+                        country_name: getDataById?.country_name || '',
+                        state: getDataById?.state || '',
+                        city: getDataById?.city || '',
+                        postcode: getDataById?.postcode || '',
+                        address: getDataById?.address || ''
                     }}
                     onSubmit={(values) => handleSubmit(values)}
                 >

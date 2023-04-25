@@ -12,8 +12,8 @@ import uploadIcon from '../../assets/images/upload-icon.png';
 
 const NewBusinessModal = () => {
     const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
-    const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
-    const { getSingleBusinessData, logoData, upiQRData, updateBusinessData } = useSelector((state) => state.settingsReducer);
+    const { getAllStates } = useSelector((state) => state.countriesInfoReducer);
+    const { getSingleBusinessData, logoData, upiQRData } = useSelector((state) => state.settingsReducer);
     const [logoImage, setLogoImage] = useState('');
     const [upiImage, setUpiImage] = useState('');
     const dispatch = useDispatch();
@@ -100,7 +100,6 @@ const NewBusinessModal = () => {
         }
     }, [rowData]);
 
-    console.log('getSingleBusinessData', getSingleBusinessData);
     return (
         <>
             <Modal
@@ -113,23 +112,23 @@ const NewBusinessModal = () => {
                     initialValues={
                         modalType === 'EDIT_BUSSINESS'
                             ? {
-                                  businessName: getSingleBusinessData?.businessName,
-                                  businessTitle: getSingleBusinessData?.businessTitle,
-                                  businessNumber: getSingleBusinessData?.businessNumber,
-                                  amountType: getSingleBusinessData?.amountType,
-                                  vatCode: getSingleBusinessData?.vatCode,
-                                  country: getSingleBusinessData?.country,
-                                  address: getSingleBusinessData?.address,
-                                  postCode: getSingleBusinessData?.postCode,
-                                  isRegisteredGst: getSingleBusinessData?.isRegisteredGst,
-                                  stateId: getSingleBusinessData?.stateId,
-                                  city: getSingleBusinessData?.city,
-                                  bankName: getSingleBusinessData?.bankName,
-                                  accountNumber: getSingleBusinessData?.accountNumber,
-                                  branchName: getSingleBusinessData?.branchName,
-                                  bankIfscCode: getSingleBusinessData?.bankIfscCode,
-                                  gstRegisterDate: getSingleBusinessData?.gstRegisterDate,
-                                  businessCategory: getSingleBusinessData?.businessCategory
+                                  businessName: getSingleBusinessData?.businessName || '',
+                                  businessTitle: getSingleBusinessData?.businessTitle || '',
+                                  businessNumber: getSingleBusinessData?.businessNumber || '',
+                                  amountType: getSingleBusinessData?.amountType || '',
+                                  vatCode: getSingleBusinessData?.vatCode || '',
+                                  country: getSingleBusinessData?.country || '',
+                                  address: getSingleBusinessData?.address || '',
+                                  postCode: getSingleBusinessData?.postCode || '',
+                                  isRegisteredGst: getSingleBusinessData?.isRegisteredGst || '',
+                                  stateId: getSingleBusinessData?.stateId || '',
+                                  city: getSingleBusinessData?.city || '',
+                                  bankName: getSingleBusinessData?.bankName || '',
+                                  accountNumber: getSingleBusinessData?.accountNumber || '',
+                                  branchName: getSingleBusinessData?.branchName || '',
+                                  bankIfscCode: getSingleBusinessData?.bankIfscCode || '',
+                                  gstRegisterDate: getSingleBusinessData?.gstRegisterDate || '',
+                                  businessCategory: getSingleBusinessData?.businessCategory || ''
                               }
                             : {
                                   businessName: '',

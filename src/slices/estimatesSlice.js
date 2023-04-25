@@ -63,7 +63,7 @@ export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async (
         const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_ESTIMATES}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
+        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);

@@ -1,11 +1,11 @@
 import { Field, Form, Formik } from 'formik';
 import reactCSS from 'reactcss';
 import JoditEditor from 'jodit-react';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import '../../assets/css/invoiceCustomStyle.css';
 import InvoicesPreview from '../InvoicesPreview';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import TemplateImage from '../TemplateImage';
 import ColorPicker from '../ColorPicker';
@@ -13,30 +13,48 @@ import template1 from '../../assets/images/invoiceTemplateImages/template-1.png'
 import template2 from '../../assets/images/invoiceTemplateImages/template-2.png';
 import template3 from '../../assets/images/invoiceTemplateImages/template-3.png';
 import template4 from '../../assets/images/invoiceTemplateImages/template-4.png';
+import { getSingleBusiness, updateBusiness } from '../../slices/settingsSlice';
 
 const InvoiceCustomization = () => {
-    const [color, setColor] = useState('#fff');
+    const { getSingleBusinessData } = useSelector((state) => state.settingsReducer);
+    const [color, setColor] = useState('');
+    const [content, setContent] = useState('');
     const dispatch = useDispatch();
-
-    const handleSubmit = (values) => {
-        console.log(values);
+    const config = {
+        readonly: false
     };
+    const handleSubmit = (values) => {
+        let payload = {
+            _id: getSingleBusinessData?._id,
+            templateStyle: values.templateStyle,
+            color: values.color,
+            footerNote: content
+        };
+        dispatch(updateBusiness({ payload }));
+    };
+
+    useEffect(() => {
+        let payload = {
+            _id: '644650a8be0b7b4db078d85e'
+        };
+        dispatch(getSingleBusiness({ payload }));
+    }, []);
 
     return (
         <>
             <Card>
-                <Card.Header>Invoice Customization</Card.Header>
+                <Formik
+                    enableReinitialize
+                    initialValues={{
+                        templateStyle: getSingleBusinessData?.templateStyle || '',
+                        color: color || ''
+                    }}
+                    onSubmit={(values) => handleSubmit(values)}
+                >
+                    <Form>
+                        <Card.Header>Invoice Customization</Card.Header>
 
-                <Card.Body>
-                    <Formik
-                        enableReinitialize
-                        initialValues={{
-                            template: '',
-                            colorCode: color
-                        }}
-                        onSubmit={(values) => handleSubmit(values)}
-                    >
-                        <Form>
+                        <Card.Body>
                             <div>
                                 <Row>
                                     <Col>
@@ -53,7 +71,7 @@ const InvoiceCustomization = () => {
                                             </div>
                                             <Card.Body>
                                                 <label className="d-flex justify-content-center cursor-pointer">
-                                                    <Field type="radio" name="template" value="template1" />
+                                                    <Field type="radio" name="templateStyle" value="Template1" />
                                                     <span>Template 1</span>
                                                 </label>
                                             </Card.Body>
@@ -73,7 +91,7 @@ const InvoiceCustomization = () => {
                                             </div>
                                             <Card.Body>
                                                 <label className="d-flex justify-content-center cursor-pointer">
-                                                    <Field type="radio" name="template" value="template2" />
+                                                    <Field type="radio" name="templateStyle" value="Template2" />
                                                     <span>Template 2</span>
                                                 </label>
                                             </Card.Body>
@@ -93,7 +111,7 @@ const InvoiceCustomization = () => {
                                             </div>
                                             <Card.Body>
                                                 <label className="d-flex justify-content-center cursor-pointer">
-                                                    <Field type="radio" name="template" value="template3" />
+                                                    <Field type="radio" name="templateStyle" value="Template3" />
                                                     <span>Template 3</span>
                                                 </label>
                                             </Card.Body>
@@ -113,7 +131,7 @@ const InvoiceCustomization = () => {
                                             </div>
                                             <Card.Body>
                                                 <label className="d-flex justify-content-center cursor-pointer">
-                                                    <Field type="radio" name="template" value="template4" />
+                                                    <Field type="radio" name="templateStyle" value="Template4" />
                                                     <span>Template 4</span>
                                                 </label>
                                             </Card.Body>
@@ -125,23 +143,33 @@ const InvoiceCustomization = () => {
                                 <label>Change Invoice Template Color</label>
                                 <div className="d-flex align-items-center justify-between">
                                     <div className="w-50 mr-2">
-                                        <Field className="form-control border" type="text" name="colorCode" />
+                                        <Field
+                                            className="form-control border"
+                                            type="text"
+                                            name="color"
+                                            value={getSingleBusinessData?.color}
+                                        />
                                     </div>
                                     <div>
+                                        {/* {console.log(color)} */}
                                         <ColorPicker color={color} setColor={setColor} />
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-3">
                                 <label>Set default footer note for invoice</label>
-                                <JoditEditor />
+                                <JoditEditor
+                                    value={getSingleBusinessData?.footerNote}
+                                    config={config}
+                                    onBlur={(content) => setContent(content)}
+                                />
                             </div>
-                        </Form>
-                    </Formik>
-                </Card.Body>
-                <Card.Footer>
-                    <Button type="submit">Submit</Button>
-                </Card.Footer>
+                        </Card.Body>
+                        <Card.Footer>
+                            <Button type="submit">Submit</Button>
+                        </Card.Footer>
+                    </Form>
+                </Formik>
             </Card>
             <TemplateImage />
         </>

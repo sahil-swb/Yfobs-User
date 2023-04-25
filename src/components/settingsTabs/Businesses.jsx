@@ -14,7 +14,6 @@ const Businesses = () => {
         dispatch(getAllBusinessesApi());
     }, [createBusiness, updateBusinessData, deleteBusinessData]);
 
-    console.log(getAllBusinessesData);
     return (
         <>
             {/* <div className="bg-danger d-flex justify-content-center align-items-center flex-column">

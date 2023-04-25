@@ -1,23 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { Field, Form, Formik } from 'formik';
 import { createVendor, getSingleVendor, updateVendor } from '../../slices/vendorsSlice';
 import { userId } from '../../constants/userData';
+import '../reactPhoneComponent.css';
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
 
 const VendorModal = () => {
-    const { getSingleVendorData } = useSelector((state) => state.vendorReducer);
+    const { getSingleVendorData, updateVendorData } = useSelector((state) => state.vendorReducer);
     const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
+    const [vendorPhoneNumber, setVendorPhoneNumber] = useState('');
     // const { getSingleBusinessData } = useSelector((state) => state.settingsReducer);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
         const payload = {
             userId: userId,
-            businessId: '64425f6f462fed333aeedfad',
+            businessId: '644650a8be0b7b4db078d85e',
             vendorName: values?.vendorName,
-            phone: values?.phone,
+            phone: vendorPhoneNumber,
             email: values?.email,
             address: values?.address
         };
@@ -26,11 +30,19 @@ const VendorModal = () => {
             payload._id = getSingleVendorData?._id;
             dispatch(updateVendor({ payload }));
         } else {
-            console.log('payload', payload);
             dispatch(createVendor({ payload }));
         }
+        setVendorPhoneNumber('');
         dispatch(commonModalIsOpen(false));
     };
+
+    useEffect(() => {
+        if (modalType === 'EDIT_VENDOR') {
+            setVendorPhoneNumber(getSingleVendorData?.phone);
+        } else {
+            setVendorPhoneNumber('');
+        }
+    }, [getSingleVendorData, modalType]);
 
     useEffect(() => {
         if (modalType === 'EDIT_VENDOR') {
@@ -39,15 +51,15 @@ const VendorModal = () => {
             };
             dispatch(getSingleVendor({ payload }));
         }
-    }, [ID]);
+    }, [modalIsOpen, updateVendorData, ID]);
 
-    console.log(getSingleVendorData);
     return (
         <>
             <Modal
                 show={modalIsOpen}
                 onHide={() => {
                     dispatch(commonModalIsOpen(false));
+                    setVendorPhoneNumber('');
                 }}
             >
                 <Modal.Header closeButton className="font-weight-bold">
@@ -60,13 +72,11 @@ const VendorModal = () => {
                             modalType === 'EDIT_VENDOR'
                                 ? {
                                       vendorName: getSingleVendorData?.vendorName ? getSingleVendorData?.vendorName : '',
-                                      phone: getSingleVendorData?.phone ? getSingleVendorData?.phone : '',
                                       email: getSingleVendorData?.email ? getSingleVendorData?.email : '',
                                       address: getSingleVendorData?.address ? getSingleVendorData?.address : ''
                                   }
                                 : {
                                       vendorName: '',
-                                      phone: '',
                                       email: '',
                                       address: ''
                                   }
@@ -87,7 +97,8 @@ const VendorModal = () => {
                                 <label>
                                     Phone <span className="text-danger">*</span>
                                 </label>
-                                <Field className="form-control" name="phone" />
+                                {/* <Field className="form-control" name="phone" /> */}
+                                <PhoneInput name="phone" value={vendorPhoneNumber} onChange={(e) => setVendorPhoneNumber(e)} />
                             </div>
                             <div className="mt-3">
                                 <label>Email</label>

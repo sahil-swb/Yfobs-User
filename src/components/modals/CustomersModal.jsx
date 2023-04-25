@@ -8,7 +8,7 @@ import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 //CUSTOM OR COMPONENTS IMPORTS
-import { createCustomerApi, getAllCustomersApi, updateCustomerApi } from '../../slices/customersSlice';
+import { createCustomerApi, getAllCustomersApi, getCustomerById, updateCustomerApi } from '../../slices/customersSlice';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import 'react-phone-number-input/style.css';
 import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
@@ -17,8 +17,9 @@ import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailS
 
 //MODAL COMPONENT FOR ADD AND EDIT CUSTOMER
 const CustomersModal = () => {
-    const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
+    const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
+    const { getSingleCustomerData, updateCustomer } = useSelector((state) => state.customers);
     const [customerPhoneNumber, setCustomerPhoneNumber] = useState('');
     const [companyPhoneNumber, setCompanyPhoneNumber] = useState('');
     const dispatch = useDispatch();
@@ -39,31 +40,39 @@ const CustomersModal = () => {
             vatCode: values.vatCode
         };
         if (modalType === 'EDIT') {
-            payload.id = rowData?._id;
+            payload._id = getSingleCustomerData?._id;
             dispatch(updateCustomerApi({ payload }));
         } else {
             dispatch(createCustomerApi({ payload }));
         }
+        setCustomerPhoneNumber('');
+        setCompanyPhoneNumber('');
         dispatch(commonModalIsOpen(false));
     };
 
     useEffect(() => {
         if (modalType === 'EDIT') {
-            setCustomerPhoneNumber(rowData?.phone);
-            setCompanyPhoneNumber(rowData?.businessNumber);
+            setCustomerPhoneNumber(getSingleCustomerData?.phone);
+            setCompanyPhoneNumber(getSingleCustomerData?.businessNumber);
         } else {
             setCustomerPhoneNumber('');
             setCompanyPhoneNumber('');
         }
-    }, []);
+    }, [getSingleCustomerData, modalType]);
 
     useEffect(() => {
         dispatch(getAllCountriesApi());
         dispatch(getAllStatesApi());
     }, []);
 
-    // console.log(modalType, rowData);
-    // console.log('customerPhoneNumber', customerPhoneNumber);
+    useEffect(() => {
+        if (modalType === 'EDIT') {
+            let payload = {
+                _id: ID
+            };
+            dispatch(getCustomerById({ payload }));
+        }
+    }, [ID, updateCustomer, modalIsOpen]);
 
     return (
         <>
@@ -72,6 +81,8 @@ const CustomersModal = () => {
                 show={modalIsOpen}
                 onHide={() => {
                     dispatch(commonModalIsOpen(false));
+                    setCustomerPhoneNumber('');
+                    setCompanyPhoneNumber('');
                 }}
             >
                 <Modal.Header closeButton className="font-weight-bold">
@@ -83,16 +94,16 @@ const CustomersModal = () => {
                         initialValues={
                             modalType === 'EDIT'
                                 ? {
-                                      name: rowData?.name,
-                                      email: rowData?.email,
-                                      address: rowData?.address,
-                                      countryName: rowData?.countryName,
-                                      state: rowData?.state,
-                                      city: rowData?.city,
-                                      postalCode: rowData?.postalCode,
-                                      currencyName: rowData?.currencyName,
-                                      businessName: rowData?.businessName,
-                                      vatCode: rowData?.vatCode
+                                      name: getSingleCustomerData?.name || '',
+                                      email: getSingleCustomerData?.email || '',
+                                      address: getSingleCustomerData?.address || '',
+                                      countryName: getSingleCustomerData?.countryName || '',
+                                      state: getSingleCustomerData?.state || '',
+                                      city: getSingleCustomerData?.city || '',
+                                      postalCode: getSingleCustomerData?.postalCode || '',
+                                      currencyName: getSingleCustomerData?.currencyName || '',
+                                      businessName: getSingleCustomerData?.businessName || '',
+                                      vatCode: getSingleCustomerData?.vatCode || ''
                                   }
                                 : {
                                       name: '',

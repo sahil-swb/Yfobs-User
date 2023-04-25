@@ -41,7 +41,8 @@ const Dashboard = () => {
                                 <Businesses />
                             </Tab.Pane>
                             <Tab.Pane eventKey="invoiceCustomization">
-                                <InvoiceCustomization />
+                                <h1>InvoiceCustomization</h1>
+                                {/* <InvoiceCustomization /> */}
                             </Tab.Pane>
                         </Tab.Content>
                     </Tab.Container>

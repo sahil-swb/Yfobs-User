@@ -42,7 +42,7 @@ const Estimates = () => {
         },
         {
             name: 'Action',
-            selector: (row) => {
+            cell: (row) => {
                 return (
                     <div>
                         <select name="" id="" className="form-control" onClick={(e) => handleDeleteEstimate(e, row)}>
@@ -55,6 +55,35 @@ const Estimates = () => {
                             <option value="EXPORT_AS_PDF">Export as PDF</option>
                             <option value="DELETE">Delete</option>
                         </select>
+
+                        {/* <Dropdown>
+                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                Actions
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu onClick={(e) => handleDeleteEstimate(e, row)} style={{ overflowY: 'scroll' }}>
+                                <Dropdown.Item as={Link} to={`/estimates/estimates_details/${row._id}`}>
+                                    View
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={() => dispatch(commonModalIsOpen(true))}>Send</Dropdown.Item>
+                                <Dropdown.Item href="#/action-3">Convert to Invoice</Dropdown.Item>
+                                <Dropdown.Item as={Link} to={`/estimates/estimates_preview/${row._id}`}>
+                                    Preview as Customer
+                                </Dropdown.Item>
+                                <Dropdown.Item href="#/action-3">Print</Dropdown.Item>
+                                <Dropdown.Item href="#/action-3">Export as PDF</Dropdown.Item>
+                                <Dropdown.Item
+                                    onClick={() => {
+                                        let payload = {
+                                            _id: row?._id
+                                        };
+                                        dispatch(deleteEstimateApi({ payload }));
+                                    }}
+                                >
+                                    Delete
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown> */}
                     </div>
                 );
             }

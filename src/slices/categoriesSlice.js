@@ -3,7 +3,7 @@ import axios from 'axios';
 // REDUX-TOOLKIT IMPORTS
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 //CUSTOM OR COMPONENTS IMPORTS
-import { successPNotify, warningPNotify } from '../components/alertMsg';
+import { errorPNotify, successPNotify, warningPNotify } from '../components/alertMsg';
 
 //API ENDPOINTS FOR CATEGORY
 import {
@@ -29,11 +29,11 @@ export const createCategoryApi = createAsyncThunk('user/createCategory', async (
         const response = await axios.post(BASE_URL_FOR_USER + USER_CREATE_CATEGORIES, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+
+        successPNotify('Category Added Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -44,7 +44,6 @@ export const getAllCategoriesApi = createAsyncThunk('user/getAllCategories', asy
         const response = await axios.get(BASE_URL_FOR_USER + USER_GET_ALL_CATEGORIES, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error.response);
@@ -57,10 +56,10 @@ export const updateCategoryApi = createAsyncThunk('user/updateCategory', async (
         const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_CATEGORIES}${payload.id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        successPNotify('Category Updated Succesfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response);
     }
 });
@@ -72,11 +71,10 @@ export const deleteCategoryApi = createAsyncThunk('user/deleteCategory', async (
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        console.log(response?.data);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+        successPNotify('Category Deleted Succesfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response);
     }
 });

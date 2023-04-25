@@ -12,13 +12,13 @@ const ExpenseModal = () => {
     const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
     const { getAllVendorData } = useSelector((state) => state.vendorReducer);
     const { getAllData } = useSelector((state) => state.categoriesReducer);
-    const { getSingleExpenseData } = useSelector((state) => state.expenseReducer);
+    const { getSingleExpenseData, updateExpenseData } = useSelector((state) => state.expenseReducer);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
         const payload = {
             userId: userId,
-            businessId: '64425f6f462fed333aeedfad',
+            businessId: '644650a8be0b7b4db078d85e',
             vendorName: values?.vendorName,
             amount: values?.amount,
             tax: values?.tax,
@@ -49,7 +49,7 @@ const ExpenseModal = () => {
             };
             dispatch(getSingleExpense({ payload }));
         }
-    }, [ID]);
+    }, [ID, updateExpenseData]);
 
     return (
         <>

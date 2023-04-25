@@ -3,7 +3,7 @@ import axios from 'axios';
 // REDUX-TOOLKIT IMPORTS
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 //CUSTOM OR COMPONENTS IMPORTS
-import { successPNotify, warningPNotify } from '../components/alertMsg';
+import { errorPNotify, successPNotify, warningPNotify } from '../components/alertMsg';
 
 //API ENDPOINTS FOR CUSTOMER
 import {
@@ -31,11 +31,11 @@ export const createCustomerApi = createAsyncThunk('user/createCustomer', async (
         const response = await axios.post(BASE_URL_FOR_USER + USER_CREATE_CUSTOMER, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+
+        successPNotify('Customer Added Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response.data);
     }
 });
@@ -57,14 +57,14 @@ export const getAllCustomersApi = createAsyncThunk('user/getAllCustomers', async
 //APICALL FOR UPDATING CUSTOMER USING THUNK
 export const updateCustomerApi = createAsyncThunk('user/updateCustomer', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_CUSTOMER}${payload.id}`, payload, {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_CUSTOMER}${payload._id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
+
+        successPNotify('Customer Updated Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response.data);
     }
 });
@@ -75,12 +75,10 @@ export const deleteCustomerApi = createAsyncThunk('user/deleteCustomer', async (
         const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_CUSTOMER}${del_id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
-
+        successPNotify('Customer Deleted Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response.data);
     }
 });
@@ -90,12 +88,10 @@ export const getCustomerById = createAsyncThunk('user/getCustomerById', async ({
         const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_CUSTOMER_BYID}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.message);
-        response?.data?.status ? successPNotify(response?.data?.message) : warningPNotify(response?.data?.message);
-        console.log(response?.data?.data);
+
+        console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
         return rejectWithValue(error.response.data);
     }
 });
