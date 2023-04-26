@@ -58,16 +58,16 @@ export const updateEstimateApi = createAsyncThunk('user/updateEstimate', async (
     }
 });
 
-export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async ({ payload }, { rejectWithValue }) => {
+export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async ({ del_id }, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_ESTIMATES}${payload._id}`, {
+        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_ESTIMATES}${del_id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
-        return rejectWithValue(error.response);
+        return rejectWithValue(error?.response?.data);
     }
 });
 
@@ -76,8 +76,8 @@ export const getEstimateById = createAsyncThunk('user/getEstimateById', async ({
         const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ESTIMATE_BYID}${payload._id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.data);
-        return response?.data?.data;
+        console.log(response?.data);
+        return response?.data;
     } catch (error) {
         return rejectWithValue(error.response);
     }

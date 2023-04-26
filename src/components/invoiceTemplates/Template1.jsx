@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 
 const Template1 = React.forwardRef((props, ref) => {
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
+
+    let quanAns = [2, 4, 6, 7, 8, 3];
+    console.log(getSingleEstimate);
     return (
         <>
             <meta charSet="UTF-8" />
@@ -37,8 +40,8 @@ const Template1 = React.forwardRef((props, ref) => {
                                 <img src={yfobsLogo} alt="yfobs-logo" width="100%" />
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <h2 style={{ textTransform: 'uppercase' }}>{getSingleEstimate?.title}</h2>
-                                <p style={{ margin: '1.5rem 0' }}>{getSingleEstimate?.summary}</p>
+                                <h2 style={{ textTransform: 'uppercase' }}>{getSingleEstimate?.data?.title}</h2>
+                                <p style={{ margin: '1.5rem 0' }}>{getSingleEstimate?.data?.summary}</p>
                                 <p style={{ marginBottom: '1rem', lineHeight: '1.5rem' }}>
                                     <strong>SilverWebbuzz.</strong> <br />
                                     Lorem, ipsum dolor.
@@ -64,10 +67,16 @@ const Template1 = React.forwardRef((props, ref) => {
                                     <strong>GST No:</strong> Lorem, ipsum dolor.
                                 </div>
                                 <div style={{ maxWidth: '30%', position: 'absolute', right: 0 }}>
-                                    <p>Invoice Number : {getSingleEstimate?.number}</p>
-                                    <p>Invoice date : {getSingleEstimate?.date}</p>
-                                    <p>Due Date : {getSingleEstimate?.expireOn}</p>
-                                    <p style={{ marginTop: 10 }}>Within 45 Days</p>
+                                    <p>
+                                        {props.type === 'Estimate' ? 'Estimate' : 'Invoice'} Number : {getSingleEstimate?.data?.number}
+                                    </p>
+                                    <p>
+                                        {props.type === 'Estimate' ? 'Estimate' : 'Invoice'} date : {getSingleEstimate?.data?.date}
+                                    </p>
+                                    <p>
+                                        {props.type === 'Estimate' ? 'Expires On' : 'Due Date'}: {getSingleEstimate?.data?.expireOn}
+                                    </p>
+                                    {props.type === 'Estimate' ? '' : <p style={{ marginTop: 10 }}>Within 45 Days</p>}
                                 </div>
                             </div>
                         </div>
@@ -93,12 +102,25 @@ const Template1 = React.forwardRef((props, ref) => {
                                         <th>Quantity</th>
                                         <th>Amount</th>
                                     </tr>
-                                    <tr style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
-                                        <td>Web Design.</td>
-                                        <td>₹ 50000</td>
-                                        <td>1</td>
-                                        <td style={{ textAlign: 'end', paddingRight: '1rem' }}>₹ 50000.00</td>
-                                    </tr>
+                                    {getSingleEstimate?.products?.map((product) => {
+                                        return (
+                                            <tr key={product?._id} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
+                                                <td>{product?.name}</td>
+                                                <td>{product?.price}</td>
+                                                <td>{parseInt(getSingleEstimate?.data?.subTotal) / parseInt(product?.price)}</td>
+                                                <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
+                                                    ₹{' '}
+                                                    {(parseInt(getSingleEstimate?.data?.subTotal) / parseInt(product?.price)) *
+                                                        parseInt(product?.price)}
+                                                    .00
+                                                </td>
+                                                {console.log(parseInt('1') + parseInt('2'))}
+                                                {/* {console.log(
+                                                    parseInt((getSingleEstimate?.data?.subTotal / product?.price) * product?.price)
+                                                )} */}
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                             <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'end', paddingRight: '1rem' }}>
@@ -122,16 +144,16 @@ const Template1 = React.forwardRef((props, ref) => {
                                 </ul>
                                 <ul style={{ listStyle: 'none', lineHeight: 2, wordSpacing: '0.5rem' }}>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.subTotal}.00</b>
+                                        <b> ₹ {getSingleEstimate?.data?.subTotal}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.discount}.00</b>
+                                        <b> ₹ {getSingleEstimate?.data?.discount}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.tax}.00</b>
+                                        <b> ₹ {getSingleEstimate?.data?.tax}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.tax}.00</b>
+                                        <b> ₹ {getSingleEstimate?.data?.tax}.00</b>
                                     </li>
                                     <li>
                                         <b>
@@ -139,7 +161,7 @@ const Template1 = React.forwardRef((props, ref) => {
                                         </b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.grandTotal}.00</b>
+                                        <b> ₹ {getSingleEstimate?.data?.grandTotal}.00</b>
                                     </li>
                                 </ul>
                             </div>

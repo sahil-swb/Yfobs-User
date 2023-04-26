@@ -84,7 +84,7 @@ const InvoiceDetails = () => {
                         </Card.Body>
                     </Card>
                 </div>
-                <Template1 />
+                <Template1 type={'Invoice'} />
             </div>
         </>
     );

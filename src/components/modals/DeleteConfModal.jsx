@@ -8,10 +8,13 @@ import { commonDeleteModal } from '../../slices/modalSlice';
 import { deleteProductApi, getAllProductsApi } from '../../slices/productsSlice';
 import { deleteExpense } from '../../slices/expenseSlice';
 import { deleteVendor } from '../../slices/vendorsSlice';
+import { deleteEstimateApi } from '../../slices/estimatesSlice';
+import { useHistory } from 'react-router-dom';
 
 //COMPONENT FOR DELETE
 const DeleteConfModal = ({ type, del_id, title }) => {
     const { deleteModal } = useSelector((state) => state.modalReducer);
+    const history = useHistory();
     const dispatch = useDispatch();
 
     //FUNCTION FOR DELETE
@@ -24,6 +27,9 @@ const DeleteConfModal = ({ type, del_id, title }) => {
             dispatch(deleteProductApi({ del_id }));
         } else if (type === 'EXPENSE') {
             dispatch(deleteExpense({ del_id }));
+        } else if (type === 'ESTIMATES') {
+            dispatch(deleteEstimateApi({ del_id }));
+            history.push('/estimates');
         } else if (type === 'VENDORS') {
             dispatch(deleteVendor({ del_id }));
         }
