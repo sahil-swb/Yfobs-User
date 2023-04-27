@@ -57,7 +57,7 @@ const Vendors = () => {
     const { createVendorData, getAllVendorData, updateVendorData, deleteVendorData, getSingleVendorData } = useSelector(
         (state) => state.vendorReducer
     );
-    const { rowData } = useSelector((state) => state.modalReducer);
+    const { rowData, ID } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
 
     const handleEdit = (row) => {
@@ -72,6 +72,8 @@ const Vendors = () => {
     useEffect(() => {
         dispatch(getAllVendors());
     }, [createVendorData, updateVendorData, deleteVendorData]);
+
+    console.log('ID', ID);
 
     return (
         <>

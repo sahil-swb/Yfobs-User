@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 const Template1 = React.forwardRef((props, ref) => {
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
 
-    let quanAns = [2, 4, 6, 7, 8, 3];
-    console.log(getSingleEstimate);
     return (
         <>
             <meta charSet="UTF-8" />
@@ -115,9 +113,6 @@ const Template1 = React.forwardRef((props, ref) => {
                                                     .00
                                                 </td>
                                                 {console.log(parseInt('1') + parseInt('2'))}
-                                                {/* {console.log(
-                                                    parseInt((getSingleEstimate?.data?.subTotal / product?.price) * product?.price)
-                                                )} */}
                                             </tr>
                                         );
                                     })}

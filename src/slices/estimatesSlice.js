@@ -18,6 +18,7 @@ const initialState = {
     deleteEstimate: {},
     updateEstimate: {},
     getSingleEstimate: {},
+    ESTIMATEID: null,
     getSingleEstimateMessage: {}
 };
 
@@ -107,6 +108,7 @@ const estimatesSlice = createSlice({
             })
             .addCase(createEstimateApi.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.ESTIMATEID = action.payload?.EstimatesId;
                 state.createEstimate = action.payload;
             })
             .addCase(createEstimateApi.rejected, (state, action) => {

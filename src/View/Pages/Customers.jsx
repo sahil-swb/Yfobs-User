@@ -62,7 +62,7 @@ const Customers = () => {
 
     //STATES
     const { getAllCustomers, createCustomer, deleteCustomer, updateCustomer } = useSelector((state) => state.customers);
-    const { rowData } = useSelector((state) => state.modalReducer);
+    const { rowData, ID } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
 
     //FUNCTION FOR DELETE CUSTOMER
@@ -82,6 +82,9 @@ const Customers = () => {
     useEffect(() => {
         dispatch(getAllCustomersApi());
     }, [createCustomer, deleteCustomer, updateCustomer]);
+
+    console.log('ID', ID);
+
     return (
         <div>
             <Card>

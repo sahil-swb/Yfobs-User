@@ -21,7 +21,7 @@ const initialState = {
     getAllProducts: [],
     updateData: {},
     deleteData: {},
-    createData: {},
+    createData: [],
     getEstimateProducts: [],
     getSingleProduct: {}
 };
@@ -36,7 +36,7 @@ export const createProductApi = createAsyncThunk('user/createProduct', async ({ 
         successPNotify('Product Added Successfully');
         return response?.data?.data;
     } catch (error) {
-        console.log(error?.response?.data);
+        console.log(error?.response);
         errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response?.data?.message);
     }
@@ -86,10 +86,10 @@ export const deleteProductApi = createAsyncThunk('user/deleteProduct', async ({ 
 
 export const getSingleProductApi = createAsyncThunk('user/getSingleProductApi', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GETBYID_PRODUCTS}${payload._id}`, payload, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GETBYID_PRODUCTS}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data?.data);
+        console.log(response);
         successPNotify('Product Fetched Successfully');
         return response?.data?.data;
     } catch (error) {

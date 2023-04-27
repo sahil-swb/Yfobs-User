@@ -5,12 +5,13 @@ import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategoriesApi } from '../../slices/categoriesSlice';
 import { commonModalIsOpen } from '../../slices/modalSlice';
-import { createProductApi, getAllProductsApi, updateProductApi } from '../../slices/productsSlice';
+import { createProductApi, getAllProductsApi, getSingleProductApi, updateProductApi } from '../../slices/productsSlice';
 import { userId } from '../../constants/userData';
 
-const ProductsModal = ({ data }) => {
-    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
+const ProductsModal = () => {
+    const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
     const { getAllData } = useSelector((state) => state.categoriesReducer);
+    const { updateData, getSingleProduct } = useSelector((state) => state.productsReducer);
     const [showIncome, setShowIncome] = useState(false);
     const [showExpense, setShowExpense] = useState(false);
 
@@ -25,24 +26,33 @@ const ProductsModal = ({ data }) => {
             details: values.details,
             isSell: values?.isSell === false ? '0' : '1',
             isBuy: values?.isBuy === false ? '0' : '1',
-            incomeCategory: data?.incomeCategory,
-            expenseCategory: data?.expenseCategory
+            incomeCategory: getSingleProduct?.incomeCategory,
+            expenseCategory: getSingleProduct?.expenseCategory
         };
-        if (modalType === 'EDIT') {
-            payload.id = data?._id;
+        if (modalType === 'EDIT_PRODUCT') {
+            payload.id = getSingleProduct?._id;
             dispatch(updateProductApi({ payload }));
         } else {
             dispatch(createProductApi({ payload }));
         }
         dispatch(commonModalIsOpen(false));
-        // setTimeout(() => {
-        //     dispatch(getAllProductsApi());
-        // }, 1000);
     };
 
     useEffect(() => {
         dispatch(getAllCategoriesApi());
     }, []);
+
+    useEffect(() => {
+        if (modalType === 'EDIT_PRODUCT') {
+            let payload = {
+                _id: ID
+            };
+            dispatch(getSingleProductApi({ payload }));
+        }
+    }, [modalIsOpen, updateData, ID]);
+
+    // console.log('ID', ID);
+    // console.log('getSingleProduct', getSingleProduct);
 
     return (
         <Modal
@@ -52,21 +62,22 @@ const ProductsModal = ({ data }) => {
             }}
         >
             <Modal.Header closeButton className="font-weight-bold">
-                {modalType === 'EDIT' ? 'Edit Product' : 'Add New Product'}
+                {modalType === 'EDIT_PRODUCT' ? 'Edit Product' : 'Add New Product'}
             </Modal.Header>
             <Modal.Body className="modal-scrollable">
                 <Formik
+                    enableReinitialize
                     initialValues={
-                        modalType === 'EDIT'
+                        modalType === 'EDIT_PRODUCT'
                             ? {
-                                  name: data?.name,
-                                  hsnCode: data?.hsnCode,
-                                  price: data?.price,
-                                  details: data?.details,
-                                  isSell: data?.isSell === '0' ? false : true,
-                                  isBuy: data?.isBuy === '0' ? false : true,
-                                  incomeCategory: data?.incomeCategory,
-                                  expenseCategory: data?.expenseCategory
+                                  name: getSingleProduct?.name,
+                                  hsnCode: getSingleProduct?.hsnCode,
+                                  price: getSingleProduct?.price,
+                                  details: getSingleProduct?.details,
+                                  isSell: getSingleProduct?.isSell === '0' ? false : true,
+                                  isBuy: getSingleProduct?.isBuy === '0' ? false : true,
+                                  incomeCategory: getSingleProduct?.incomeCategory,
+                                  expenseCategory: getSingleProduct?.expenseCategory
                               }
                             : {
                                   name: '',

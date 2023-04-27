@@ -11,6 +11,8 @@ import favicon from '../../assets/images/favicon-32x32.png';
 import JoditEditor from 'jodit-react';
 import { createEstimateApi } from '../../slices/estimatesSlice';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
+import { userId } from '../../constants/userData';
+import { createProductApi } from '../../slices/productsSlice';
 
 const CreateEstimate = () => {
     const [modalOpenType, setModalTypeOpen] = useState('');
@@ -20,16 +22,17 @@ const CreateEstimate = () => {
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const { getEstimateProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
+    const { ESTIMATEID } = useSelector((state) => state.estimateReducer);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
     const [defaultQuantity, setDefaultQuantity] = useState(1);
     const [defaultTotal, setDefaultTotal] = useState(0);
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
     // const [productArrayId, setProductArrayId] = useState([]);
-    let productArrayId = [];
+    // let productArrayId = [];
 
     //Array Field
-
+    console.log(ESTIMATEID);
     const dispatch = useDispatch();
     let discountValue = (defaultTotal * defaultDiscount) / 100;
     let discountAmount = defaultTotal - (defaultTotal * defaultDiscount) / 100;
@@ -45,7 +48,7 @@ const CreateEstimate = () => {
             number: values?.number,
             posoNumber: values?.posoNumber,
             date: values?.date,
-            productId: productArrayId,
+            // productId: productArrayId,
             expireOn: values?.expireOn,
             discount: defaultDiscount,
             tax: defaultTax,
@@ -53,8 +56,24 @@ const CreateEstimate = () => {
             grandTotal: grandTotal
         };
 
-        dispatch(createEstimateApi({ payload }));
-        // resetForm({ payload: '' });
+        dispatch(createEstimateApi({ payload })).then((res) => {
+            if (res?.payload?._id) {
+                let payload = {
+                    EstimatesId: res?.payload?._id,
+                    userId: userId,
+                    name: values.name,
+                    hsnCode: values.hsnCode,
+                    price: values.price,
+                    details: values.details,
+                    isSell: values?.isSell === false ? '0' : '1',
+                    isBuy: values?.isBuy === false ? '0' : '1'
+                    // incomeCategory: data?.incomeCategory,
+                    // expenseCategory: data?.expenseCategory
+                };
+
+                dispatch(createProductApi({ payload }));
+            }
+        });
     };
 
     const handleChangeCustomer = (e) => {
@@ -93,9 +112,9 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
-    getEstimateProducts?.map((val) => {
-        productArrayId.push(val?._id);
-    });
+    // getEstimateProducts?.map((val) => {
+    //     productArrayId.push(val?._id);
+    // });
 
     return (
         <>

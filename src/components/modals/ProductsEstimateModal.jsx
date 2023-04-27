@@ -16,7 +16,7 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
         let keyword = e.target.value;
         if (keyword !== '') {
             const results = getAllProducts.filter((val) => {
-                return val?.name.toLowerCase().startsWith(keyword.toLowerCase());
+                // return val?.name?.toLowerCase().startsWith(keyword.toLowerCase());
             });
             setFoundItems(results);
         } else {
@@ -24,8 +24,6 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
         }
         setItemName(keyword);
     };
-
-    console.log(defaultQuantity);
 
     const handleSubmit = (id) => {
         const payload = {

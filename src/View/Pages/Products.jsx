@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonDataTable from '../../components/CommonDataTable';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import ProductsModal from '../../components/modals/ProductsModal';
-import { commonDeleteModal, commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
 import { getAllProductsApi } from '../../slices/productsSlice';
 // import '../../components/CommonIcons.css';
 
@@ -12,22 +12,22 @@ const Products = () => {
     const columns = [
         {
             name: '#',
-            selector: (row) => row.index,
+            selector: (row) => row?.index,
             sortable: true
         },
         {
             name: 'Name',
-            selector: (row) => row.name,
+            selector: (row) => row?.product?.map((data) => data?.name),
             sortable: true
         },
         {
             name: 'HSN Code',
-            selector: (row) => row.hsnCode,
+            selector: (row) => row?.hsnCode,
             sortable: true
         },
         {
             name: 'Price',
-            selector: (row) => row.price,
+            selector: (row) => row?.product?.map((data) => data?.price),
             sortable: true
         },
         {
@@ -54,13 +54,9 @@ const Products = () => {
         }
     ];
 
-    const [rowData, setRowData] = useState(null);
     const { getAllProducts, updateData, deleteData, createData } = useSelector((state) => state.productsReducer);
+    const { rowData, ID } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getAllProductsApi());
-    }, [updateData, deleteData, createData]);
 
     const handleDelete = (row) => {
         setRowData(row);
@@ -69,9 +65,13 @@ const Products = () => {
 
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
-        dispatch(commonModalType('EDIT'));
-        setRowData(row);
+        dispatch(commonModalType('EDIT_PRODUCT'));
+        setID(row?._id);
     };
+
+    useEffect(() => {
+        dispatch(getAllProductsApi());
+    }, [updateData, deleteData, createData]);
 
     return (
         <div>
@@ -81,7 +81,7 @@ const Products = () => {
                     <Button
                         onClick={() => {
                             dispatch(commonModalIsOpen(true));
-                            dispatch(commonModalType(!'EDIT'));
+                            dispatch(commonModalType('ADD'));
                         }}
                         size="sm"
                         className="d-flex align-items-center p-2"
@@ -94,7 +94,7 @@ const Products = () => {
                     <CommonDataTable columns={columns} data={getAllProducts} />
                 </Card.Body>
             </Card>
-            <ProductsModal data={rowData} />
+            <ProductsModal />
             <DeleteConfModal del_id={rowData?._id} type={'PRODUCTS'} title={rowData?.name} />
         </div>
     );
