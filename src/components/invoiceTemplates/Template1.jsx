@@ -101,20 +101,23 @@ const Template1 = React.forwardRef((props, ref) => {
                                         <th>Amount</th>
                                     </tr>
                                     {getSingleEstimate?.products?.map((product) => {
-                                        return (
-                                            <tr key={product?._id} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
-                                                <td>{product?.name}</td>
-                                                <td>{product?.price}</td>
-                                                <td>{parseInt(getSingleEstimate?.data?.subTotal) / parseInt(product?.price)}</td>
-                                                <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
-                                                    ₹{' '}
-                                                    {(parseInt(getSingleEstimate?.data?.subTotal) / parseInt(product?.price)) *
-                                                        parseInt(product?.price)}
-                                                    .00
-                                                </td>
-                                                {console.log(parseInt('1') + parseInt('2'))}
-                                            </tr>
-                                        );
+                                        product?.product?.map((val, index) => {
+                                            console.log('val', val);
+                                            return (
+                                                <tr key={index} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
+                                                    <td>{val?.name}</td>
+                                                    <td>{val?.price}</td>
+                                                    <td>{val?.quantity}</td>
+                                                    <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
+                                                        ₹{' '}
+                                                        {(parseInt(getSingleEstimate?.data?.subTotal) / parseInt(product?.price)) *
+                                                            parseInt(product?.price)}
+                                                        .00
+                                                    </td>
+                                                    {console.log(parseInt('1') + parseInt('2'))}
+                                                </tr>
+                                            );
+                                        });
                                     })}
                                 </tbody>
                             </table>

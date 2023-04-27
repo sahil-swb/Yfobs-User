@@ -25,7 +25,7 @@ const EstimateDetails = () => {
 
     useEffect(() => {
         let payload = {
-            _id: _id
+            _id: '644a6e97652be6313a8ca304'
         };
         dispatch(getEstimateById({ payload }));
     }, [_id]);

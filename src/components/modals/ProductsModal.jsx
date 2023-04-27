@@ -8,8 +8,8 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import { createProductApi, getAllProductsApi, getSingleProductApi, updateProductApi } from '../../slices/productsSlice';
 import { userId } from '../../constants/userData';
 
-const ProductsModal = () => {
-    const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
+const ProductsModal = ({ ID }) => {
+    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllData } = useSelector((state) => state.categoriesReducer);
     const { updateData, getSingleProduct } = useSelector((state) => state.productsReducer);
     const [showIncome, setShowIncome] = useState(false);
@@ -18,11 +18,16 @@ const ProductsModal = () => {
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
+        let product = [
+            {
+                name: values?.name,
+                price: values?.price
+            }
+        ];
         let payload = {
             userId: userId,
-            name: values.name,
+            product: product,
             hsnCode: values.hsnCode,
-            price: values.price,
             details: values.details,
             isSell: values?.isSell === false ? '0' : '1',
             isBuy: values?.isBuy === false ? '0' : '1',
@@ -49,10 +54,10 @@ const ProductsModal = () => {
             };
             dispatch(getSingleProductApi({ payload }));
         }
-    }, [modalIsOpen, updateData, ID]);
+    }, [updateData, ID]);
 
     // console.log('ID', ID);
-    // console.log('getSingleProduct', getSingleProduct);
+    console.log('getSingleProduct', getSingleProduct);
 
     return (
         <Modal
@@ -70,14 +75,15 @@ const ProductsModal = () => {
                     initialValues={
                         modalType === 'EDIT_PRODUCT'
                             ? {
-                                  name: getSingleProduct?.name,
-                                  hsnCode: getSingleProduct?.hsnCode,
-                                  price: getSingleProduct?.price,
-                                  details: getSingleProduct?.details,
-                                  isSell: getSingleProduct?.isSell === '0' ? false : true,
-                                  isBuy: getSingleProduct?.isBuy === '0' ? false : true,
-                                  incomeCategory: getSingleProduct?.incomeCategory,
-                                  expenseCategory: getSingleProduct?.expenseCategory
+                                  name: getSingleProduct?.product?.map((val) => val?.name) || '',
+                                  hsnCode: getSingleProduct?.hsnCode || '',
+
+                                  price: getSingleProduct?.product?.map((val) => val?.price) || '',
+                                  details: getSingleProduct?.details || '',
+                                  isSell: getSingleProduct?.isSell === '0' ? false : true || '',
+                                  isBuy: getSingleProduct?.isBuy === '0' ? false : true || '',
+                                  incomeCategory: getSingleProduct?.incomeCategory || '',
+                                  expenseCategory: getSingleProduct?.expenseCategory || ''
                               }
                             : {
                                   name: '',
@@ -99,7 +105,7 @@ const ProductsModal = () => {
                         </div>
                         <div className="mb-3">
                             <label className="font-weight-bold">HSN Code</label>
-                            <Field className="form-control" type="number" name="hsnCode" />
+                            <Field className="form-control" type="text" name="hsnCode" />
                         </div>
                         <div className="mb-3">
                             <label className="font-weight-bold">Price</label>

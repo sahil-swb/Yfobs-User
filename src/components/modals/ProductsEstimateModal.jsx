@@ -35,12 +35,12 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
     useEffect(() => {
         if (getSingleProduct?._id) {
             addHelper.push({
-                name: getSingleProduct?.name,
-                price: parseInt(getSingleProduct?.price),
+                name: getSingleProduct?.product?.map((val) => val?.name),
+                price: parseInt(getSingleProduct?.product?.map((val) => val?.price)),
                 quantity: defaultQuantity
             });
         }
-    }, [getSingleProduct]);
+    }, [getSingleProduct?.product]);
 
     useEffect(() => {
         dispatch(getAllProductsApi());
@@ -77,11 +77,11 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
                                     <div className="d-flex" style={{ justifyContent: 'space-between' }}>
                                         <div>
                                             <div className="font-weight-bold h5 text-dark">
-                                                {val?.name} [{val?.hsnCode}]
+                                                {val?.product?.map((val) => val?.name)} [{val?.hsnCode}]
                                             </div>
                                             <div>{val?.details}</div>
                                         </div>
-                                        <div>{val?.price}.00</div>
+                                        <div>{val?.product?.map((val) => val?.price)}.00</div>
                                     </div>
                                 </ListGroup.Item>
                             );

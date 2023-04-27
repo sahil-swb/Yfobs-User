@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonDataTable from '../../components/CommonDataTable';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import ProductsModal from '../../components/modals/ProductsModal';
-import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
+import { commonDeleteModal, commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import { getAllProductsApi } from '../../slices/productsSlice';
 // import '../../components/CommonIcons.css';
 
@@ -55,18 +55,20 @@ const Products = () => {
     ];
 
     const { getAllProducts, updateData, deleteData, createData } = useSelector((state) => state.productsReducer);
-    const { rowData, ID } = useSelector((state) => state.modalReducer);
+    const { modalType } = useSelector((state) => state.modalReducer);
+    const [ID, setID] = useState(null);
+    const [rowData, setRowData] = useState({});
     const dispatch = useDispatch();
-
-    const handleDelete = (row) => {
-        setRowData(row);
-        dispatch(commonDeleteModal(true));
-    };
 
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
         dispatch(commonModalType('EDIT_PRODUCT'));
         setID(row?._id);
+    };
+
+    const handleDelete = (row) => {
+        dispatch(commonDeleteModal(true));
+        setRowData(row);
     };
 
     useEffect(() => {
@@ -94,7 +96,7 @@ const Products = () => {
                     <CommonDataTable columns={columns} data={getAllProducts} />
                 </Card.Body>
             </Card>
-            <ProductsModal />
+            {modalType === 'EDIT_PRODUCT' && <ProductsModal ID={ID} />}
             <DeleteConfModal del_id={rowData?._id} type={'PRODUCTS'} title={rowData?.name} />
         </div>
     );

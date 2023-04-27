@@ -28,6 +28,9 @@ const CreateEstimate = () => {
     const [defaultTotal, setDefaultTotal] = useState(0);
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
+
+    const [ansPrice, setAnsPrice] = useState(null);
+    const [ansName, setAnsName] = useState(null);
     // const [productArrayId, setProductArrayId] = useState([]);
     // let productArrayId = [];
 
@@ -64,6 +67,7 @@ const CreateEstimate = () => {
                     name: values.name,
                     hsnCode: values.hsnCode,
                     price: values.price,
+                    product: values.estimateProducts,
                     details: values.details,
                     isSell: values?.isSell === false ? '0' : '1',
                     isBuy: values?.isBuy === false ? '0' : '1'
@@ -112,10 +116,6 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
-    // getEstimateProducts?.map((val) => {
-    //     productArrayId.push(val?._id);
-    // });
-
     return (
         <>
             <Row>
@@ -142,6 +142,7 @@ const CreateEstimate = () => {
                         >
                             {({ values }) => (
                                 <Form>
+                                    {console.log('getEstimateProducts----', getEstimateProducts)}
                                     <Accordion defaultActiveKey="0">
                                         <Card>
                                             <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
@@ -336,8 +337,6 @@ const CreateEstimate = () => {
                                                                                                     type="button"
                                                                                                     className="btn btn-primary btn-sm ml-3"
                                                                                                     onClick={() => {
-                                                                                                        console.log(estimate?._id);
-
                                                                                                         arrayHelpers.remove(index);
                                                                                                     }}
                                                                                                 >

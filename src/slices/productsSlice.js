@@ -89,7 +89,7 @@ export const getSingleProductApi = createAsyncThunk('user/getSingleProductApi', 
         const response = await axios.get(`${BASE_URL_FOR_USER + USER_GETBYID_PRODUCTS}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response);
+        console.log(response?.data?.data);
         successPNotify('Product Fetched Successfully');
         return response?.data?.data;
     } catch (error) {
