@@ -69,6 +69,28 @@ const chartData = {
                     url: '/vendors',
                     classes: 'nav-item',
                     icon: 'fa fa-cubes'
+                },
+                {
+                    id: 'reports',
+                    title: 'Reports',
+                    type: 'item',
+                    url: '/reports',
+                    classes: 'nav-item',
+                    icon: 'fa fa-cubes'
+                },
+                {
+                    id: 'subscription',
+                    title: 'Subscription',
+                    type: 'item',
+                    url: '/subscription',
+                    icon: 'fa fa-calculator'
+                },
+                {
+                    id: 'gst_calculate',
+                    title: 'GST Calculate',
+                    type: 'item',
+                    url: '/gst_calculate',
+                    icon: 'fa fa-calculator'
                 }
             ]
         }

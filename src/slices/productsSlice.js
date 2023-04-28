@@ -32,7 +32,7 @@ export const createProductApi = createAsyncThunk('user/createProduct', async ({ 
         const response = await axios.post(BASE_URL_FOR_USER + USER_CREATE_PRODUCTS, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data);
+        console.log(response?.data?.data);
         successPNotify('Product Added Successfully');
         return response?.data?.data;
     } catch (error) {
@@ -58,7 +58,7 @@ export const getAllProductsApi = createAsyncThunk('user/getAllProducts', async (
 //APICALL FOR UPDATING PRODUCTS USING THUNK
 export const updateProductApi = createAsyncThunk('user/updateProduct', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_PRODUCTS}${payload.id}`, payload, {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_PRODUCTS}${payload._id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);

@@ -8,17 +8,15 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import { createProductApi, getAllProductsApi, getSingleProductApi, updateProductApi } from '../../slices/productsSlice';
 import { userId } from '../../constants/userData';
 
-const ProductsModal = ({ ID }) => {
+const ProductsModal = ({ data }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllData } = useSelector((state) => state.categoriesReducer);
-    const { updateData, getSingleProduct } = useSelector((state) => state.productsReducer);
     const [showIncome, setShowIncome] = useState(false);
     const [showExpense, setShowExpense] = useState(false);
-
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
-        let product = [
+        let productArray = [
             {
                 name: values?.name,
                 price: values?.price
@@ -26,16 +24,17 @@ const ProductsModal = ({ ID }) => {
         ];
         let payload = {
             userId: userId,
-            product: product,
+            product: productArray,
             hsnCode: values.hsnCode,
             details: values.details,
             isSell: values?.isSell === false ? '0' : '1',
             isBuy: values?.isBuy === false ? '0' : '1',
-            incomeCategory: getSingleProduct?.incomeCategory,
-            expenseCategory: getSingleProduct?.expenseCategory
+            incomeCategory: values?.incomeCategory,
+            expenseCategory: values?.expenseCategory,
+            productStatus: 'product'
         };
         if (modalType === 'EDIT_PRODUCT') {
-            payload.id = getSingleProduct?._id;
+            payload._id = data?._id;
             dispatch(updateProductApi({ payload }));
         } else {
             dispatch(createProductApi({ payload }));
@@ -46,18 +45,6 @@ const ProductsModal = ({ ID }) => {
     useEffect(() => {
         dispatch(getAllCategoriesApi());
     }, []);
-
-    useEffect(() => {
-        if (modalType === 'EDIT_PRODUCT') {
-            let payload = {
-                _id: ID
-            };
-            dispatch(getSingleProductApi({ payload }));
-        }
-    }, [updateData, ID]);
-
-    // console.log('ID', ID);
-    console.log('getSingleProduct', getSingleProduct);
 
     return (
         <Modal
@@ -75,15 +62,14 @@ const ProductsModal = ({ ID }) => {
                     initialValues={
                         modalType === 'EDIT_PRODUCT'
                             ? {
-                                  name: getSingleProduct?.product?.map((val) => val?.name) || '',
-                                  hsnCode: getSingleProduct?.hsnCode || '',
-
-                                  price: getSingleProduct?.product?.map((val) => val?.price) || '',
-                                  details: getSingleProduct?.details || '',
-                                  isSell: getSingleProduct?.isSell === '0' ? false : true || '',
-                                  isBuy: getSingleProduct?.isBuy === '0' ? false : true || '',
-                                  incomeCategory: getSingleProduct?.incomeCategory || '',
-                                  expenseCategory: getSingleProduct?.expenseCategory || ''
+                                  name: data?.product?.map((val) => val?.name) || '',
+                                  hsnCode: data?.hsnCode || '',
+                                  price: data?.product?.map((val) => val?.price) || '',
+                                  details: data?.details || '',
+                                  isSell: data?.isSell === '0' ? false : true || '',
+                                  isBuy: data?.isBuy === '0' ? false : true || '',
+                                  incomeCategory: data?.incomeCategory || '',
+                                  expenseCategory: data?.expenseCategory || ''
                               }
                             : {
                                   name: '',

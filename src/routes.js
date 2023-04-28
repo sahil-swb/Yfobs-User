@@ -12,6 +12,9 @@ const Invoices = React.lazy(() => import('./View/Pages/Invoices'));
 const InvoiceDetails = React.lazy(() => import('./View/Pages/InvoiceDetails'));
 const Expense = React.lazy(() => import('./View/Pages/Expense'));
 const Vendors = React.lazy(() => import('./View/Pages/Vendors'));
+const Reports = React.lazy(() => import('./View/Pages/Reports'));
+const Subscription = React.lazy(() => import('./View/Pages/Subscription'));
+const GstCalulate = React.lazy(() => import('./View/Pages/GstCalculate'));
 
 // const EstimatePreview = React.lazy(() => import('../src/View/Pages/EstimatePreview'));
 
@@ -27,7 +30,10 @@ const routes = [
     { path: '/invoices', exact: true, name: 'Invoices', component: Invoices },
     { path: '/invoices/invoice_details/:_id', exact: true, name: 'InvoiceDetails', component: InvoiceDetails },
     { path: '/expense', exact: true, name: 'Expense', component: Expense },
-    { path: '/vendors', exact: true, name: 'Vendors', component: Vendors }
+    { path: '/vendors', exact: true, name: 'Vendors', component: Vendors },
+    { path: '/reports', exact: true, name: 'Reports', component: Reports },
+    { path: '/subscription', exact: true, name: 'Subscription', component: Subscription },
+    { path: '/gst_calculate', exact: true, name: 'GstCalulate', component: GstCalulate }
     // { path: '/estimates/estimates_preview/:_id', exact: true, name: 'EstimatePreview', component: EstimatePreview }
 ];
 export default routes;

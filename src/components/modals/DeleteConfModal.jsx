@@ -50,7 +50,9 @@ const DeleteConfModal = ({ type, del_id, title }) => {
                     Delete Confirmation
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="font-weight-bold">Are you sure you want to delete "{title}" ?</Modal.Body>
+            <Modal.Body className="font-weight-bold">
+                Are you sure you want to delete "{type === 'PRODUCTS' ? title?.map((val) => val?.name) : title}" ?
+            </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => handleDeleteConfModal()} className="btn-icon" variant="info">
                     <i className="feather icon-check f-20" />

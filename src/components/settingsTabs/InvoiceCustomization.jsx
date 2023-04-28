@@ -17,7 +17,7 @@ import { getSingleBusiness, updateBusiness } from '../../slices/settingsSlice';
 
 const InvoiceCustomization = () => {
     const { getSingleBusinessData } = useSelector((state) => state.settingsReducer);
-    const [color, setColor] = useState('');
+    const [color, setColor] = useState('#fff');
     const [content, setContent] = useState('');
     const dispatch = useDispatch();
     const config = {
@@ -47,7 +47,7 @@ const InvoiceCustomization = () => {
                     enableReinitialize
                     initialValues={{
                         templateStyle: getSingleBusinessData?.templateStyle || '',
-                        color: color || ''
+                        color: color
                     }}
                     onSubmit={(values) => handleSubmit(values)}
                 >
@@ -143,12 +143,7 @@ const InvoiceCustomization = () => {
                                 <label>Change Invoice Template Color</label>
                                 <div className="d-flex align-items-center justify-between">
                                     <div className="w-50 mr-2">
-                                        <Field
-                                            className="form-control border"
-                                            type="text"
-                                            name="color"
-                                            value={getSingleBusinessData?.color}
-                                        />
+                                        <Field className="form-control border" type="text" name="color" value={color} />
                                     </div>
                                     <div>
                                         {/* {console.log(color)} */}

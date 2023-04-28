@@ -36,14 +36,21 @@ const Products = () => {
                 return (
                     <div>
                         <i
-                            onClick={() => handleEdit(row)}
+                            onClick={() => {
+                                dispatch(commonModalIsOpen(true));
+                                dispatch(commonModalType('EDIT_PRODUCT'));
+                                setRowData(row);
+                            }}
                             className="icon feather icon-edit f-22 text-c-blue mr-3"
                             role="button"
                             aria-hidden="true"
                         />
 
                         <i
-                            onClick={() => handleDelete(row)}
+                            onClick={() => {
+                                dispatch(commonDeleteModal(true));
+                                setRowData(row);
+                            }}
                             className="icon feather icon-trash-2 f-22 text-c-red"
                             role="button"
                             aria-hidden="true"
@@ -55,21 +62,8 @@ const Products = () => {
     ];
 
     const { getAllProducts, updateData, deleteData, createData } = useSelector((state) => state.productsReducer);
-    const { modalType } = useSelector((state) => state.modalReducer);
-    const [ID, setID] = useState(null);
-    const [rowData, setRowData] = useState({});
+    const [rowData, setRowData] = useState(null);
     const dispatch = useDispatch();
-
-    const handleEdit = (row) => {
-        dispatch(commonModalIsOpen(true));
-        dispatch(commonModalType('EDIT_PRODUCT'));
-        setID(row?._id);
-    };
-
-    const handleDelete = (row) => {
-        dispatch(commonDeleteModal(true));
-        setRowData(row);
-    };
 
     useEffect(() => {
         dispatch(getAllProductsApi());
@@ -96,10 +90,9 @@ const Products = () => {
                     <CommonDataTable columns={columns} data={getAllProducts} />
                 </Card.Body>
             </Card>
-            {modalType === 'EDIT_PRODUCT' && <ProductsModal ID={ID} />}
-            <DeleteConfModal del_id={rowData?._id} type={'PRODUCTS'} title={rowData?.name} />
+            <ProductsModal data={rowData} />
+            <DeleteConfModal del_id={rowData?._id} type={'PRODUCTS'} title={rowData?.product} />
         </div>
     );
 };
-
 export default Products;
