@@ -65,11 +65,13 @@ export const setUpdateInvoice = createAsyncThunk('user/setUpdateInvoice', async 
     }
 });
 
-export const setDeleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ payload }, { rejectWithValue }) => {
+export const setDeleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ del_id }, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_INVOICE}${payload._id}`, {
+        const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_INVOICE}${del_id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
+
+        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);

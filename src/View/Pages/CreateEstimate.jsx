@@ -2,17 +2,17 @@ import { Field, FieldArray, Form, Formik, useFormikContext } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, Badge, Button, Card, Col, ListGroup, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import CustomersModal from '../../components/modals/CustomersModal';
 import ProductsEstimateModal from '../../components/modals/ProductsEstimateModal';
 import { getAllCustomersApi, getCustomerById } from '../../slices/customersSlice';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import favicon from '../../assets/images/favicon-32x32.png';
 import JoditEditor from 'jodit-react';
-import { createEstimateApi } from '../../slices/estimatesSlice';
+import { createEstimateApi, getEstimateById, updateEstimateApi } from '../../slices/estimatesSlice';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 import { userId } from '../../constants/userData';
-import { createProductApi } from '../../slices/productsSlice';
+import { createProductApi, updateProductApi } from '../../slices/productsSlice';
 
 const CreateEstimate = () => {
     const [modalOpenType, setModalTypeOpen] = useState('');
@@ -28,6 +28,10 @@ const CreateEstimate = () => {
     const [defaultTotal, setDefaultTotal] = useState(0);
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
+    const estimateId = useParams();
+    const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
+    const history = useHistory();
+    // const { getAllBusinessesData } = useSelector((state) => state.settingsReducer);
 
     const [ansPrice, setAnsPrice] = useState(null);
     const [ansName, setAnsName] = useState(null);
@@ -35,7 +39,6 @@ const CreateEstimate = () => {
     // let productArrayId = [];
 
     //Array Field
-    console.log(ESTIMATEID);
     const dispatch = useDispatch();
     let discountValue = (defaultTotal * defaultDiscount) / 100;
     let discountAmount = defaultTotal - (defaultTotal * defaultDiscount) / 100;
@@ -44,40 +47,69 @@ const CreateEstimate = () => {
 
     const handleSubmit = (values, resetForm) => {
         const payload = {
-            businessId: values?.businessId,
+            businessId: '644777f395efae186a4fe4bd',
+            customerId: getSingleCustomerData?._id,
             title: values?.title,
             summary: values?.summary,
             ccMail: values?.ccMail,
             number: values?.number,
             posoNumber: values?.posoNumber,
             date: values?.date,
-            // productId: productArrayId,
             expireOn: values?.expireOn,
             discount: defaultDiscount,
             tax: defaultTax,
             subTotal: defaultTotal,
-            grandTotal: grandTotal
+            grandTotal: grandTotal,
+            footerNote: footerText,
+            productStatus: 'productEstimate'
         };
 
-        dispatch(createEstimateApi({ payload })).then((res) => {
-            if (res?.payload?._id) {
-                let payload = {
-                    EstimatesId: res?.payload?._id,
-                    userId: userId,
-                    name: values.name,
-                    hsnCode: values.hsnCode,
-                    price: values.price,
-                    product: values.estimateProducts,
-                    details: values.details,
-                    isSell: values?.isSell === false ? '0' : '1',
-                    isBuy: values?.isBuy === false ? '0' : '1'
-                    // incomeCategory: data?.incomeCategory,
-                    // expenseCategory: data?.expenseCategory
-                };
+        if (estimateId?._id) {
+            payload._id = estimateId?._id;
+            dispatch(updateEstimateApi({ payload })).then((res) => {
+                if (res?.payload?._id) {
+                    let payload = {
+                        _id: getSingleEstimate?.products?.map((val) => val?._id),
+                        EstimatesId: res?.payload?._id,
+                        userId: userId,
+                        // name: values.name,
+                        // hsnCode: values.hsnCode,
+                        // price: values.price,
+                        product: values.estimateProducts,
+                        // details: values.details,
+                        // isSell: values?.isSell === false ? '0' : '1',
+                        // isBuy: values?.isBuy === false ? '0' : '1',
+                        productStatus: 'productEstimate'
+                        // incomeCategory: data?.incomeCategory,
+                        // expenseCategory: data?.expenseCategory
+                    };
 
-                dispatch(createProductApi({ payload }));
-            }
-        });
+                    dispatch(updateProductApi({ payload }));
+                }
+            });
+        } else {
+            dispatch(createEstimateApi({ payload })).then((res) => {
+                if (res?.payload?._id) {
+                    let payload = {
+                        EstimatesId: res?.payload?._id,
+                        userId: userId,
+                        // name: values.name,
+                        // hsnCode: values.hsnCode,
+                        // price: values.price,
+                        product: values.estimateProducts,
+                        // details: values.details,
+                        // isSell: values?.isSell === false ? '0' : '1',
+                        // isBuy: values?.isBuy === false ? '0' : '1',
+                        productStatus: 'productEstimate'
+                        // incomeCategory: data?.incomeCategory,
+                        // expenseCategory: data?.expenseCategory
+                    };
+
+                    dispatch(createProductApi({ payload }));
+                }
+            });
+        }
+        history.push('/estimates');
     };
 
     const handleChangeCustomer = (e) => {
@@ -103,6 +135,12 @@ const CreateEstimate = () => {
     }, [createCustomer, getSingleCustomerData]);
 
     useEffect(() => {
+        if (estimateId?._id) {
+            let payload = {
+                _id: estimateId?._id
+            };
+            dispatch(getEstimateById({ payload }));
+        }
         dispatch(getAllCountriesApi());
         dispatch(getAllStatesApi());
     }, []);
@@ -116,33 +154,56 @@ const CreateEstimate = () => {
         });
     }, [getSingleCustomerData, countryPrefillValue]);
 
+    let productArray = getSingleEstimate?.products?.map((val) => val?.product);
+
+    useEffect(() => {
+        if (estimateId?._id) {
+            setFooterText(getSingleEstimate?.data?.footerNote);
+        }
+    }, [estimateId?._id]);
+
+    // console.log('getSingleEstimate--==', getSingleEstimate);
+
     return (
         <>
             <Row>
                 <Col xl={{ span: 10, offset: 1 }}>
                     <div className="d-flex mb-4" style={{ justifyContent: 'space-between' }}>
-                        <h3>Create new Estimate</h3>
+                        <h3>{estimateId?._id ? 'Edit Estimate' : 'Create new Estimate'}</h3>
                         <Button as={Link} to="/estimates" variant="outline-primary">
                             All Estimates
                         </Button>
                     </div>
                     <div>
                         <Formik
-                            initialValues={{
-                                title: '',
-                                summary: '',
-                                ccMail: '',
-                                number: '',
-                                posoNumber: '',
-                                date: '',
-                                expireOn: '',
-                                estimateProducts: getEstimateProducts
-                            }}
+                            enableReinitialize
+                            initialValues={
+                                estimateId?._id
+                                    ? {
+                                          title: getSingleEstimate?.data?.title || '',
+                                          summary: getSingleEstimate?.data?.summary || '',
+                                          ccMail: getSingleEstimate?.data?.ccMail || '',
+                                          number: getSingleEstimate?.data?.number || '',
+                                          posoNumber: getSingleEstimate?.data?.posoNumber || '',
+                                          date: getSingleEstimate?.data?.date || '',
+                                          expireOn: getSingleEstimate?.data?.expireOn || '',
+                                          estimateProducts: productArray?.[0] || []
+                                      }
+                                    : {
+                                          title: '',
+                                          summary: '',
+                                          ccMail: '',
+                                          number: '',
+                                          posoNumber: '',
+                                          date: '',
+                                          expireOn: '',
+                                          estimateProducts: getEstimateProducts
+                                      }
+                            }
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
                             {({ values }) => (
                                 <Form>
-                                    {console.log('getEstimateProducts----', getEstimateProducts)}
                                     <Accordion defaultActiveKey="0">
                                         <Card>
                                             <Accordion.Toggle className="border-0 p-3 text-left font-weight-bold h4" eventKey="0">
@@ -295,9 +356,9 @@ const CreateEstimate = () => {
                                                                     name="estimateProducts"
                                                                     render={(arrayHelpers) => (
                                                                         <>
-                                                                            {values?.estimateProducts.map((estimate, index) => {
+                                                                            {values?.estimateProducts?.map((estimate, index) => {
                                                                                 return (
-                                                                                    <tr key={estimate?._id}>
+                                                                                    <tr key={index}>
                                                                                         <td>
                                                                                             <Field
                                                                                                 type="text"
@@ -347,6 +408,8 @@ const CreateEstimate = () => {
                                                                                     </tr>
                                                                                 );
                                                                             })}
+
+                                                                            {console.log('arrayHelpers', arrayHelpers)}
                                                                             {modalOpenType === 'CUSTOMERS' ? (
                                                                                 <CustomersModal />
                                                                             ) : modalOpenType === 'PRODUCTS' ? (

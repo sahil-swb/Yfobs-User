@@ -49,7 +49,7 @@ export const getAllEstimatesApi = createAsyncThunk('user/getAllEstimates', async
 
 export const updateEstimateApi = createAsyncThunk('user/updateEstimate', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_ESTIMATES}${payload.id}`, payload, {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_ESTIMATES}${payload._id}`, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);

@@ -1,11 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import CommonDataTable from '../../components/CommonDataTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDeleteInvoice, setGetAllInvoices } from '../../slices/invoiceSlice';
+import { commonDeleteModal, commonModalIsOpen } from '../../slices/modalSlice';
+import DeleteConfModal from '../../components/modals/DeleteConfModal';
 
 const Invoices = () => {
+    const [rowData, setRowData] = useState({});
+    const { createInvoice, getAllInvoices, updateInvoice, deleteInvoice, getSingleInvoice } = useSelector((state) => state.invoiceReducer);
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     const columns = [
         {
             name: 'Status',
@@ -42,49 +49,47 @@ const Invoices = () => {
             selector: (row) => {
                 return (
                     <div>
-                        <select name="" id="" className="form-control border" onClick={(e) => handleDeleteInvoice(e, row)}>
-                            <option value="">Select</option>
-                            <option value="VIEW">View</option>
-                            <option value="EDIT">Edit</option>
-                            <option value="CONVERT_TO_INVOICE">Convert to Recurring</option>
-                            <option value="PREVIEW_AS_CUSTOMER">Preview as Customer</option>
-                            <option value="PRINT">Print</option>
-                            <option value="EXPORT_AS_PDF">Export as PDF</option>
-                            <option value="DELETE">Delete</option>
-                        </select>
+                        <Button size="sm" className="mr-1" as={Link} to={`/invoices/invoice_details/${row._id}`}>
+                            View
+                        </Button>
+                        <Button size="sm" variant="danger" onClick={() => handleDeleteModal(row)}>
+                            Delete
+                        </Button>
                     </div>
                 );
             }
         }
     ];
+    // const handleDeleteInvoice = (e, row) => {
+    //     let optionValue = e.target.value;
+    //     let payload = {
+    //         _id: row?._id
+    //     };
 
-    const { createInvoice, getAllInvoices, updateInvoice, deleteInvoice, getSingleInvoice } = useSelector((state) => state.invoiceReducer);
-    const dispatch = useDispatch();
-    const history = useHistory();
+    //     if (optionValue === 'VIEW' || optionValue === 'PRINT') {
+    //         history.push(`/invoices/invoice_details/${row._id}`);
+    //     } else if (optionValue === 'EDIT') {
+    //         console.log('EDIT');
+    //     } else if (optionValue === 'CONVERT_TO_INVOICE') {
+    //         console.log('CONVERT_TO_INVOICE');
+    //     } else if (optionValue === 'PREVIEW_AS_CUSTOMER') {
+    //         console.log('PREVIEW_AS_CUSTOMER');
+    //         history.push(`/invoices/invoice_preview/${row._id}`);
+    //     } else if (optionValue === 'EXPORT_AS_PDF') {
+    //         console.log('EXPORT_AS_PDF');
+    //     } else if (optionValue === 'DELETE') {
+    //         dispatch(setDeleteInvoice({ payload }));
+    //     } else {
+    //         return;
+    //     }
+    // };
 
-    const handleDeleteInvoice = (e, row) => {
-        let optionValue = e.target.value;
-        let payload = {
-            _id: row?._id
-        };
-
-        if (optionValue === 'VIEW' || optionValue === 'PRINT') {
-            history.push(`/invoices/invoice_details/${row._id}`);
-        } else if (optionValue === 'EDIT') {
-            console.log('EDIT');
-        } else if (optionValue === 'CONVERT_TO_INVOICE') {
-            console.log('CONVERT_TO_INVOICE');
-        } else if (optionValue === 'PREVIEW_AS_CUSTOMER') {
-            console.log('PREVIEW_AS_CUSTOMER');
-            history.push(`/invoices/invoice_preview/${row._id}`);
-        } else if (optionValue === 'EXPORT_AS_PDF') {
-            console.log('EXPORT_AS_PDF');
-        } else if (optionValue === 'DELETE') {
-            dispatch(setDeleteInvoice({ payload }));
-        } else {
-            return;
-        }
+    const handleDeleteModal = (row) => {
+        commonDeleteModal(true);
+        setRowData(row);
     };
+
+    console.log('first---', rowData);
 
     useEffect(() => {
         dispatch(setGetAllInvoices());
@@ -106,6 +111,7 @@ const Invoices = () => {
                     <CommonDataTable columns={columns} data={getAllInvoices} />
                 </Card.Body>
             </Card>
+            <DeleteConfModal del_id={rowData?._id} type={'INVOICES'} title={rowData?.title} />
         </>
     );
 };

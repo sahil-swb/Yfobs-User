@@ -15,9 +15,11 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
     const handleChange = (e) => {
         let keyword = e.target.value;
         if (keyword !== '') {
-            const results = getAllProducts.filter((val) => {
-                // return val?.name?.toLowerCase().startsWith(keyword.toLowerCase());
-            });
+            const results = getAllProducts.map((val, index) =>
+                val.product.filter((val) => val?.name?.toLowerCase().startsWith(keyword.toLowerCase()))
+            );
+
+            console.log('results---', results);
             setFoundItems(results);
         } else {
             setFoundItems(getAllProducts);
@@ -25,16 +27,16 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
         setItemName(keyword);
     };
 
-    const handleSubmit = (id) => {
+    const handleSubmit = (_id) => {
         const payload = {
-            _id: id
+            _id: _id
         };
         dispatch(getSingleProductApi({ payload }));
     };
 
     useEffect(() => {
         if (getSingleProduct?._id) {
-            addHelper.push({
+            addHelper?.product?.push({
                 name: getSingleProduct?.product?.map((val) => val?.name),
                 price: parseInt(getSingleProduct?.product?.map((val) => val?.price)),
                 quantity: defaultQuantity
@@ -42,9 +44,13 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
         }
     }, [getSingleProduct?.product]);
 
+    console.log('addHelper--', addHelper);
+
     useEffect(() => {
         dispatch(getAllProductsApi());
     }, []);
+
+    console.log('getSingleProduct', getSingleProduct);
 
     return (
         <Modal

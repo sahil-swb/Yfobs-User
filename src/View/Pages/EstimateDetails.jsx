@@ -25,21 +25,22 @@ const EstimateDetails = () => {
 
     useEffect(() => {
         let payload = {
-            _id: '644a6e97652be6313a8ca304'
+            _id: _id
         };
         dispatch(getEstimateById({ payload }));
     }, [_id]);
     return (
         <>
             <div>
-                {/* <h1>invoicePage</h1> */}
                 <Row className="mb-5">
                     <Col xl={{ span: 10, offset: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'end' }}>
-                            <Button variant="outline-primary">
-                                {' '}
-                                <i className="icon feather icon-edit"></i> Edit
-                            </Button>
+                            <Link to={`/estimates/edit_estimates/${_id}`}>
+                                <Button variant="outline-primary">
+                                    {' '}
+                                    <i className="icon feather icon-edit"></i> Edit
+                                </Button>
+                            </Link>
                             <Dropdown className="mx-4">
                                 <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
                                     <i className="feather icon-settings"></i> Actions

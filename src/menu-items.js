@@ -36,7 +36,7 @@ const chartData = {
                     type: 'item',
                     url: '/products',
                     classes: 'nav-item',
-                    icon: 'fa fa-cubes'
+                    icon: 'fa fa-shopping-cart'
                 },
                 {
                     id: 'estimates',
@@ -68,7 +68,7 @@ const chartData = {
                     type: 'item',
                     url: '/vendors',
                     classes: 'nav-item',
-                    icon: 'fa fa-cubes'
+                    icon: 'fa fa-users'
                 },
                 {
                     id: 'reports',
@@ -76,7 +76,7 @@ const chartData = {
                     type: 'item',
                     url: '/reports',
                     classes: 'nav-item',
-                    icon: 'fa fa-cubes'
+                    icon: 'fa fa-bar-chart'
                 },
                 {
                     id: 'subscription',
@@ -84,6 +84,13 @@ const chartData = {
                     type: 'item',
                     url: '/subscription',
                     icon: 'fa fa-calculator'
+                },
+                {
+                    id: 'user_change_password',
+                    title: 'Change Password',
+                    type: 'item',
+                    url: '/user_change_password',
+                    icon: 'fa fa-key'
                 },
                 {
                     id: 'gst_calculate',
