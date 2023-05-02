@@ -5,7 +5,7 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import { getAllProductsApi, getSingleProductApi } from '../../slices/productsSlice';
 import { getCustomerById } from '../../slices/customersSlice';
 
-const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
+const ProductsEstimateModal = ({ addHelper }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllProducts, getSingleProduct, getEstimateProducts } = useSelector((state) => state.productsReducer);
     const [itemName, setItemName] = useState('');
@@ -15,12 +15,16 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
     const handleChange = (e) => {
         let keyword = e.target.value;
         if (keyword !== '') {
-            const results = getAllProducts.map((val, index) =>
-                val.product.filter((val) => val?.name?.toLowerCase().startsWith(keyword.toLowerCase()))
+            let filtArray = [];
+            getAllProducts.map((val) =>
+                val.product.filter((fVal) => {
+                    let ans = fVal?.name?.toLowerCase().startsWith(keyword.toLowerCase());
+                    if (ans) {
+                        filtArray.push(val);
+                    }
+                })
             );
-
-            console.log('results---', results);
-            setFoundItems(results);
+            setFoundItems(filtArray);
         } else {
             setFoundItems(getAllProducts);
         }
@@ -36,21 +40,17 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
 
     useEffect(() => {
         if (getSingleProduct?._id) {
-            addHelper?.product?.push({
+            addHelper?.push({
                 name: getSingleProduct?.product?.map((val) => val?.name),
                 price: parseInt(getSingleProduct?.product?.map((val) => val?.price)),
-                quantity: defaultQuantity
+                quantity: 1
             });
         }
     }, [getSingleProduct?.product]);
 
-    console.log('addHelper--', addHelper);
-
     useEffect(() => {
         dispatch(getAllProductsApi());
     }, []);
-
-    console.log('getSingleProduct', getSingleProduct);
 
     return (
         <Modal
@@ -77,9 +77,9 @@ const ProductsEstimateModal = ({ addHelper, defaultQuantity }) => {
                         </Badge>
                     </div>
                     {foundItems && foundItems.length > 0 ? (
-                        foundItems.map((val) => {
+                        foundItems.map((val, index) => {
                             return (
-                                <ListGroup.Item action variant="light" key={val?._id} onClick={() => handleSubmit(val._id)}>
+                                <ListGroup.Item action variant="light" key={index} onClick={() => handleSubmit(val._id)}>
                                     <div className="d-flex" style={{ justifyContent: 'space-between' }}>
                                         <div>
                                             <div className="font-weight-bold h5 text-dark">

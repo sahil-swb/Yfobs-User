@@ -22,21 +22,15 @@ const CreateEstimate = () => {
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const { getEstimateProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
-    const { ESTIMATEID } = useSelector((state) => state.estimateReducer);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
-    const [defaultQuantity, setDefaultQuantity] = useState(1);
     const [defaultTotal, setDefaultTotal] = useState(0);
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
     const estimateId = useParams();
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
     const history = useHistory();
-    // const { getAllBusinessesData } = useSelector((state) => state.settingsReducer);
 
-    const [ansPrice, setAnsPrice] = useState(null);
-    const [ansName, setAnsName] = useState(null);
-    // const [productArrayId, setProductArrayId] = useState([]);
-    // let productArrayId = [];
+    let defaultQuantity = 1;
 
     //Array Field
     const dispatch = useDispatch();
@@ -44,6 +38,8 @@ const CreateEstimate = () => {
     let discountAmount = defaultTotal - (defaultTotal * defaultDiscount) / 100;
     let taxValue = (discountAmount * defaultTax) / 100;
     let grandTotal = (discountAmount * defaultTax) / 100 + discountAmount;
+
+    // estimateId?._id ? parseInt(getSingleEstimate?.data?.tax) :
 
     const handleSubmit = (values, resetForm) => {
         const payload = {
@@ -72,16 +68,8 @@ const CreateEstimate = () => {
                         _id: getSingleEstimate?.products?.map((val) => val?._id),
                         EstimatesId: res?.payload?._id,
                         userId: userId,
-                        // name: values.name,
-                        // hsnCode: values.hsnCode,
-                        // price: values.price,
                         product: values.estimateProducts,
-                        // details: values.details,
-                        // isSell: values?.isSell === false ? '0' : '1',
-                        // isBuy: values?.isBuy === false ? '0' : '1',
                         productStatus: 'productEstimate'
-                        // incomeCategory: data?.incomeCategory,
-                        // expenseCategory: data?.expenseCategory
                     };
 
                     dispatch(updateProductApi({ payload }));
@@ -93,16 +81,8 @@ const CreateEstimate = () => {
                     let payload = {
                         EstimatesId: res?.payload?._id,
                         userId: userId,
-                        // name: values.name,
-                        // hsnCode: values.hsnCode,
-                        // price: values.price,
                         product: values.estimateProducts,
-                        // details: values.details,
-                        // isSell: values?.isSell === false ? '0' : '1',
-                        // isBuy: values?.isBuy === false ? '0' : '1',
                         productStatus: 'productEstimate'
-                        // incomeCategory: data?.incomeCategory,
-                        // expenseCategory: data?.expenseCategory
                     };
 
                     dispatch(createProductApi({ payload }));
@@ -114,20 +94,10 @@ const CreateEstimate = () => {
 
     const handleChangeCustomer = (e) => {
         const id = e.target.value;
-        console.log(id);
         const payload = {
             _id: id
         };
         dispatch(getCustomerById({ payload }));
-    };
-
-    const handleCountryChange = (e) => {
-        setCountryId(e.target.value);
-    };
-
-    const handleFooterText = (e) => {
-        const fText = e;
-        setFooterText(fText);
     };
 
     useEffect(() => {
@@ -155,6 +125,7 @@ const CreateEstimate = () => {
     }, [getSingleCustomerData, countryPrefillValue]);
 
     let productArray = getSingleEstimate?.products?.map((val) => val?.product);
+    let addProducts = getEstimateProducts?.map((val) => val?.product.map((val) => val));
 
     useEffect(() => {
         if (estimateId?._id) {
@@ -162,7 +133,7 @@ const CreateEstimate = () => {
         }
     }, [estimateId?._id]);
 
-    // console.log('getSingleEstimate--==', getSingleEstimate);
+    // console.log('addProducts', addProducts[0]);
 
     return (
         <>
@@ -187,6 +158,8 @@ const CreateEstimate = () => {
                                           posoNumber: getSingleEstimate?.data?.posoNumber || '',
                                           date: getSingleEstimate?.data?.date || '',
                                           expireOn: getSingleEstimate?.data?.expireOn || '',
+                                          discount: getSingleEstimate?.data?.discount || '',
+                                          tax: getSingleEstimate?.data?.tax || '',
                                           estimateProducts: productArray?.[0] || []
                                       }
                                     : {
@@ -197,7 +170,9 @@ const CreateEstimate = () => {
                                           posoNumber: '',
                                           date: '',
                                           expireOn: '',
-                                          estimateProducts: getEstimateProducts
+                                          discount: '',
+                                          tax: '',
+                                          estimateProducts: addProducts[0] || []
                                       }
                             }
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
@@ -288,7 +263,7 @@ const CreateEstimate = () => {
                                                                         <span>Country: </span>
                                                                         <select
                                                                             className="form-control mb-3 border rounded mt-2"
-                                                                            onChange={(e) => handleCountryChange(e)}
+                                                                            onChange={(e) => setCountryId(e.target.value)}
                                                                         >
                                                                             <option value="">Select Country</option>
                                                                             {getAllCountries?.map((val) => (
@@ -409,14 +384,10 @@ const CreateEstimate = () => {
                                                                                 );
                                                                             })}
 
-                                                                            {console.log('arrayHelpers', arrayHelpers)}
                                                                             {modalOpenType === 'CUSTOMERS' ? (
                                                                                 <CustomersModal />
                                                                             ) : modalOpenType === 'PRODUCTS' ? (
-                                                                                <ProductsEstimateModal
-                                                                                    addHelper={arrayHelpers}
-                                                                                    defaultQuantity={defaultQuantity}
-                                                                                />
+                                                                                <ProductsEstimateModal addHelper={arrayHelpers} />
                                                                             ) : null}
                                                                         </>
                                                                     )}
@@ -483,7 +454,7 @@ const CreateEstimate = () => {
                                     <Card>
                                         <Card.Header as="h4">Footer</Card.Header>
                                         <Card.Body>
-                                            <JoditEditor value={footerText} onChange={handleFooterText} />
+                                            <JoditEditor value={footerText} onChange={(e) => setFooterText(e)} />
                                         </Card.Body>
                                     </Card>
 
