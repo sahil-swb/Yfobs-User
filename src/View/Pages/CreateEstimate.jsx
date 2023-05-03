@@ -24,7 +24,7 @@ const CreateEstimate = () => {
     const [footerText, setFooterText] = useState('');
     const [currencySign, setCurrencySign] = useState('');
     const [countryId, setCountryId] = useState('');
-    const [countryPrefillValue, setCountryPrefillValue] = useState('');
+
     const { getEstimateProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
@@ -58,7 +58,10 @@ const CreateEstimate = () => {
             subTotal: defaultTotal,
             grandTotal: grandTotal,
             footerNote: footerText,
-            productStatus: 'productEstimate'
+            productStatus: 'productEstimate',
+            customerName: values?.customerName,
+            customerCountry: values?.customerCountry,
+            customerState: values?.customerState
         };
 
         if (estimateId?._id) {
@@ -90,20 +93,8 @@ const CreateEstimate = () => {
                 }
             });
         }
-        history.push('/estimates');
+        // history.push('/estimates');
     };
-
-    const handleChangeCustomer = (e) => {
-        const id = e.target.value;
-        const payload = {
-            _id: id
-        };
-        dispatch(getCustomerById({ payload }));
-    };
-
-    useEffect(() => {
-        dispatch(getAllCustomersApi());
-    }, [createCustomer, getSingleCustomerData]);
 
     useEffect(() => {
         if (estimateId?._id) {
@@ -115,15 +106,6 @@ const CreateEstimate = () => {
         dispatch(getAllCountriesApi());
         dispatch(getAllStatesApi());
     }, []);
-
-    useEffect(() => {
-        getAllCountries.map((val) => {
-            if (getSingleCustomerData?.currencyName === val?.currencyName) {
-                setCurrencySign(val?.currencySymbol);
-                setCountryPrefillValue(val?.countryName);
-            }
-        });
-    }, [getSingleCustomerData, countryPrefillValue]);
 
     let productArray = getSingleEstimate?.products?.map((val) => val?.product);
     let addProducts = getEstimateProducts?.map((val) => val?.product.map((val) => val));
@@ -192,7 +174,13 @@ const CreateEstimate = () => {
                                     <Card>
                                         <Card.Body>
                                             <Row className="mb-4">
-                                                <LeftColumn />
+                                                <LeftColumn
+                                                    setModalTypeOpen={setModalTypeOpen}
+                                                    currencySign={currencySign}
+                                                    setCurrencySign={setCurrencySign}
+                                                    initialValues={values}
+                                                />
+
                                                 <RightColumn />
                                             </Row>
                                             <Row>
@@ -323,7 +311,7 @@ const CreateEstimate = () => {
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <span className="mr-5"> Grand Total</span>
-                                                                {currencySign} {grandTotal}
+                                                                {currencySign} {grandTotal.toFixed(2)}
                                                             </ListGroup.Item>
                                                         </ListGroup>
                                                     </div>

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Card from '../../App/components/MainCard';
 const SamplePage = () => {
-    return (<>
+    return (
+        <>
             <Row>
                 <Col>
                     <Card title="Hello Card" isOption>
@@ -16,6 +17,7 @@ const SamplePage = () => {
                     </Card>
                 </Col>
             </Row>
-        </>);
+        </>
+    );
 };
 export default SamplePage;
