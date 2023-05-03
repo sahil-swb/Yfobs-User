@@ -63,28 +63,45 @@ const Products = () => {
 
     const { getAllProducts, updateData, deleteData, createData } = useSelector((state) => state.productsReducer);
     const [rowData, setRowData] = useState(null);
+    const [searchValue, setSearchValue] = useState('');
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllProductsApi());
-    }, [updateData, deleteData, createData]);
+        let payload = {
+            keyword: searchValue
+        };
+        dispatch(getAllProductsApi({ payload }));
+    }, [updateData, deleteData, createData, searchValue]);
 
     return (
         <div>
             <Card>
-                <Card.Header className="d-flex justify-content-between align-items-center">
-                    <Card.Title className="m-0 font-weight-bold">All Products</Card.Title>
-                    <Button
-                        onClick={() => {
-                            dispatch(commonModalIsOpen(true));
-                            dispatch(commonModalType('ADD'));
-                        }}
-                        size="sm"
-                        className="d-flex align-items-center p-2"
-                    >
-                        <i className="feather icon-plus f-20" />
-                        <div>New Product</div>
-                    </Button>
+                <Card.Header className="row align-items-center">
+                    <Card.Title className="col-8 m-0 font-weight-bold">All Products</Card.Title>
+                    <div className="col-4 d-flex justify-content-between" style={{ alignItems: 'center' }}>
+                        <div className="d-flex align-items-center">
+                            <label className="m-0 mr-3">Search: </label>
+                            <input
+                                className="form-control border"
+                                type="text"
+                                value={searchValue}
+                                onChange={(e) => {
+                                    setSearchValue(e.target.value);
+                                }}
+                            />
+                        </div>
+                        <Button
+                            onClick={() => {
+                                dispatch(commonModalIsOpen(true));
+                                dispatch(commonModalType('ADD'));
+                            }}
+                            size="sm"
+                            className="d-flex align-items-center p-2"
+                        >
+                            <i className="feather icon-plus f-20" />
+                            <div>New Product</div>
+                        </Button>
+                    </div>
                 </Card.Header>
                 <Card.Body>
                     <CommonDataTable columns={columns} data={getAllProducts} />

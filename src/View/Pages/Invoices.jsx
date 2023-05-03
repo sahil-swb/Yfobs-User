@@ -89,8 +89,6 @@ const Invoices = () => {
         setRowData(row);
     };
 
-    console.log('first---', rowData);
-
     useEffect(() => {
         dispatch(setGetAllInvoices());
     }, [deleteInvoice]);

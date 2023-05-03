@@ -9,13 +9,20 @@ const ProductsEstimateModal = ({ addHelper }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllProducts, getSingleProduct, getEstimateProducts } = useSelector((state) => state.productsReducer);
     const [itemName, setItemName] = useState('');
-    const [foundItems, setFoundItems] = useState(getAllProducts);
+    const [foundItems, setFoundItems] = useState([]);
     const dispatch = useDispatch();
 
+    const handleSubmit = (_id) => {
+        const payload = {
+            _id: _id
+        };
+        dispatch(getSingleProductApi({ payload }));
+    };
+
     const handleChange = (e) => {
-        let keyword = e.target.value;
+        let keyword = e;
+        let filtArray = [];
         if (keyword !== '') {
-            let filtArray = [];
             getAllProducts.map((val) =>
                 val.product.filter((fVal) => {
                     let ans = fVal?.name?.toLowerCase().startsWith(keyword.toLowerCase());
@@ -31,12 +38,22 @@ const ProductsEstimateModal = ({ addHelper }) => {
         setItemName(keyword);
     };
 
-    const handleSubmit = (_id) => {
-        const payload = {
-            _id: _id
-        };
-        dispatch(getSingleProductApi({ payload }));
-    };
+    // const searchFilterFunction = (text) => {
+    //     if (text) {
+    //         const newData = getAllProducts.filter(function (item) {
+    //             const itemData = item.displayName ? item.displayName.toUpperCase() : ''.toUpperCase();
+    //             const textData = text.toUpperCase();
+    //             return itemData.indexOf(textData) > -1;
+    //         });
+    //         console.log('newData---', newData);
+    //         setFoundItems(newData);
+    //         setItemName(text);
+    //     } else {
+    //         console.log('getAllProducts---', getAllProducts);
+    //         setFoundItems(getAllProducts);
+    //         setItemName(text);
+    //     }
+    // };
 
     useEffect(() => {
         if (getSingleProduct?._id) {
@@ -52,6 +69,8 @@ const ProductsEstimateModal = ({ addHelper }) => {
         dispatch(getAllProductsApi());
     }, []);
 
+    console.log('getAllProducts--', getAllProducts);
+
     return (
         <Modal
             show={modalIsOpen}
@@ -65,7 +84,7 @@ const ProductsEstimateModal = ({ addHelper }) => {
             <Modal.Body className="modal-scrollable overflow-auto" style={{ maxHeight: '500px' }}>
                 <ListGroup variant="flush">
                     <input
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e.target.value)}
                         value={itemName}
                         className="form-control border-secondary border rounded mb-3"
                         type="text"

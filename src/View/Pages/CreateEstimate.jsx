@@ -39,8 +39,6 @@ const CreateEstimate = () => {
     let taxValue = (discountAmount * defaultTax) / 100;
     let grandTotal = (discountAmount * defaultTax) / 100 + discountAmount;
 
-    // estimateId?._id ? parseInt(getSingleEstimate?.data?.tax) :
-
     const handleSubmit = (values, resetForm) => {
         const payload = {
             businessId: '644777f395efae186a4fe4bd',
@@ -158,9 +156,10 @@ const CreateEstimate = () => {
                                           posoNumber: getSingleEstimate?.data?.posoNumber || '',
                                           date: getSingleEstimate?.data?.date || '',
                                           expireOn: getSingleEstimate?.data?.expireOn || '',
-                                          discount: getSingleEstimate?.data?.discount || '',
-                                          tax: getSingleEstimate?.data?.tax || '',
-                                          estimateProducts: productArray?.[0] || []
+                                          estimateProducts:
+                                              productArray?.[0].filter((item) => {
+                                                  console.log(item);
+                                              }) || []
                                       }
                                     : {
                                           title: '',
@@ -170,8 +169,6 @@ const CreateEstimate = () => {
                                           posoNumber: '',
                                           date: '',
                                           expireOn: '',
-                                          discount: '',
-                                          tax: '',
                                           estimateProducts: addProducts[0] || []
                                       }
                             }
@@ -314,7 +311,7 @@ const CreateEstimate = () => {
                                                     </div>
                                                 </Col>
                                             </Row>
-                                            <Row className="">
+                                            <Row>
                                                 <Col lg={{ span: 10, offset: 1 }}>
                                                     <div>
                                                         <Table responsive striped bordered hover size="sm">
@@ -417,28 +414,38 @@ const CreateEstimate = () => {
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Discount in %</label>
-                                                                <Field
+                                                                <input
                                                                     className="mr-5 rounded p-1"
                                                                     style={{ width: '50px' }}
                                                                     name="discount"
                                                                     type="number"
-                                                                    onChange={(e) => setDefaultDiscount(e.target.value)}
+                                                                    defaultValue={
+                                                                        estimateId?._id
+                                                                            ? getSingleEstimate?.data?.discount
+                                                                            : defaultDiscount
+                                                                    }
+                                                                    onChange={(e) => {
+                                                                        setDefaultDiscount(e.target.value);
+                                                                    }}
                                                                 />
                                                                 <span>
-                                                                    {currencySign} {discountValue}
+                                                                    {currencySign} {discountValue.toFixed(2)}
                                                                 </span>
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>
                                                                 <label className="mr-3">Tax in %</label>
-                                                                <Field
+                                                                <input
                                                                     className="mr-5 rounded p-1"
                                                                     style={{ width: '50px' }}
                                                                     name="tax"
                                                                     type="number"
+                                                                    defaultValue={
+                                                                        estimateId?._id ? getSingleEstimate?.data?.tax : defaultTax
+                                                                    }
                                                                     onChange={(e) => setDefaultTax(e.target.value)}
                                                                 />
                                                                 <span>
-                                                                    {currencySign} {taxValue}
+                                                                    {currencySign} {taxValue.toFixed(2)}
                                                                 </span>
                                                             </ListGroup.Item>
                                                             <ListGroup.Item>

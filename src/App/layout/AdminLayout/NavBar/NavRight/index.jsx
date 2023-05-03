@@ -25,6 +25,7 @@ const NavRight = (props) => {
     const handleLogout = () => {
         localStorage.removeItem('userData');
         setCurrentLogout(true);
+        window.location.reload();
     };
 
     useEffect(() => {
