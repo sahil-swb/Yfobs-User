@@ -8,8 +8,7 @@ import { getCustomerById } from '../../slices/customersSlice';
 const ProductsEstimateModal = ({ addHelper }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllProducts, getSingleProduct, getEstimateProducts } = useSelector((state) => state.productsReducer);
-    const [itemName, setItemName] = useState('');
-    const [foundItems, setFoundItems] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
     const dispatch = useDispatch();
 
     const handleSubmit = (_id) => {
@@ -18,42 +17,6 @@ const ProductsEstimateModal = ({ addHelper }) => {
         };
         dispatch(getSingleProductApi({ payload }));
     };
-
-    const handleChange = (e) => {
-        let keyword = e;
-        let filtArray = [];
-        if (keyword !== '') {
-            getAllProducts.map((val) =>
-                val.product.filter((fVal) => {
-                    let ans = fVal?.name?.toLowerCase().startsWith(keyword.toLowerCase());
-                    if (ans) {
-                        filtArray.push(val);
-                    }
-                })
-            );
-            setFoundItems(filtArray);
-        } else {
-            setFoundItems(getAllProducts);
-        }
-        setItemName(keyword);
-    };
-
-    // const searchFilterFunction = (text) => {
-    //     if (text) {
-    //         const newData = getAllProducts.filter(function (item) {
-    //             const itemData = item.displayName ? item.displayName.toUpperCase() : ''.toUpperCase();
-    //             const textData = text.toUpperCase();
-    //             return itemData.indexOf(textData) > -1;
-    //         });
-    //         console.log('newData---', newData);
-    //         setFoundItems(newData);
-    //         setItemName(text);
-    //     } else {
-    //         console.log('getAllProducts---', getAllProducts);
-    //         setFoundItems(getAllProducts);
-    //         setItemName(text);
-    //     }
-    // };
 
     useEffect(() => {
         if (getSingleProduct?._id) {
@@ -66,10 +29,11 @@ const ProductsEstimateModal = ({ addHelper }) => {
     }, [getSingleProduct?.product]);
 
     useEffect(() => {
-        dispatch(getAllProductsApi());
-    }, []);
-
-    console.log('getAllProducts--', getAllProducts);
+        let payload = {
+            keyword: searchValue
+        };
+        dispatch(getAllProductsApi({ payload }));
+    }, [searchValue]);
 
     return (
         <Modal
@@ -84,19 +48,20 @@ const ProductsEstimateModal = ({ addHelper }) => {
             <Modal.Body className="modal-scrollable overflow-auto" style={{ maxHeight: '500px' }}>
                 <ListGroup variant="flush">
                     <input
-                        onChange={(e) => handleChange(e.target.value)}
-                        value={itemName}
-                        className="form-control border-secondary border rounded mb-3"
+                        className="form-control border"
                         type="text"
-                        placeholder="Search Product"
+                        value={searchValue}
+                        onChange={(e) => {
+                            setSearchValue(e.target.value);
+                        }}
                     />
                     <div className="text-right my-4">
                         <Badge pill variant="primary" className="p-2 px-3">
-                            <h5 className="text-white m-0">Search results: {foundItems.length}</h5>
+                            <h5 className="text-white m-0">Search results: {getAllProducts.length}</h5>
                         </Badge>
                     </div>
-                    {foundItems && foundItems.length > 0 ? (
-                        foundItems.map((val, index) => {
+                    {getAllProducts && getAllProducts.length > 0 ? (
+                        getAllProducts.map((val, index) => {
                             return (
                                 <ListGroup.Item action variant="light" key={index} onClick={() => handleSubmit(val._id)}>
                                     <div className="d-flex" style={{ justifyContent: 'space-between' }}>
