@@ -33,6 +33,7 @@ const CreateEstimate = () => {
     const [defaultTax, setDefaultTax] = useState(0);
     const estimateId = useParams();
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
+    const [inputs, setInputs] = useState({ customerName: '', customerCountry: '', customerState: '' });
     const history = useHistory();
 
     //Array Field
@@ -59,9 +60,9 @@ const CreateEstimate = () => {
             grandTotal: grandTotal,
             footerNote: footerText,
             productStatus: 'productEstimate',
-            customerName: values?.customerName,
-            customerCountry: values?.customerCountry,
-            customerState: values?.customerState
+            customerName: inputs?.customerName,
+            customerCountry: inputs?.customerCountry,
+            customerState: inputs?.customerState
         };
 
         if (estimateId?._id) {
@@ -96,6 +97,18 @@ const CreateEstimate = () => {
         // history.push('/estimates');
     };
 
+    const handleChangeCustomer = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        let el = document.querySelector('.customerClassName');
+        const option = el.getAttribute('id');
+        const payload = {
+            _id: option
+        };
+        setInputs((values) => ({ ...values, [name]: value }));
+        dispatch(getCustomerById({ payload }));
+    };
+
     useEffect(() => {
         if (estimateId?._id) {
             let payload = {
@@ -103,8 +116,6 @@ const CreateEstimate = () => {
             };
             dispatch(getEstimateById({ payload }));
         }
-        dispatch(getAllCountriesApi());
-        dispatch(getAllStatesApi());
     }, []);
 
     let productArray = getSingleEstimate?.products?.map((val) => val?.product);
@@ -178,7 +189,10 @@ const CreateEstimate = () => {
                                                     setModalTypeOpen={setModalTypeOpen}
                                                     currencySign={currencySign}
                                                     setCurrencySign={setCurrencySign}
-                                                    initialValues={values}
+                                                    estimateId={estimateId}
+                                                    handleChangeCustomer={handleChangeCustomer}
+                                                    getSingleEstimate={getSingleEstimate}
+                                                    inputs={inputs}
                                                 />
 
                                                 <RightColumn />
