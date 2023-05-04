@@ -10,7 +10,7 @@ import { deleteExpense } from '../../slices/expenseSlice';
 import { deleteVendor } from '../../slices/vendorsSlice';
 import { deleteEstimateApi } from '../../slices/estimatesSlice';
 import { useHistory } from 'react-router-dom';
-import { setDeleteInvoice } from '../../slices/invoiceSlice';
+import { deleteInvoice } from '../../slices/invoiceSlice';
 
 //COMPONENT FOR DELETE
 const DeleteConfModal = ({ type, del_id, title }) => {
@@ -34,7 +34,7 @@ const DeleteConfModal = ({ type, del_id, title }) => {
         } else if (type === 'VENDORS') {
             dispatch(deleteVendor({ del_id }));
         } else if (type === 'INVOICES') {
-            dispatch(setDeleteInvoice({ del_id }));
+            dispatch(deleteInvoice({ del_id }));
         }
         dispatch(commonDeleteModal(false));
     };

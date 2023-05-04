@@ -6,11 +6,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllCustomersApi, getCustomerById } from '../../slices/customersSlice';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 
-const LeftColumn = ({ setModalTypeOpen, currencySign, setCurrencySign, handleChangeCustomer, estimateId, getSingleEstimate, inputs }) => {
+const LeftColumn = ({ setModalTypeOpen, currencySign, setCurrencySign, estimateId, getSingleEstimate, inputs, setInputs }) => {
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
     const dispatch = useDispatch();
+
+    const handleChangeCustomer = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+
+        let el = document.querySelector('.customerClassName');
+        const option = el.getAttribute('id');
+
+        const payload = {
+            _id: option
+        };
+        setInputs((values) => ({ ...values, [name]: value }));
+        dispatch(getCustomerById({ payload }));
+    };
 
     useEffect(() => {
         getAllCountries.map((val) => {
@@ -30,15 +44,15 @@ const LeftColumn = ({ setModalTypeOpen, currencySign, setCurrencySign, handleCha
         dispatch(getAllStatesApi());
     }, []);
 
-    console.log('getSingleCustomerData-', getSingleEstimate?.data?.customerName);
+    console.log('getSingleEstimate---', getSingleEstimate?.data);
 
     return (
         <Col>
             <div className="w-50">
                 <div className="mb-3">
                     <select
-                        // defaultValue={estimateId ? getSingleEstimate?.data?.customerName : inputs?.customerName}
-                        value={inputs?.customerName}
+                        defaultValue={estimateId ? getSingleEstimate?.data?.customerName : inputs?.customerName}
+                        // value={estimateId ? getSingleEstimate?.data?.customerName : inputs.customerName}
                         onChange={(e) => handleChangeCustomer(e)}
                         name="customerName"
                     >
@@ -69,8 +83,8 @@ const LeftColumn = ({ setModalTypeOpen, currencySign, setCurrencySign, handleCha
                         <div className="my-3">
                             <span>Country: </span>
                             <select
-                                // defaultValue={estimateId ? getSingleEstimate?.data?.customerCountry : getSingleCustomerData.countryName}
-                                value={inputs?.customerCountry}
+                                defaultValue={estimateId ? getSingleEstimate?.data?.customerCountry : inputs.countryName}
+                                // value={inputs?.customerCountry}
                                 onChange={(e) => handleChangeCustomer(e)}
                                 name="customerCountry"
                             >
@@ -85,23 +99,23 @@ const LeftColumn = ({ setModalTypeOpen, currencySign, setCurrencySign, handleCha
                         </div>
                     </div>
 
-                    {getSingleCustomerData?._id && (
-                        <div className="my-3">
-                            <span>State: </span>
-                            <select
-                                // defaultValue={estimateId ? getSingleEstimate?.data?.customerState : getSingleCustomerData.state}
-                                value={inputs?.customerState}
-                                onChange={(e) => handleChangeCustomer(e)}
-                                name="customerState"
-                            >
-                                {getAllStates.map((val) => (
-                                    <option key={val?._id} value={val?.name}>
-                                        {val?.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
+                    {/* {getSingleCustomerData?._id && ( */}
+                    <div className="my-3">
+                        <span>State: </span>
+                        <select
+                            defaultValue={estimateId ? getSingleEstimate?.data?.customerState : inputs.state}
+                            // value={inputs?.customerState}
+                            onChange={(e) => handleChangeCustomer(e)}
+                            name="customerState"
+                        >
+                            {getAllStates.map((val) => (
+                                <option key={val?._id} value={val?.name}>
+                                    {val?.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {/* )} */}
                 </div>
             </div>
         </Col>

@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Nav, Row, Tab } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import CommonDataTable from '../../components/CommonDataTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDeleteInvoice, setGetAllInvoices } from '../../slices/invoiceSlice';
 import { commonDeleteModal, commonModalIsOpen } from '../../slices/modalSlice';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import DraftTab from '../../components/InvoiceTabs/DraftTab';
+import RecurringInvoiceTab from '../../components/InvoiceTabs/RecurringInvoiceTab';
+import AllInvoiceTab from '../../components/InvoiceTabs/AllInvoiceTab';
+import UnpaidTab from '../../components/InvoiceTabs/UnpaidTab';
+import { getAllInvoices } from '../../slices/invoiceSlice';
 
 const Invoices = () => {
-    const [rowData, setRowData] = useState({});
-    const { createInvoice, getAllInvoices, updateInvoice, deleteInvoice, getSingleInvoice } = useSelector((state) => state.invoiceReducer);
+    const [rowData, setRowData] = useState();
+    const { createInvoiceData, getAllInvoicesData, updateInvoiceData, deleteInvoiceData, getSingleInvoiceData } = useSelector(
+        (state) => state.invoiceReducer
+    );
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -17,10 +23,10 @@ const Invoices = () => {
         {
             name: 'Status',
             selector: (row) =>
-                row?.status === 'expire' ? (
+                row?.status === 'unpaid' ? (
                     <Badge className="bg-danger text-white">{row?.status.toUpperCase()}</Badge>
                 ) : (
-                    <Badge className="bg-primary text-white">{row?.status.toUpperCase()}</Badge>
+                    <Badge className="bg-secondary text-white">{row?.status.toUpperCase()}</Badge>
                 ),
             sortable: true
         },
@@ -52,7 +58,14 @@ const Invoices = () => {
                         <Button size="sm" className="mr-1" as={Link} to={`/invoices/invoice_details/${row._id}`}>
                             View
                         </Button>
-                        <Button size="sm" variant="danger" onClick={() => handleDeleteModal(row)}>
+                        <Button
+                            size="sm"
+                            variant="danger"
+                            onClick={() => {
+                                dispatch(commonDeleteModal(true));
+                                setRowData(row);
+                            }}
+                        >
                             Delete
                         </Button>
                     </div>
@@ -60,6 +73,7 @@ const Invoices = () => {
             }
         }
     ];
+
     // const handleDeleteInvoice = (e, row) => {
     //     let optionValue = e.target.value;
     //     let payload = {
@@ -84,31 +98,67 @@ const Invoices = () => {
     //     }
     // };
 
-    const handleDeleteModal = (row) => {
-        commonDeleteModal(true);
-        setRowData(row);
-    };
-
     useEffect(() => {
-        dispatch(setGetAllInvoices());
-    }, [deleteInvoice]);
+        dispatch(getAllInvoices());
+    }, [deleteInvoiceData]);
+
+    const location = {
+        pathname: '/invoices/create_invoices',
+        state: 'CREATE_INVOICE'
+    };
 
     return (
         <>
-            <Card>
-                <Card.Header className="d-flex justify-content-between align-items-center">
-                    <Card.Title className="m-0 font-weight-bold">All Estimates</Card.Title>
-                    <Link to="/invoices/create_invoices">
-                        <Button size="sm" className="d-flex align-items-center p-2">
-                            <i className="feather icon-plus f-20" />
-                            <div>New Estimate</div>
-                        </Button>
-                    </Link>
-                </Card.Header>
-                <Card.Body>
-                    <CommonDataTable columns={columns} data={getAllInvoices} />
-                </Card.Body>
-            </Card>
+            <Row style={{ marginTop: '6em' }}>
+                <Col xl={10}>
+                    <div className="d-flex align-items-center justify-content-between">
+                        <h3>Invoices</h3>
+                        <Link to={location}>
+                            <Button size="sm" className="d-flex align-items-center p-2">
+                                <i className="feather icon-plus f-20" />
+                                <div>Create New Invoice</div>
+                            </Button>
+                        </Link>
+                    </div>
+                </Col>
+                <Col className="mt-4" xl={10}>
+                    <Tab.Container defaultActiveKey="allInvoice">
+                        <Card>
+                            <Card.Body>
+                                <Nav variant="pills" className="bg-nav-pills nav-justified mb-0">
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="allInvoice">All Invoices</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="unpaid">Unpaid</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="draft">Draft</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey="recurringInvoice">Recurring Invoice</Nav.Link>
+                                    </Nav.Item>
+                                </Nav>
+                            </Card.Body>
+                        </Card>
+
+                        <Tab.Content>
+                            <Tab.Pane eventKey="allInvoice">
+                                <AllInvoiceTab columns={columns} getAllInvoicesData={getAllInvoicesData} />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="unpaid">
+                                <UnpaidTab columns={columns} getAllInvoicesData={getAllInvoicesData} />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="draft">
+                                <DraftTab columns={columns} getAllInvoicesData={getAllInvoicesData} />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="recurringInvoice">
+                                <RecurringInvoiceTab columns={columns} getAllInvoicesData={getAllInvoicesData} />
+                            </Tab.Pane>
+                        </Tab.Content>
+                    </Tab.Container>
+                </Col>
+            </Row>
             <DeleteConfModal del_id={rowData?._id} type={'INVOICES'} title={rowData?.title} />
         </>
     );

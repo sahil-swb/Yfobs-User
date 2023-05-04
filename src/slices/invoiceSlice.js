@@ -11,25 +11,26 @@ import {
 
 const initialState = {
     isLoading: false,
-    createInvoice: {},
-    getAllInvoices: [],
-    updateInvoice: {},
-    deleteInvoice: {},
-    getSingleInvoice: {}
+    createInvoiceData: {},
+    getAllInvoicesData: [],
+    updateInvoiceData: {},
+    deleteInvoiceData: {},
+    getSingleInvoiceData: {}
 };
 
-export const setCreateInvoice = createAsyncThunk('user/setCreateInvoice', async ({ payload }, { rejectWithValue }) => {
+export const createInvoice = createAsyncThunk('user/setCreateInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.post(BASE_URL_FOR_USER + USER_CREATE_INVOICE, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
+        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }
 });
 
-export const setGetAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (_, { rejectWithValue }) => {
+export const getAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (_, { rejectWithValue }) => {
     try {
         const response = await axios.post(BASE_URL_FOR_USER + USER_GETALL_INVOICES, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
@@ -41,7 +42,7 @@ export const setGetAllInvoices = createAsyncThunk('user/setGetAllInvoices', asyn
     }
 });
 
-export const setGetSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', async ({ payload }, { rejectWithValue }) => {
+export const getSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_SINGLE_INVOICE}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
@@ -53,7 +54,7 @@ export const setGetSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', 
     }
 });
 
-export const setUpdateInvoice = createAsyncThunk('user/setUpdateInvoice', async ({ payload }, { rejectWithValue }) => {
+export const updateInvoice = createAsyncThunk('user/setUpdateInvoice', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_INVOICE}${payload._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
@@ -65,7 +66,7 @@ export const setUpdateInvoice = createAsyncThunk('user/setUpdateInvoice', async 
     }
 });
 
-export const setDeleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ del_id }, { rejectWithValue }) => {
+export const deleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ del_id }, { rejectWithValue }) => {
     try {
         const response = await axios.delete(`${BASE_URL_FOR_USER + USER_DELETE_INVOICE}${del_id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
@@ -84,58 +85,58 @@ const invoiceSlice = createSlice({
     extraReducers: (builder) => {
         builder
             //CREATE
-            .addCase(setCreateInvoice.pending, (state, action) => {
+            .addCase(createInvoice.pending, (state, action) => {
                 state.isLoading = true;
             })
-            .addCase(setCreateInvoice.fulfilled, (state, action) => {
+            .addCase(createInvoice.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.createInvoice = action.payload;
+                state.createInvoiceData = action.payload;
             })
-            .addCase(setCreateInvoice.rejected, (state, action) => {
+            .addCase(createInvoice.rejected, (state, action) => {
                 state.isLoading = false;
             })
             //READ
-            .addCase(setGetAllInvoices.pending, (state, action) => {
+            .addCase(getAllInvoices.pending, (state, action) => {
                 state.isLoading = true;
             })
-            .addCase(setGetAllInvoices.fulfilled, (state, action) => {
+            .addCase(getAllInvoices.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.getAllInvoices = action.payload;
+                state.getAllInvoicesData = action.payload;
             })
-            .addCase(setGetAllInvoices.rejected, (state, action) => {
+            .addCase(getAllInvoices.rejected, (state, action) => {
                 state.isLoading = false;
             })
             //UPDATE
-            .addCase(setUpdateInvoice.pending, (state, action) => {
+            .addCase(updateInvoice.pending, (state, action) => {
                 state.isLoading = true;
             })
-            .addCase(setUpdateInvoice.fulfilled, (state, action) => {
+            .addCase(updateInvoice.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.updateInvoice = action.payload;
+                state.updateInvoiceData = action.payload;
             })
-            .addCase(setUpdateInvoice.rejected, (state, action) => {
+            .addCase(updateInvoice.rejected, (state, action) => {
                 state.isLoading = false;
             })
             //DELETE
-            .addCase(setDeleteInvoice.pending, (state, action) => {
+            .addCase(deleteInvoice.pending, (state, action) => {
                 state.isLoading = true;
             })
-            .addCase(setDeleteInvoice.fulfilled, (state, action) => {
+            .addCase(deleteInvoice.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.deleteInvoice = action.payload;
+                state.deleteInvoiceData = action.payload;
             })
-            .addCase(setDeleteInvoice.rejected, (state, action) => {
+            .addCase(deleteInvoice.rejected, (state, action) => {
                 state.isLoading = false;
             })
             //GETBYID
-            .addCase(setGetSingleInvoice.pending, (state, action) => {
+            .addCase(getSingleInvoice.pending, (state, action) => {
                 state.isLoading = true;
             })
-            .addCase(setGetSingleInvoice.fulfilled, (state, action) => {
+            .addCase(getSingleInvoice.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.getSingleInvoice = action.payload;
+                state.getSingleInvoiceData = action.payload;
             })
-            .addCase(setGetSingleInvoice.rejected, (state, action) => {
+            .addCase(getSingleInvoice.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }
