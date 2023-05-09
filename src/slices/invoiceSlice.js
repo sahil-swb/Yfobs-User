@@ -30,9 +30,9 @@ export const createInvoice = createAsyncThunk('user/setCreateInvoice', async ({ 
     }
 });
 
-export const getAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (_, { rejectWithValue }) => {
+export const getAllInvoices = createAsyncThunk('user/setGetAllInvoices', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.post(BASE_URL_FOR_USER + USER_GETALL_INVOICES, {
+        const response = await axios.post(`${BASE_URL_FOR_USER + USER_GETALL_INVOICES}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
@@ -48,7 +48,7 @@ export const getSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', asy
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
-        return response?.data?.data;
+        return response?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
     }

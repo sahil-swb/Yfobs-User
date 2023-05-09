@@ -1,17 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { commonModalIsOpen, commonModalType, setRowData } from '../../slices/modalSlice';
+import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import NewBusinessModal from '../modals/NewBusinessModal';
-import { deleteBusiness, getAllBusinessesApi } from '../../slices/settingsSlice';
+import { deleteBusiness, getAllBusinessesApi, updateBusiness } from '../../slices/settingsSlice';
+import { userId } from '../../constants/userData';
+import Switch from 'react-switch';
 
 const Businesses = () => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
+    const [rowData, setRowData] = useState(null);
     const { getAllBusinessesData, createBusiness, updateBusinessData, deleteBusinessData } = useSelector((state) => state.settingsReducer);
+    const [activeBusiness, setActiveBusiness] = useState(false);
+
     const dispatch = useDispatch();
 
+    getAllBusinessesData.filter((val) => val?.isActive === 1 && localStorage.setItem('singleBusinessId', val?._id));
+
     useEffect(() => {
-        dispatch(getAllBusinessesApi());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllBusinessesApi({ payload }));
     }, [createBusiness, updateBusinessData, deleteBusinessData]);
 
     return (
@@ -76,27 +86,54 @@ const Businesses = () => {
                                             </div>
                                         </td>
                                         <td>
-                                            <Button
-                                                size="sm"
-                                                onClick={() => {
-                                                    dispatch(commonModalIsOpen(true));
-                                                    dispatch(commonModalType('EDIT_BUSSINESS'));
-                                                    dispatch(setRowData(detail?._id));
-                                                }}
-                                            >
-                                                Edit
-                                            </Button>
+                                            <div className="d-flex justify-content-between">
+                                                <div>
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            dispatch(commonModalIsOpen(true));
+                                                            dispatch(commonModalType('EDIT_BUSSINESS'));
+                                                            setRowData(detail);
+                                                        }}
+                                                    >
+                                                        Edit
+                                                    </Button>
 
-                                            <Button
-                                                className="ml-3"
-                                                size="sm"
-                                                onClick={() => {
-                                                    let payload = { _id: detail?._id };
-                                                    dispatch(deleteBusiness({ payload }));
-                                                }}
-                                            >
-                                                Delete
-                                            </Button>
+                                                    <Button
+                                                        className="ml-3"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            let payload = { _id: detail?._id };
+                                                            dispatch(deleteBusiness({ payload }));
+                                                        }}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                </div>
+                                                <div aria-disabled="true">
+                                                    <Button
+                                                        disabled={detail?.isActive === 1 ? false : false}
+                                                        size="sm"
+                                                        variant={detail?.isActive === 1 ? 'outline-success' : 'outline-primary'}
+                                                        onClick={() => {
+                                                            let payload = {
+                                                                _id: detail?._id,
+                                                                isActive: !activeBusiness ? 1 : 0
+                                                            };
+                                                            setActiveBusiness(!activeBusiness);
+                                                            dispatch(updateBusiness({ payload }));
+                                                        }}
+                                                    >
+                                                        {detail?.isActive === 1 ? 'Selected' : 'Unselected'}
+                                                    </Button>
+
+                                                    {/* <Switch
+                                                        id={detail?._id}
+                                                        onChange={(nextChecked) => handleChange(nextChecked, detail?._id)}
+                                                        checked={checked}
+                                                    /> */}
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 );
@@ -105,7 +142,7 @@ const Businesses = () => {
                     </Table>
                 </Card.Body>
             </Card>
-            <NewBusinessModal />
+            <NewBusinessModal rowData={rowData} />
         </>
     );
 };

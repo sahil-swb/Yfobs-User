@@ -39,9 +39,9 @@ export const createCategoryApi = createAsyncThunk('user/createCategory', async (
 });
 
 //APICALL FOR READING CATEGORIES USING THUNK
-export const getAllCategoriesApi = createAsyncThunk('user/getAllCategories', async (_, { rejectWithValue }) => {
+export const getAllCategoriesApi = createAsyncThunk('user/getAllCategories', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(BASE_URL_FOR_USER + USER_GET_ALL_CATEGORIES, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ALL_CATEGORIES}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         return response?.data?.data;

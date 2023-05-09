@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { Field, Form, Formik } from 'formik';
 import { createVendor, getSingleVendor, updateVendor } from '../../slices/vendorsSlice';
-import { userId } from '../../constants/userData';
+import { businessId, userId } from '../../constants/userData';
 import '../reactPhoneComponent.css';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
@@ -19,7 +19,7 @@ const VendorModal = () => {
     const handleSubmit = (values) => {
         const payload = {
             userId: userId,
-            businessId: '644650a8be0b7b4db078d85e',
+            businessId: businessId,
             vendorName: values?.vendorName,
             phone: vendorPhoneNumber,
             email: values?.email,

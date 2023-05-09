@@ -32,9 +32,9 @@ export const createVendor = createAsyncThunk('vendors/createVendor', async ({ pa
     }
 });
 
-export const getAllVendors = createAsyncThunk('vendors/getAllVendors', async (_, { rejectWithValue }) => {
+export const getAllVendors = createAsyncThunk('vendors/getAllVendors', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(BASE_URL_FOR_USER + USER_GETALL_VENDORS, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GETALL_VENDORS}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         return response?.data?.data;

@@ -24,6 +24,7 @@ const NavRight = (props) => {
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
+        localStorage.removeItem('singleBusinessId');
         setCurrentLogout(true);
         window.location.reload();
     };

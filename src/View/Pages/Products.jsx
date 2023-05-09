@@ -6,6 +6,7 @@ import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import ProductsModal from '../../components/modals/ProductsModal';
 import { commonDeleteModal, commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import { getAllProductsApi } from '../../slices/productsSlice';
+import { userId } from '../../constants/userData';
 // import '../../components/CommonIcons.css';
 
 const Products = () => {
@@ -68,7 +69,8 @@ const Products = () => {
 
     useEffect(() => {
         let payload = {
-            keyword: searchValue
+            _id: userId,
+            payload: { keyword: searchValue }
         };
         dispatch(getAllProductsApi({ payload }));
     }, [updateData, deleteData, createData, searchValue]);

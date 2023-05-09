@@ -35,9 +35,9 @@ export const createEstimateApi = createAsyncThunk('user/createEstimate', async (
     }
 });
 
-export const getAllEstimatesApi = createAsyncThunk('user/getAllEstimates', async (_, { rejectWithValue }) => {
+export const getAllEstimatesApi = createAsyncThunk('user/getAllEstimates', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(BASE_URL_FOR_USER + USER_GET_ALL_ESTIMATES, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ALL_ESTIMATES}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);

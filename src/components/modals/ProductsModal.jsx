@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategoriesApi } from '../../slices/categoriesSlice';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { createProductApi, getAllProductsApi, getSingleProductApi, updateProductApi } from '../../slices/productsSlice';
-import { userId } from '../../constants/userData';
+import { businessId, userId } from '../../constants/userData';
 
 const ProductsModal = ({ data }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
@@ -24,6 +24,7 @@ const ProductsModal = ({ data }) => {
         ];
         let payload = {
             userId: userId,
+            businessId: businessId,
             product: productArray,
             hsnCode: values.hsnCode,
             details: values.details,

@@ -4,7 +4,12 @@ import { useSelector } from 'react-redux';
 
 const Template1 = React.forwardRef((props, ref) => {
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
+    let discountAmount =
+        Number(getSingleEstimate?.data?.subTotal) -
+        (Number(getSingleEstimate?.data?.subTotal) * Number(getSingleEstimate?.data?.discount)) / 100;
+    let taxValue = (discountAmount * Number(getSingleEstimate?.data?.tax)) / 100;
 
+    console.log('taxValue--', taxValue);
     return (
         <>
             <meta charSet="UTF-8" />
@@ -144,10 +149,10 @@ const Template1 = React.forwardRef((props, ref) => {
                                         <b>Discount [{getSingleEstimate?.data?.discount}%]: </b>
                                     </li>
                                     <li>
-                                        <b>CGST2.5 [{getSingleEstimate?.data?.tax}%]: </b>
+                                        <b>CGST2.5 [{getSingleEstimate?.data?.tax / 2}%]: </b>
                                     </li>
                                     <li>
-                                        <b>IGST2.5 [2.5%]: </b>
+                                        <b>SGST2.5 [{getSingleEstimate?.data?.tax / 2}%]: </b>
                                     </li>
                                     <li>&nbsp;</li>
                                     <li>
@@ -159,13 +164,13 @@ const Template1 = React.forwardRef((props, ref) => {
                                         <b> ₹ {getSingleEstimate?.data?.subTotal}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.data?.discount}.00</b>
+                                        <b> ₹ {discountAmount}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.data?.tax}.00</b>
+                                        <b> ₹ {taxValue / 2}.00</b>
                                     </li>
                                     <li>
-                                        <b> ₹ {getSingleEstimate?.data?.tax}.00</b>
+                                        <b> ₹ {taxValue / 2}.00</b>
                                     </li>
                                     <li>
                                         <b>

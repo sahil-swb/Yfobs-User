@@ -6,14 +6,15 @@ import { Formik } from 'formik';
 import { Form } from 'formik';
 import { Field } from 'formik';
 import { Button } from 'react-bootstrap';
-import { createBusinessesApi, getSingleBusiness, updateBusiness, uploadLogoApi, uploadUpiQRCodeApi } from '../../slices/settingsSlice';
+import { createBusinessesApi, updateBusiness, uploadLogoApi, uploadUpiQRCodeApi } from '../../slices/settingsSlice';
 import '../../assets/css/businessModalStyle.css';
 import uploadIcon from '../../assets/images/upload-icon.png';
+import { businessId, userId } from '../../constants/userData';
 
-const NewBusinessModal = () => {
-    const { modalIsOpen, modalType, rowData } = useSelector((state) => state.modalReducer);
+const NewBusinessModal = ({ rowData }) => {
+    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllStates } = useSelector((state) => state.countriesInfoReducer);
-    const { getSingleBusinessData, logoData, upiQRData } = useSelector((state) => state.settingsReducer);
+    const { logoData, upiQRData } = useSelector((state) => state.settingsReducer);
     const [logoImage, setLogoImage] = useState('');
     const [upiImage, setUpiImage] = useState('');
     const dispatch = useDispatch();
@@ -57,6 +58,8 @@ const NewBusinessModal = () => {
 
     const handleSubmit = (values) => {
         let payload = {
+            userId: userId,
+            businessId: businessId,
             businessName: values?.businessName,
             businessTitle: values?.businessTitle,
             businessNumber: values?.businessNumber,
@@ -85,20 +88,20 @@ const NewBusinessModal = () => {
         }
 
         if (modalType === 'EDIT_BUSSINESS') {
-            payload._id = getSingleBusinessData?._id;
+            payload._id = rowData?._id;
             dispatch(updateBusiness({ payload }));
         }
         dispatch(commonModalIsOpen(false));
     };
 
-    useEffect(() => {
-        if (modalType === 'EDIT_BUSSINESS') {
-            let payload = {
-                _id: rowData
-            };
-            dispatch(getSingleBusiness({ payload }));
-        }
-    }, [rowData]);
+    // useEffect(() => {
+    //     if (modalType === 'EDIT_BUSSINESS') {
+    //         let payload = {
+    //             _id: data
+    //         };
+    //         dispatch(getSingleBusiness({ payload }));
+    //     }
+    // }, [data]);
 
     return (
         <>
@@ -112,23 +115,23 @@ const NewBusinessModal = () => {
                     initialValues={
                         modalType === 'EDIT_BUSSINESS'
                             ? {
-                                  businessName: getSingleBusinessData?.businessName || '',
-                                  businessTitle: getSingleBusinessData?.businessTitle || '',
-                                  businessNumber: getSingleBusinessData?.businessNumber || '',
-                                  amountType: getSingleBusinessData?.amountType || '',
-                                  vatCode: getSingleBusinessData?.vatCode || '',
-                                  country: getSingleBusinessData?.country || '',
-                                  address: getSingleBusinessData?.address || '',
-                                  postCode: getSingleBusinessData?.postCode || '',
-                                  isRegisteredGst: getSingleBusinessData?.isRegisteredGst || '',
-                                  stateId: getSingleBusinessData?.stateId || '',
-                                  city: getSingleBusinessData?.city || '',
-                                  bankName: getSingleBusinessData?.bankName || '',
-                                  accountNumber: getSingleBusinessData?.accountNumber || '',
-                                  branchName: getSingleBusinessData?.branchName || '',
-                                  bankIfscCode: getSingleBusinessData?.bankIfscCode || '',
-                                  gstRegisterDate: getSingleBusinessData?.gstRegisterDate || '',
-                                  businessCategory: getSingleBusinessData?.businessCategory || ''
+                                  businessName: rowData?.businessName || '',
+                                  businessTitle: rowData?.businessTitle || '',
+                                  businessNumber: rowData?.businessNumber || '',
+                                  amountType: rowData?.amountType || '',
+                                  vatCode: rowData?.vatCode || '',
+                                  country: rowData?.country || '',
+                                  address: rowData?.address || '',
+                                  postCode: rowData?.postCode || '',
+                                  isRegisteredGst: rowData?.isRegisteredGst || '',
+                                  stateId: rowData?.stateId || '',
+                                  city: rowData?.city || '',
+                                  bankName: rowData?.bankName || '',
+                                  accountNumber: rowData?.accountNumber || '',
+                                  branchName: rowData?.branchName || '',
+                                  bankIfscCode: rowData?.bankIfscCode || '',
+                                  gstRegisterDate: rowData?.gstRegisterDate || '',
+                                  businessCategory: rowData?.businessCategory || ''
                               }
                             : {
                                   businessName: '',
@@ -160,13 +163,7 @@ const NewBusinessModal = () => {
                                     <label>Logo</label>
                                     <div className="business-image-main-div">
                                         <img
-                                            src={
-                                                getSingleBusinessData?.logo
-                                                    ? getSingleBusinessData?.logo
-                                                    : logoImage
-                                                    ? logoImage
-                                                    : uploadIcon
-                                            }
+                                            src={rowData?.logo ? rowData?.logo : logoImage ? logoImage : uploadIcon}
                                             alt=""
                                             className="logoImage"
                                         />
@@ -177,13 +174,7 @@ const NewBusinessModal = () => {
                                     <label>UPI QR Code</label>
                                     <div className="business-image-main-div">
                                         <img
-                                            src={
-                                                getSingleBusinessData?.upiQRCode
-                                                    ? getSingleBusinessData?.upiQRCode
-                                                    : upiImage
-                                                    ? upiImage
-                                                    : uploadIcon
-                                            }
+                                            src={rowData?.upiQRCode ? rowData?.upiQRCode : upiImage ? upiImage : uploadIcon}
                                             alt=""
                                             className="logoImage"
                                         />

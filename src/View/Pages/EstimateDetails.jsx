@@ -29,6 +29,11 @@ const EstimateDetails = () => {
         };
         dispatch(getEstimateById({ payload }));
     }, [_id]);
+
+    const location = {
+        pathname: `/estimates/create_estimates`,
+        state: 'CREATE_ESTIMATE'
+    };
     return (
         <>
             <div>

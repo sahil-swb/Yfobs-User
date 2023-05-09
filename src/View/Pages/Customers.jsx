@@ -12,6 +12,10 @@ import CustomersModal from '../../components/modals/CustomersModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import { getAllCustomersApi } from '../../slices/customersSlice';
 import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
+import singleBusinessId from '../../components/ActiveBusiness';
+import ActiveBusinessId from '../../components/ActiveBusiness';
+import { getAllBusinessesApi } from '../../slices/settingsSlice';
+import { userId } from '../../constants/userData';
 
 const Customers = () => {
     //COLUMNS FOR CUSTOMER TABLE
@@ -63,6 +67,7 @@ const Customers = () => {
     //STATES
     const { getAllCustomers, createCustomer, deleteCustomer, updateCustomer } = useSelector((state) => state.customers);
     const { rowData, ID } = useSelector((state) => state.modalReducer);
+
     const dispatch = useDispatch();
 
     //FUNCTION FOR DELETE CUSTOMER
@@ -80,10 +85,11 @@ const Customers = () => {
 
     //APICALL ON PAGE LOAD
     useEffect(() => {
-        dispatch(getAllCustomersApi());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllCustomersApi({ payload }));
     }, [createCustomer, deleteCustomer, updateCustomer]);
-
-    console.log('ID', ID);
 
     return (
         <div>

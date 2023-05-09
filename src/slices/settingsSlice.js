@@ -38,9 +38,9 @@ export const createBusinessesApi = createAsyncThunk('createBusinessApi', async (
     }
 });
 
-export const getAllBusinessesApi = createAsyncThunk('getAllBusinessesApi', async (_, { rejectWithValue }) => {
+export const getAllBusinessesApi = createAsyncThunk('getAllBusinessesApi', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(BASE_URL_FOR_USER + USER_GET_ALL_BUSINESS, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ALL_BUSINESS}/${payload?._id}`, {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });

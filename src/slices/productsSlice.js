@@ -45,7 +45,7 @@ export const createProductApi = createAsyncThunk('user/createProduct', async ({ 
 //APICALL FOR READING PRODUCTS USING THUNK
 export const getAllProductsApi = createAsyncThunk('user/getAllProducts', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.post(BASE_URL_FOR_USER + USER_GET_ALL_PRODUCTS, payload, {
+        const response = await axios.post(`${BASE_URL_FOR_USER + USER_GET_ALL_PRODUCTS}/${payload?._id}`, payload?.payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);

@@ -14,6 +14,9 @@ import 'react-phone-number-input/style.css';
 import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
 import '../reactPhoneComponent.css';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
+// import { singleBusinessId, userId } from '../../constants/userData';
+import { getAllBusinessesApi } from '../../slices/settingsSlice';
+import { businessId, userId } from '../../constants/userData';
 
 //MODAL COMPONENT FOR ADD AND EDIT CUSTOMER
 const CustomersModal = () => {
@@ -22,10 +25,13 @@ const CustomersModal = () => {
     const { getSingleCustomerData, updateCustomer } = useSelector((state) => state.customers);
     const [customerPhoneNumber, setCustomerPhoneNumber] = useState('');
     const [companyPhoneNumber, setCompanyPhoneNumber] = useState('');
+    const { getAllBusinessesData } = useSelector((state) => state.settingsReducer);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
         let payload = {
+            userId: userId,
+            businessId: businessId,
             name: values.name,
             email: values.email,
             phone: customerPhoneNumber,
@@ -61,11 +67,6 @@ const CustomersModal = () => {
     }, [getSingleCustomerData, modalType]);
 
     useEffect(() => {
-        dispatch(getAllCountriesApi());
-        dispatch(getAllStatesApi());
-    }, []);
-
-    useEffect(() => {
         if (modalType === 'EDIT') {
             let payload = {
                 _id: ID
@@ -73,6 +74,12 @@ const CustomersModal = () => {
             dispatch(getCustomerById({ payload }));
         }
     }, [ID, updateCustomer, modalIsOpen]);
+
+    useEffect(() => {
+        dispatch(getAllCountriesApi());
+        dispatch(getAllStatesApi());
+        getAllBusinessesApi();
+    }, []);
 
     return (
         <>

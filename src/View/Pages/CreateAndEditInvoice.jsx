@@ -8,13 +8,14 @@ import ProductsEstimateModal from '../../components/modals/ProductsEstimateModal
 import { getAllCustomersApi, getCustomerById } from '../../slices/customersSlice';
 import favicon from '../../assets/images/favicon-32x32.png';
 import JoditEditor from 'jodit-react';
-import { createEstimateApi, getEstimateById, updateEstimateApi } from '../../slices/estimatesSlice';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 import { businessId, userId } from '../../constants/userData';
 import { createProductApi, updateProductApi } from '../../slices/productsSlice';
 import OpenModalButton from './OpenModalButton';
+import { createInvoice, getSingleInvoice, updateInvoice } from '../../slices/invoiceSlice';
 
-const CreateEstimate = () => {
+const CreateAndEditInvoice = () => {
+    const [content, setContent] = useState('');
     const [modalOpenType, setModalTypeOpen] = useState('');
     const [currencySign, setCurrencySign] = useState('');
     const { getEstimateProducts } = useSelector((state) => state.productsReducer);
@@ -23,10 +24,9 @@ const CreateEstimate = () => {
     const [defaultTotal, setDefaultTotal] = useState(0);
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
-    const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
+    const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const [customerName, setCustomerName] = useState('');
-    const [content, setContent] = useState('');
     const history = useHistory();
     const updateId = useParams();
     const dispatch = useDispatch();
@@ -43,10 +43,10 @@ const CreateEstimate = () => {
     };
 
     // Customer Prefill Name From Estimate Api
-    let prefillCustomerName = getSingleEstimate?.data?.customerName;
+    let prefillCustomerName = getSingleInvoiceData?.data?.customerName;
 
     // Product Array From Estimate Api
-    let productArray = getSingleEstimate?.products?.map((val) => val?.product);
+    let productArray = getSingleInvoiceData?.products?.map((val) => val?.product);
 
     // Product Array created using onClick
     let addProducts = getEstimateProducts?.map((val) =>
@@ -64,7 +64,6 @@ const CreateEstimate = () => {
         const payload = {
             userId: userId,
             businessId: businessId,
-            customerId: getSingleCustomerData?._id,
             title: values?.title,
             summary: values?.summary,
             customerName: customerName,
@@ -75,20 +74,32 @@ const CreateEstimate = () => {
             posoNumber: values?.posoNumber,
             date: values?.date,
             expireOn: values?.expireOn,
+            subTotal: defaultTotal,
             discount: defaultDiscount,
             tax: defaultTax,
-            subTotal: defaultTotal,
             grandTotal: grandTotal,
+            convertTotal: values?.convertTotal,
             footerNote: content,
             productStatus: 'productEstimate'
-        };
 
+            // paymentDue: values?.paymentDue,
+            // parentId: values?.parentId,
+            // expireOn: values?.expireOn,
+            // challanNo: values?.challanNo,
+            // customer: values?.customer,
+            // dueLimit: values?.dueLimit,
+            // recurringStart: values?.recurringStart,
+            // recurringEnd: values?.recurringEnd,
+            // nextPayment: values?.nextPayment,
+            // sendMyself: values?.sendMyself,
+            // status: values?.status
+        };
         if (updateId?._id) {
             payload._id = updateId?._id;
-            dispatch(updateEstimateApi({ payload })).then((res) => {
+            dispatch(updateInvoice({ payload })).then((res) => {
                 if (res?.payload?._id) {
                     let payload = {
-                        _id: getSingleEstimate?.products?.map((val) => val?._id),
+                        _id: getSingleInvoiceData?.products?.map((val) => val?._id),
                         EstimatesId: res?.payload?._id,
                         userId: userId,
                         product: values.estimateProducts,
@@ -99,7 +110,7 @@ const CreateEstimate = () => {
                 }
             });
         } else {
-            dispatch(createEstimateApi({ payload })).then((res) => {
+            dispatch(createInvoice({ payload })).then((res) => {
                 if (res?.payload?._id) {
                     let payload = {
                         EstimatesId: res?.payload?._id,
@@ -113,7 +124,7 @@ const CreateEstimate = () => {
         }
 
         setContent('');
-        history.push('/estimates');
+        history.push('/invoices');
     };
 
     const handleChangeCustomer = (e) => {
@@ -135,7 +146,7 @@ const CreateEstimate = () => {
             let payload = {
                 _id: updateId?._id
             };
-            dispatch(getEstimateById({ payload }));
+            dispatch(getSingleInvoice({ payload }));
         }
     }, []);
 
@@ -161,18 +172,18 @@ const CreateEstimate = () => {
     }, []);
 
     useEffect(() => {
-        setDefaultTax(getSingleEstimate?.data?.tax);
-        setDefaultDiscount(getSingleEstimate?.data?.discount);
-    }, [getSingleEstimate?.data?.tax, getSingleEstimate?.data?.discount]);
+        setDefaultTax(getSingleInvoiceData?.data?.tax);
+        setDefaultDiscount(getSingleInvoiceData?.data?.discount);
+    }, [getSingleInvoiceData?.data?.tax, getSingleInvoiceData?.data?.discount]);
 
     return (
         <>
             <Row>
                 <Col xl={{ span: 10, offset: 1 }}>
                     <div className="d-flex mb-4" style={{ justifyContent: 'space-between' }}>
-                        <h3>{updateId ? 'Edit Estimate' : 'Create new Estimate'}</h3>
-                        <Button as={Link} to="/estimates" variant="outline-primary">
-                            All Estimates
+                        <h3>{updateId?._id ? 'Edit Invoice' : 'Create new Invoice'}</h3>
+                        <Button as={Link} to="/invoices" variant="outline-primary">
+                            All Invoices
                         </Button>
                     </div>
                     <div>
@@ -181,15 +192,15 @@ const CreateEstimate = () => {
                             initialValues={
                                 updateId?._id
                                     ? {
-                                          title: getSingleEstimate?.data?.title || '',
-                                          summary: getSingleEstimate?.data?.summary || '',
-                                          ccMail: getSingleEstimate?.data?.ccMail || '',
-                                          number: getSingleEstimate?.data?.number || '',
-                                          posoNumber: getSingleEstimate?.data?.posoNumber || '',
-                                          date: getSingleEstimate?.data?.date || '',
-                                          expireOn: getSingleEstimate?.data?.expireOn || '',
-                                          customerCountry: getSingleEstimate?.data?.customerCountry || '',
-                                          customerState: getSingleEstimate?.data?.customerState || '',
+                                          title: getSingleInvoiceData?.data?.title || '',
+                                          summary: getSingleInvoiceData?.data?.summary || '',
+                                          ccMail: getSingleInvoiceData?.data?.ccMail || '',
+                                          number: getSingleInvoiceData?.data?.number || '',
+                                          posoNumber: getSingleInvoiceData?.data?.posoNumber || '',
+                                          date: getSingleInvoiceData?.data?.date || '',
+                                          expireOn: getSingleInvoiceData?.data?.expireOn || '',
+                                          customerCountry: getSingleInvoiceData?.data?.customerCountry || '',
+                                          customerState: getSingleInvoiceData?.data?.customerState || '',
                                           estimateProducts: productArray?.[0] || []
                                       }
                                     : {
@@ -261,7 +272,7 @@ const CreateEstimate = () => {
                                                                 className="form-control border mb-2"
                                                                 onChange={(e) => handleChangeCustomer(e)}
                                                             >
-                                                                <option value="">-- Select Customer --</option>
+                                                                <option value="">-- Select Customer --</option>;
                                                                 {getAllCustomers.map((val) => {
                                                                     return (
                                                                         <option key={val?._id} value={val?.name}>
@@ -286,7 +297,6 @@ const CreateEstimate = () => {
                                                                         Currency: {getSingleCustomerData?.currencyName} - ({currencySign})
                                                                     </span>
                                                                 </div>
-
                                                                 {updateId?._id ? (
                                                                     <div className="my-3">
                                                                         <span>Country: </span>
@@ -358,7 +368,7 @@ const CreateEstimate = () => {
                                                 <Col>
                                                     <div className="w-50 mr-0 ml-auto">
                                                         <div>
-                                                            <label>Estimate number</label>
+                                                            <label>Invoice number</label>
                                                             <Field className="form-control border rounded" name="number" type="number" />
                                                         </div>
                                                         <div>
@@ -370,11 +380,11 @@ const CreateEstimate = () => {
                                                             />
                                                         </div>
                                                         <div>
-                                                            <label>Estimate date</label>
+                                                            <label>Invoice date</label>
                                                             <Field className="form-control border rounded" name="date" type="date" />
                                                         </div>
                                                         <div>
-                                                            <label>Expires On</label>
+                                                            <label>Due date</label>
                                                             <Field className="form-control border rounded" name="expireOn" type="date" />
                                                         </div>
                                                     </div>
@@ -478,7 +488,9 @@ const CreateEstimate = () => {
                                                                     name="discount"
                                                                     type="number"
                                                                     defaultValue={
-                                                                        updateId?._id ? getSingleEstimate?.data?.discount : defaultDiscount
+                                                                        updateId?._id
+                                                                            ? getSingleInvoiceData?.data?.discount
+                                                                            : defaultDiscount
                                                                     }
                                                                     onChange={(e) => {
                                                                         setDefaultDiscount(e.target.value);
@@ -495,7 +507,9 @@ const CreateEstimate = () => {
                                                                     style={{ width: '50px' }}
                                                                     name="tax"
                                                                     type="number"
-                                                                    defaultValue={updateId?._id ? getSingleEstimate?.data?.tax : defaultTax}
+                                                                    defaultValue={
+                                                                        updateId?._id ? getSingleInvoiceData?.data?.tax : defaultTax
+                                                                    }
                                                                     onChange={(e) => setDefaultTax(e.target.value)}
                                                                 />
                                                                 <span>
@@ -516,7 +530,7 @@ const CreateEstimate = () => {
                                         <Card.Header as="h4">Footer</Card.Header>
                                         <Card.Body>
                                             <JoditEditor
-                                                value={updateId?._id ? getSingleEstimate?.data?.footerNote : ''}
+                                                value={getSingleInvoiceData?.data?.footerNote}
                                                 config={config}
                                                 onBlur={(content) => setContent(content)}
                                             />
@@ -535,4 +549,4 @@ const CreateEstimate = () => {
     );
 };
 
-export default CreateEstimate;
+export default CreateAndEditInvoice;

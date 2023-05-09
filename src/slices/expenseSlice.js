@@ -30,9 +30,9 @@ export const createExpense = createAsyncThunk('expense/createExpense', async ({ 
     }
 });
 
-export const getAllExpenses = createAsyncThunk('expense/getAllExpenses', async (_, { rejectWithValue }) => {
+export const getAllExpenses = createAsyncThunk('expense/getAllExpenses', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(BASE_URL_FOR_USER + USER_GETALL_EXPENSES, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GETALL_EXPENSES}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);

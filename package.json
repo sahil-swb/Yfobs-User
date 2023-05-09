@@ -91,6 +91,7 @@
         "react-select": "^5.2.2",
         "react-slick": "^0.28.1",
         "react-stickies": "0.0.16",
+        "react-switch": "^7.0.0",
         "react-tag-autocomplete": "^6.3.0",
         "react-text-mask": "^5.4.3",
         "react-to-print": "^2.14.12",

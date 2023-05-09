@@ -41,9 +41,9 @@ export const createCustomerApi = createAsyncThunk('user/createCustomer', async (
 });
 
 //APICALL FOR READING CUSTOMER USING THUNK
-export const getAllCustomersApi = createAsyncThunk('user/getAllCustomers', async (_, { rejectWithValue }) => {
+export const getAllCustomersApi = createAsyncThunk('user/getAllCustomers', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.get(BASE_URL_FOR_USER + USER_GET_ALL_CUSTOMERS, {
+        const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ALL_CUSTOMERS}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);

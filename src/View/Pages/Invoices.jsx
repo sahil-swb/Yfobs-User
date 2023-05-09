@@ -10,6 +10,7 @@ import RecurringInvoiceTab from '../../components/InvoiceTabs/RecurringInvoiceTa
 import AllInvoiceTab from '../../components/InvoiceTabs/AllInvoiceTab';
 import UnpaidTab from '../../components/InvoiceTabs/UnpaidTab';
 import { getAllInvoices } from '../../slices/invoiceSlice';
+import { userId } from '../../constants/userData';
 
 const Invoices = () => {
     const [rowData, setRowData] = useState();
@@ -99,7 +100,10 @@ const Invoices = () => {
     // };
 
     useEffect(() => {
-        dispatch(getAllInvoices());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllInvoices({ payload }));
     }, [deleteInvoiceData]);
 
     const location = {
@@ -110,7 +114,7 @@ const Invoices = () => {
     return (
         <>
             <Row style={{ marginTop: '6em' }}>
-                <Col xl={10}>
+                <Col xl={11}>
                     <div className="d-flex align-items-center justify-content-between">
                         <h3>Invoices</h3>
                         <Link to={location}>
@@ -121,7 +125,7 @@ const Invoices = () => {
                         </Link>
                     </div>
                 </Col>
-                <Col className="mt-4" xl={10}>
+                <Col className="mt-4" xl={11}>
                     <Tab.Container defaultActiveKey="allInvoice">
                         <Card>
                             <Card.Body>

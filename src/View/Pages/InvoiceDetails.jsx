@@ -1,9 +1,33 @@
-import React from 'react';
-import { Badge, Button, Card, Table } from 'react-bootstrap';
+import React, { useEffect, useRef } from 'react';
+import { Badge, Button, Card, Col, Dropdown, Row, Table } from 'react-bootstrap';
 import Template1 from '../../components/invoiceTemplates/Template1';
 import '../../assets/css/cardStyle.css';
+import { Link, useParams } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import { commonDeleteModal, commonModalIsOpen } from '../../slices/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import { getSingleInvoice } from '../../slices/invoiceSlice';
 
 const InvoiceDetails = () => {
+    const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
+    const { _id } = useParams();
+    const componentRef = useRef();
+    const dispatch = useDispatch();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current
+    });
+
+    useEffect(() => {
+        let payload = {
+            _id: _id
+        };
+        dispatch(getSingleInvoice({ payload }));
+    }, [_id]);
+    const location = {
+        pathname: `/invoices/edit_invoice/${_id}`,
+        state: 'EDIT_INVOICE'
+    };
     return (
         <>
             <div className="bg-white p-5 rounded">
@@ -13,7 +37,39 @@ const InvoiceDetails = () => {
                         <p>Created: 03 Apr 2023</p>
                     </div>
                     <div>
-                        <Button>Edit</Button>
+                        <div style={{ display: 'flex', justifyContent: 'end' }}>
+                            <Link to={location}>
+                                <Button variant="outline-primary">
+                                    {' '}
+                                    <i className="icon feather icon-edit"></i> Edit
+                                </Button>
+                            </Link>
+                            <Dropdown className="mx-4">
+                                <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                                    <i className="feather icon-settings"></i> Actions
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={handlePrint}>Print</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2">Convert to Invoice</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-3">Export as PDF</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => dispatch(commonModalIsOpen(true))}>Send</Dropdown.Item>
+                                    <Dropdown.Item as={Link} target="_blank" to="/estimates_preview">
+                                        Preview as a Customer
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => {
+                                            dispatch(commonDeleteModal(true));
+                                        }}
+                                    >
+                                        Delete
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Button as={Link} to="/invoices/create_invoices" variant="outline-primary">
+                                + New Invoice
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
@@ -84,8 +140,9 @@ const InvoiceDetails = () => {
                         </Card.Body>
                     </Card>
                 </div>
-                <Template1 type={'Invoice'} />
+                <Template1 ref={componentRef} type={'Invoice'} />
             </div>
+            <DeleteConfModal del_id={getSingleInvoiceData?._id} type={'INVOICES'} title={getSingleInvoiceData?.title} />
         </>
     );
 };

@@ -16,6 +16,7 @@ const Reports = React.lazy(() => import('./View/Pages/Reports'));
 const Subscription = React.lazy(() => import('./View/Pages/Subscription'));
 const ChangePassword = React.lazy(() => import('./components/settingsTabs/ChangePassword'));
 const GstCalulate = React.lazy(() => import('./View/Pages/GstCalculate'));
+const CreateAndEditInvoice = React.lazy(() => import('./View/Pages/CreateAndEditInvoice'));
 
 // const EstimatePreview = React.lazy(() => import('../src/View/Pages/EstimatePreview'));
 
@@ -26,10 +27,11 @@ const routes = [
     { path: '/products', exact: true, name: 'Products', component: Products },
     { path: '/estimates', exact: true, name: 'Estimates', component: Estimates },
     { path: '/estimates/create_estimates', exact: true, name: 'CreateEstimate', component: CreateEstimate },
-    { path: '/invoices/create_invoices', exact: true, name: 'CreateInvoice', component: CreateEstimate },
+    { path: '/invoices/create_invoices', exact: true, name: 'CreateInvoice', component: CreateAndEditInvoice },
     { path: '/estimates/estimates_details/:_id', exact: true, name: 'EstimateDetails', component: EstimateDetails },
     { path: '/estimates/edit_estimates/:_id', exact: true, name: 'EditEstimate', component: CreateEstimate },
     { path: '/invoices', exact: true, name: 'Invoices', component: Invoices },
+    { path: '/invoices/edit_invoice/:_id', exact: true, name: 'EditInvoice', component: CreateAndEditInvoice },
     { path: '/invoices/invoice_details/:_id', exact: true, name: 'InvoiceDetails', component: InvoiceDetails },
     { path: '/expense', exact: true, name: 'Expense', component: Expense },
     { path: '/vendors', exact: true, name: 'Vendors', component: Vendors },

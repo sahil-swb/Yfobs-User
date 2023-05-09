@@ -6,6 +6,7 @@ import { Button, Card } from 'react-bootstrap';
 import CommonDataTable from '../../components/CommonDataTable';
 import VendorModal from '../../components/modals/VendorModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import { userId } from '../../constants/userData';
 
 const Vendors = () => {
     const columns = [
@@ -70,7 +71,10 @@ const Vendors = () => {
         dispatch(setRowData(row));
     };
     useEffect(() => {
-        dispatch(getAllVendors());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllVendors({ payload }));
     }, [createVendorData, updateVendorData, deleteVendorData]);
 
     console.log('ID', ID);

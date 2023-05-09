@@ -9,7 +9,7 @@ const Dashboard = () => {
     return (
         <>
             <Row>
-                <Col xl={10}>
+                <Col xl={11}>
                     <Tab.Container defaultActiveKey="business">
                         <Card>
                             <Card.Body>

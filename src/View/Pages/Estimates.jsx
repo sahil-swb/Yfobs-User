@@ -7,6 +7,7 @@ import { deleteEstimateApi, getAllEstimatesApi } from '../../slices/estimatesSli
 import { commonDeleteModal, commonModalIsOpen, commonModalType, setRowData } from '../../slices/modalSlice';
 import EstimateSendModal from '../../components/modals/EstimateSendModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import { userId } from '../../constants/userData';
 
 const Estimates = () => {
     const history = useHistory();
@@ -67,18 +68,24 @@ const Estimates = () => {
         dispatch(setRowData(row));
     };
 
-    console.log(rowData);
-
     useEffect(() => {
-        dispatch(getAllEstimatesApi());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllEstimatesApi({ payload }));
     }, [createEstimate, deleteEstimate, updateEstimate]);
+
+    const location = {
+        pathname: `/estimates/create_estimates`,
+        state: 'CREATE_ESTIMATE'
+    };
 
     return (
         <>
             <Card>
                 <Card.Header className="d-flex justify-content-between align-items-center">
                     <Card.Title className="m-0 font-weight-bold">All Estimates</Card.Title>
-                    <Link to="/estimates/create_estimates">
+                    <Link to={location}>
                         <Button size="sm" className="d-flex align-items-center p-2">
                             <i className="feather icon-plus f-20" />
                             <div>New Estimate</div>

@@ -4,6 +4,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { sendEstimateMessage } from '../../slices/estimatesSlice';
+import { businessId, userId } from '../../constants/userData';
 
 const EstimateSendModal = () => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
@@ -12,6 +13,8 @@ const EstimateSendModal = () => {
     const handleSendMessage = (values) => {
         console.log(values);
         const payload = {
+            userId: userId,
+            businessId: businessId,
             email: values?.email,
             message: values?.message
         };

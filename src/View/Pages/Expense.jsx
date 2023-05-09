@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllExpenses } from '../../slices/expenseSlice';
 import ExpenseModal from '../../components/modals/ExpenseModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import { userId } from '../../constants/userData';
 
 const Expense = () => {
     const columns = [
@@ -82,7 +83,10 @@ const Expense = () => {
         dispatch(setRowData(row));
     };
     useEffect(() => {
-        dispatch(getAllExpenses());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllExpenses({ payload }));
     }, [createExpenseData, updateExpenseData, deleteExpenseData]);
     return (
         <>

@@ -6,6 +6,7 @@ import CategoriesModal from '../../components/modals/CategoriesModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import { getAllCategoriesApi } from '../../slices/categoriesSlice';
 import { commonDeleteModal, commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
+import { userId } from '../../constants/userData';
 
 const Categories = () => {
     const columns = [
@@ -58,7 +59,10 @@ const Categories = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllCategoriesApi());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllCategoriesApi({ payload }));
     }, [updateData, deleteData, createData]);
 
     const handleDelete = (row) => {

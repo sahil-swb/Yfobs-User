@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { getAllProductsApi, getSingleProductApi } from '../../slices/productsSlice';
 import { getCustomerById } from '../../slices/customersSlice';
+import { userId } from '../../constants/userData';
 
 const ProductsEstimateModal = ({ addHelper }) => {
-    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
-    const { getAllProducts, getSingleProduct, getEstimateProducts } = useSelector((state) => state.productsReducer);
+    const { modalIsOpen } = useSelector((state) => state.modalReducer);
+    const { getAllProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
     const [searchValue, setSearchValue] = useState('');
+
     const dispatch = useDispatch();
 
     const handleSubmit = (_id) => {
@@ -18,11 +20,18 @@ const ProductsEstimateModal = ({ addHelper }) => {
         dispatch(getSingleProductApi({ payload }));
     };
 
+    let productPrice = [];
+    let productName = [];
+    getSingleProduct?.product?.map((val) => {
+        productName.push(val?.name);
+        productPrice.push(val?.price);
+    });
+
     useEffect(() => {
         if (getSingleProduct?._id) {
             addHelper?.push({
-                name: getSingleProduct?.product?.map((val) => val?.name),
-                price: parseInt(getSingleProduct?.product?.map((val) => val?.price)),
+                name: productName[0],
+                price: productPrice[0],
                 quantity: 1
             });
         }
@@ -30,7 +39,8 @@ const ProductsEstimateModal = ({ addHelper }) => {
 
     useEffect(() => {
         let payload = {
-            keyword: searchValue
+            _id: userId,
+            payload: { keyword: searchValue }
         };
         dispatch(getAllProductsApi({ payload }));
     }, [searchValue]);
