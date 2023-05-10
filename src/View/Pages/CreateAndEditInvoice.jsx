@@ -77,7 +77,7 @@ const CreateAndEditInvoice = () => {
             subTotal: defaultTotal,
             discount: defaultDiscount,
             tax: defaultTax,
-            grandTotal: grandTotal,
+            grandTotal: Math.round(grandTotal),
             convertTotal: values?.convertTotal,
             footerNote: content,
             productStatus: 'productEstimate'

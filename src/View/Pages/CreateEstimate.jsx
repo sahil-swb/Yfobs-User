@@ -78,7 +78,7 @@ const CreateEstimate = () => {
             discount: defaultDiscount,
             tax: defaultTax,
             subTotal: defaultTotal,
-            grandTotal: grandTotal,
+            grandTotal: Math.round(grandTotal),
             footerNote: content,
             productStatus: 'productEstimate'
         };

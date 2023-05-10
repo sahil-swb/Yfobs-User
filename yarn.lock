@@ -16011,6 +16011,11 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
+to-words@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.npmjs.org/to-words/-/to-words-3.5.1.tgz"
+  integrity sha512-Jzm0Y/HDVDUTpQ+ho9vhdpHrLeLXnRIoBJbFYly6qhyW5/LNX3dp4wuWW024c+n1nKEw7cQWvSHYeKtte7OQfg==
+
 toidentifier@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.1.tgz"

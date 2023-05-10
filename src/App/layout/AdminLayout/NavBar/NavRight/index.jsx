@@ -30,7 +30,6 @@ const NavRight = (props) => {
     };
 
     useEffect(() => {
-        console.log(currentLogout);
         if (currentLogout) {
             history.push('/');
         }

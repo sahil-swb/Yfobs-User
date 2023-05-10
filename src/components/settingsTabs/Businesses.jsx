@@ -3,7 +3,7 @@ import { Button, Card, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen, commonModalType } from '../../slices/modalSlice';
 import NewBusinessModal from '../modals/NewBusinessModal';
-import { deleteBusiness, getAllBusinessesApi, updateBusiness } from '../../slices/settingsSlice';
+import { deleteBusiness, getAllBusinessesApi, updateBusiness, updateBusinessStatus } from '../../slices/settingsSlice';
 import { userId } from '../../constants/userData';
 import Switch from 'react-switch';
 
@@ -14,7 +14,6 @@ const Businesses = () => {
     const [activeBusiness, setActiveBusiness] = useState(false);
 
     const dispatch = useDispatch();
-
     getAllBusinessesData.filter((val) => val?.isActive === 1 && localStorage.setItem('singleBusinessId', val?._id));
 
     useEffect(() => {
@@ -110,17 +109,28 @@ const Businesses = () => {
                                                         Delete
                                                     </Button>
                                                 </div>
-                                                <div aria-disabled="true">
+                                                <div
+                                                    aria-disabled="true"
+                                                    className="d-flex justify-content-between align-items-center w-50"
+                                                >
+                                                    <div>
+                                                        {detail?.isActive === 1 ? (
+                                                            <i className="fa fa-check f-22 text-c-info" aria-hidden="true" />
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                    </div>
                                                     <Button
                                                         disabled={detail?.isActive === 1 ? false : false}
                                                         size="sm"
                                                         variant={detail?.isActive === 1 ? 'outline-success' : 'outline-primary'}
-                                                        onClick={() => {
+                                                        onClick={(e) => {
+                                                            setActiveBusiness(!activeBusiness);
                                                             let payload = {
                                                                 _id: detail?._id,
-                                                                isActive: !activeBusiness ? 1 : 0
+                                                                isActive: activeBusiness ? 1 : 0
                                                             };
-                                                            setActiveBusiness(!activeBusiness);
+                                                            dispatch(updateBusinessStatus({ payload }));
                                                             dispatch(updateBusiness({ payload }));
                                                         }}
                                                     >

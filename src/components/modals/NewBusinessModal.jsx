@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Modal, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
@@ -9,7 +9,7 @@ import { Button } from 'react-bootstrap';
 import { createBusinessesApi, updateBusiness, uploadLogoApi, uploadUpiQRCodeApi } from '../../slices/settingsSlice';
 import '../../assets/css/businessModalStyle.css';
 import uploadIcon from '../../assets/images/upload-icon.png';
-import { businessId, userId } from '../../constants/userData';
+import { userId } from '../../constants/userData';
 
 const NewBusinessModal = ({ rowData }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
@@ -59,7 +59,6 @@ const NewBusinessModal = ({ rowData }) => {
     const handleSubmit = (values) => {
         let payload = {
             userId: userId,
-            businessId: businessId,
             businessName: values?.businessName,
             businessTitle: values?.businessTitle,
             businessNumber: values?.businessNumber,
@@ -93,15 +92,6 @@ const NewBusinessModal = ({ rowData }) => {
         }
         dispatch(commonModalIsOpen(false));
     };
-
-    // useEffect(() => {
-    //     if (modalType === 'EDIT_BUSSINESS') {
-    //         let payload = {
-    //             _id: data
-    //         };
-    //         dispatch(getSingleBusiness({ payload }));
-    //     }
-    // }, [data]);
 
     return (
         <>

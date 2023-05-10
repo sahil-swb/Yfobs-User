@@ -44,6 +44,7 @@ export const USER_GETALL_STATES = 'state/getAllState';
 export const USER_CREATE_BUSINESS = 'business/addBusiness';
 export const USER_GET_ALL_BUSINESS = 'business/getAllBusiness';
 export const USER_UPDATE_BUSINESS = 'business/updateBusiness/';
+export const USER_UPDATE_BUSINESS_STATUS = 'business/updateBusinesstatus/';
 export const USER_UPLOAD_UPIQRCODE = 'business/upiQRCodeImage/';
 export const USER_UPLOAD_LOGO = 'business/uploadLogo/';
 export const USER_GET_SINGLE_BUSINESS = 'business/getSingleBusiness/';

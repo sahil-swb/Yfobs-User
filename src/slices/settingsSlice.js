@@ -7,6 +7,7 @@ import {
     USER_GET_ALL_BUSINESS,
     USER_GET_SINGLE_BUSINESS,
     USER_UPDATE_BUSINESS,
+    USER_UPDATE_BUSINESS_STATUS,
     USER_UPLOAD_LOGO,
     USER_UPLOAD_UPIQRCODE
 } from '../constants/urlConfig';
@@ -21,7 +22,8 @@ const initialState = {
     upiQRData: {},
     getSingleBusinessData: {},
     ID: '',
-    deleteBusinessData: {}
+    deleteBusinessData: {},
+    updateBusinessStatusData: {}
 };
 
 export const createBusinessesApi = createAsyncThunk('createBusinessApi', async ({ payload }, { rejectWithValue }) => {
@@ -100,6 +102,19 @@ export const getSingleBusiness = createAsyncThunk('getSingleBusiness', async ({ 
 export const updateBusiness = createAsyncThunk('updateBusiness', async ({ payload }, { rejectWithValue }) => {
     try {
         const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_BUSINESS}${payload?._id}`, payload, {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        });
+        console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        return rejectWithValue(error?.response?.data);
+    }
+});
+
+export const updateBusinessStatus = createAsyncThunk('updateBusinessStatus', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_BUSINESS_STATUS}${payload?._id}`, payload, {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
@@ -196,6 +211,16 @@ const settingsSlice = createSlice({
                 state.deleteBusinessData = action.payload;
             })
             .addCase(deleteBusiness.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(updateBusinessStatus.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(updateBusinessStatus.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.updateBusinessStatusData = action.payload;
+            })
+            .addCase(updateBusinessStatus.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
@@ -11,17 +11,33 @@ import { getEstimateById } from '../../slices/estimatesSlice';
 import { commonDeleteModal, commonModalIsOpen, setRowData } from '../../slices/modalSlice';
 import EstimateSendModal from '../../components/modals/EstimateSendModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
+import { ToWords } from 'to-words';
 
 const EstimateDetails = () => {
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
-
+    const [estimateCustomerData, setEstimateCustomerData] = useState({});
+    const [estimateBusinessData, setEstimateBusinessData] = useState({});
     const { _id } = useParams();
     const dispatch = useDispatch();
     const componentRef = useRef();
 
+    const toWords = new ToWords();
+    let estimateGrandTotal = Number(getSingleEstimate?.data?.grandTotal) || 0;
+    let words = toWords.convert(estimateGrandTotal, { currency: true });
+
+    let discountAmount =
+        Number(getSingleEstimate?.data?.subTotal) -
+        (Number(getSingleEstimate?.data?.subTotal) * Number(getSingleEstimate?.data?.discount)) / 100;
+    let taxValue = (discountAmount * Number(getSingleEstimate?.data?.tax)) / 100;
+
     const handlePrint = useReactToPrint({
         content: () => componentRef.current
     });
+
+    const location = {
+        pathname: `/estimates/create_estimates`,
+        state: 'CREATE_ESTIMATE'
+    };
 
     useEffect(() => {
         let payload = {
@@ -30,10 +46,11 @@ const EstimateDetails = () => {
         dispatch(getEstimateById({ payload }));
     }, [_id]);
 
-    const location = {
-        pathname: `/estimates/create_estimates`,
-        state: 'CREATE_ESTIMATE'
-    };
+    useEffect(() => {
+        getSingleEstimate?.customer?.map((data) => setEstimateCustomerData(data));
+        getSingleEstimate?.business?.map((data) => setEstimateBusinessData(data));
+    }, [getSingleEstimate?.business, getSingleEstimate?.customer]);
+
     return (
         <>
             <div>
@@ -76,10 +93,53 @@ const EstimateDetails = () => {
                 </Row>
                 <Row>
                     <Col md={{ span: 10, offset: 1 }}>
-                        <Template1 ref={componentRef} type={'Estimate'} />
-                        {/* <Template2 ref={componentRef} /> */}
-                        {/* <Template3 ref={componentRef} /> */}
-                        {/* <Template4 ref={componentRef} /> */}
+                        {estimateBusinessData?.templateStyle === 'Template1' ? (
+                            <Template1
+                                ref={componentRef}
+                                type={'Estimate'}
+                                getSingleEstimate={getSingleEstimate}
+                                estimateCustomerData={estimateCustomerData}
+                                estimateBusinessData={estimateBusinessData}
+                                discountAmount={discountAmount}
+                                taxValue={taxValue}
+                                words={words}
+                            />
+                        ) : estimateBusinessData?.templateStyle === 'Template2' ? (
+                            <Template2
+                                ref={componentRef}
+                                type={'Estimate'}
+                                getSingleEstimate={getSingleEstimate}
+                                estimateCustomerData={estimateCustomerData}
+                                estimateBusinessData={estimateBusinessData}
+                                discountAmount={discountAmount}
+                                taxValue={taxValue}
+                                words={words}
+                            />
+                        ) : estimateBusinessData?.templateStyle === 'Template3' ? (
+                            <Template3
+                                ref={componentRef}
+                                type={'Estimate'}
+                                getSingleEstimate={getSingleEstimate}
+                                estimateCustomerData={estimateCustomerData}
+                                estimateBusinessData={estimateBusinessData}
+                                discountAmount={discountAmount}
+                                taxValue={taxValue}
+                                words={words}
+                            />
+                        ) : estimateBusinessData?.templateStyle === 'Template4' ? (
+                            <Template4
+                                ref={componentRef}
+                                type={'Estimate'}
+                                getSingleEstimate={getSingleEstimate}
+                                estimateCustomerData={estimateCustomerData}
+                                estimateBusinessData={estimateBusinessData}
+                                discountAmount={discountAmount}
+                                taxValue={taxValue}
+                                words={words}
+                            />
+                        ) : (
+                            ''
+                        )}
                     </Col>
                 </Row>
             </div>

@@ -14,10 +14,11 @@ import template2 from '../../assets/images/invoiceTemplateImages/template-2.png'
 import template3 from '../../assets/images/invoiceTemplateImages/template-3.png';
 import template4 from '../../assets/images/invoiceTemplateImages/template-4.png';
 import { getSingleBusiness, updateBusiness } from '../../slices/settingsSlice';
+import { businessId } from '../../constants/userData';
 
 const InvoiceCustomization = () => {
     const { getSingleBusinessData } = useSelector((state) => state.settingsReducer);
-    const [color, setColor] = useState('#fff');
+    const [color, setColor] = useState('');
     const [content, setContent] = useState('');
     const dispatch = useDispatch();
     const config = {
@@ -26,6 +27,7 @@ const InvoiceCustomization = () => {
     const handleSubmit = (values) => {
         let payload = {
             _id: getSingleBusinessData?._id,
+            userId: getSingleBusinessData?.userId,
             templateStyle: values.templateStyle,
             color: values.color,
             footerNote: content
@@ -35,10 +37,14 @@ const InvoiceCustomization = () => {
 
     useEffect(() => {
         let payload = {
-            _id: '644650a8be0b7b4db078d85e'
+            _id: businessId
         };
         dispatch(getSingleBusiness({ payload }));
     }, []);
+
+    useEffect(() => {
+        setColor(getSingleBusinessData?.color);
+    }, [getSingleBusinessData?.color]);
 
     return (
         <>
@@ -47,7 +53,7 @@ const InvoiceCustomization = () => {
                     enableReinitialize
                     initialValues={{
                         templateStyle: getSingleBusinessData?.templateStyle || '',
-                        color: color
+                        color: color || ''
                     }}
                     onSubmit={(values) => handleSubmit(values)}
                 >
@@ -143,7 +149,7 @@ const InvoiceCustomization = () => {
                                 <label>Change Invoice Template Color</label>
                                 <div className="d-flex align-items-center justify-between">
                                     <div className="w-50 mr-2">
-                                        <Field className="form-control border" type="text" name="color" value={color} />
+                                        <Field className="form-control border" type="text" name="color" />
                                     </div>
                                     <div>
                                         {/* {console.log(color)} */}
@@ -154,7 +160,7 @@ const InvoiceCustomization = () => {
                             <div className="mt-3">
                                 <label>Set default footer note for invoice</label>
                                 <JoditEditor
-                                    value={getSingleBusinessData?.footerNote}
+                                    value={getSingleBusinessData?.footerNote ? getSingleBusinessData?.footerNote : ''}
                                     config={config}
                                     onBlur={(content) => setContent(content)}
                                 />

@@ -28,7 +28,9 @@ const Template4 = React.forwardRef((props, ref) => {
                                 <th>
                                     <div style={{ display: 'grid' }}>
                                         <div>
-                                            <h1 style={{ padding: '0.5rem 0 0 0.5rem' }}>SilverWebbuzz</h1>
+                                            <h2 style={{ padding: '0.5rem 0 0 0.5rem', textTransform: 'uppercase' }}>
+                                                {props.getSingleEstimate?.data?.title}
+                                            </h2>
                                         </div>
                                         <div style={{ color: '#fff' }}>
                                             <div
@@ -40,12 +42,14 @@ const Template4 = React.forwardRef((props, ref) => {
                                             >
                                                 <div
                                                     style={{
-                                                        background: '#af1a7e',
+                                                        background: props.estimateBusinessData?.color
+                                                            ? props.estimateBusinessData?.color
+                                                            : '#e7d8e8',
                                                         padding: '0.5rem 0 0.5rem 0.5rem',
                                                         width: '100%'
                                                     }}
                                                 >
-                                                    All Types of Mobiles
+                                                    {props.getSingleEstimate?.data?.summary}
                                                 </div>
                                                 <div>
                                                     <img
@@ -54,14 +58,20 @@ const Template4 = React.forwardRef((props, ref) => {
                                                         alt="official-yfobs-logo"
                                                     />
                                                 </div>
-                                                <div style={{ background: '#af1a7e', padding: '0.5rem 0.8rem' }}>&nbsp;</div>
+                                                <div
+                                                    style={{
+                                                        background: props.estimateBusinessData?.color
+                                                            ? props.estimateBusinessData?.color
+                                                            : '#e7d8e8',
+                                                        padding: '0.5rem 0.8rem'
+                                                    }}
+                                                >
+                                                    &nbsp;
+                                                </div>
                                             </div>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ padding: '0 0 0.5rem 0.5rem' }}>
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere a accusamus sit totam quia
-                                                itaque?
-                                            </p>
+                                            <p style={{ padding: '0 0 0.5rem 0.5rem' }}>{props.estimateBusinessData?.address}</p>
                                         </div>
                                     </div>
                                 </th>
@@ -77,10 +87,10 @@ const Template4 = React.forwardRef((props, ref) => {
                                         }}
                                     >
                                         <div style={{ fontSize: 16 }}>
-                                            <b>GSTIN:</b>
+                                            <b>GSTIN: {props.estimateBusinessData?.vatCode}</b>
                                         </div>
                                         <div style={{ fontSize: 16 }}>
-                                            <b>In eius qui sunt qu</b>
+                                            <b>Tax Invoice</b>
                                         </div>
                                         <div style={{ fontSize: 12 }}>ORIGINAL FOR RESIPIENT</div>
                                     </div>
@@ -105,7 +115,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>M/S: </b>
-                                                                    <span>Lesley Greene</span>
+                                                                    <span>{props.getSingleEstimate?.data?.summary}</span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -114,7 +124,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>Address: </b>
-                                                                    <span>Blanditiis dolore qu, ahme, Andorra</span>
+                                                                    <span>{props.estimateCustomerData?.address}</span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -123,7 +133,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>PHONE: </b>
-                                                                    <span>8797987898</span>
+                                                                    <span>{props.estimateCustomerData?.phone}</span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -132,7 +142,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>GSTIN: </b>
-                                                                    <span>Est mollitia n</span>
+                                                                    <span>{props.estimateCustomerData?.vatCode}</span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -141,7 +151,10 @@ const Template4 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>Place of Supply : </b>
-                                                                    <span>ahmedabad</span>
+                                                                    <span>
+                                                                        {props.getSingleEstimate?.data?.customerState},{' '}
+                                                                        {props.getSingleEstimate?.data?.customerCountry}
+                                                                    </span>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -159,7 +172,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                         }}
                                                     >
                                                         <b>Invoice date :</b>
-                                                        <span>04 Apr 2023</span>
+                                                        <span>{props.getSingleEstimate?.data?.date}</span>
                                                     </li>
                                                     <li
                                                         style={{
@@ -167,7 +180,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                             gridTemplateColumns: '1fr 1fr'
                                                         }}
                                                     >
-                                                        <b>Invoice number :</b>
+                                                        <b>Invoice no :</b>
                                                         <span>752</span>
                                                     </li>
                                                     <li
@@ -185,8 +198,8 @@ const Template4 = React.forwardRef((props, ref) => {
                                                             gridTemplateColumns: '1fr 1fr'
                                                         }}
                                                     >
-                                                        <b>P.O./S.O. number :</b>
-                                                        <span>856</span>
+                                                        <b>P.O./S.O. no :</b>
+                                                        <span>{props.getSingleEstimate?.data?.posoNumber}</span>
                                                     </li>
                                                     <li
                                                         style={{
@@ -195,7 +208,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                         }}
                                                     >
                                                         <b>Due date :</b>
-                                                        <span>02 Jun 2023</span>
+                                                        <span>{props.getSingleEstimate?.data?.expireOn}</span>
                                                     </li>
                                                     <li
                                                         style={{
@@ -227,14 +240,22 @@ const Template4 = React.forwardRef((props, ref) => {
                                                 <th>Rate</th>
                                                 <th>Taxable Value</th>
                                             </tr>
-                                            <tr style={{ height: '2rem', textAlign: 'center' }}>
-                                                <td>1</td>
-                                                <td>Earphones</td>
-                                                <td>8798797</td>
-                                                <td>1</td>
-                                                <td>€ 1000.00</td>
-                                                <td style={{ textAlign: 'right', padding: '0 0.5rem' }}>€ 1000.00</td>
-                                            </tr>
+                                            {props.getSingleEstimate?.products?.map((val) =>
+                                                val.product?.map((product, index) => {
+                                                    return (
+                                                        <tr key={index} style={{ height: '2rem', textAlign: 'center' }}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{product?.name}</td>
+                                                            <td>8798797</td>
+                                                            <td>{product?.quantity}</td>
+                                                            <td>€ {product?.price}</td>
+                                                            <td style={{ textAlign: 'right', padding: '0 0.5rem' }}>
+                                                                ₹ {product?.price * product?.quantity}.00
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })
+                                            )}
                                             <tr style={{ textAlign: 'right', height: '2rem' }}>
                                                 <td style={{ borderBottomColor: 'white' }} />
                                                 <td style={{ padding: '0 0.5rem', borderBottomColor: 'white' }}>Sub Total</td>
@@ -242,34 +263,45 @@ const Template4 = React.forwardRef((props, ref) => {
                                                 <td style={{ borderBottomColor: 'white' }} />
                                                 <td style={{ borderBottomColor: 'white' }} />
                                                 <td style={{ padding: '0 0.5rem', borderBottomColor: 'white', background: '#f1f1f1' }}>
-                                                    € 1000.00
+                                                    ₹ {props.getSingleEstimate?.data?.subTotal}.00
                                                 </td>
                                             </tr>
                                             <tr style={{ textAlign: 'right', height: '2rem' }}>
                                                 <td style={{ borderBottomColor: 'white' }} />
-                                                <td style={{ padding: '0 0.5rem', borderBottomColor: 'white' }}>Discount [10%]</td>
+                                                <td style={{ padding: '0 0.5rem', borderBottomColor: 'white' }}>
+                                                    Discount [{props.getSingleEstimate?.data?.discount}%]
+                                                </td>
                                                 <td style={{ borderBottomColor: 'white' }} />
                                                 <td style={{ borderBottomColor: 'white' }} />
                                                 <td style={{ borderBottomColor: 'white' }} />
                                                 <td style={{ padding: '0 0.5rem', borderBottomColor: 'white', background: '#f1f1f1' }}>
-                                                    € 100.00
+                                                    {props.discountAmount}
                                                 </td>
                                             </tr>
                                             <tr style={{ textAlign: 'right', height: '2rem' }}>
                                                 <td />
-                                                <td style={{ padding: '0 0.5rem' }}>IGST5 [5%]</td>
+                                                <td style={{ padding: '0 0.5rem' }}>IGST5 [{props.getSingleEstimate?.data?.tax}%]</td>
                                                 <td />
                                                 <td />
                                                 <td />
-                                                <td style={{ padding: '0 0.5rem', background: '#f1f1f1' }}>€ 45.00</td>
+                                                <td style={{ padding: '0 0.5rem', background: '#f1f1f1' }}>{props.taxValue}</td>
                                             </tr>
                                             <tr style={{ height: '2rem', textAlign: 'center', background: '#f1f1f1' }}>
                                                 <td colSpan={3} style={{ textAlign: 'right', paddingRight: '1rem' }}>
                                                     Total
                                                 </td>
-                                                <td>1</td>
+                                                <td>
+                                                    {props.getSingleEstimate?.products?.map((val) =>
+                                                        val.product?.reduce((acc, val) => {
+                                                            return acc + val?.quantity;
+                                                        }, 0)
+                                                    )}
+                                                </td>
                                                 <td />
-                                                <td style={{ textAlign: 'right', padding: '0 0.5rem' }}>€ 1000.00</td>
+                                                <td style={{ textAlign: 'right', padding: '0 0.5rem' }}>
+                                                    {' '}
+                                                    {Math.round(props.getSingleEstimate?.data?.grandTotal)}.00
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -315,7 +347,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                                 <td>&nbsp;</td>
                                             </tr>
                                             <tr>
-                                                <td>€ 900.00</td>
+                                                <td>{props.getSingleEstimate?.data?.subTotal}</td>
                                                 <td>
                                                     <div
                                                         style={{
@@ -323,8 +355,10 @@ const Template4 = React.forwardRef((props, ref) => {
                                                             gridTemplateColumns: '0.5fr 2fr'
                                                         }}
                                                     >
-                                                        <div style={{ borderRight: '1px solid black' }}>10</div>
-                                                        <div>€100.00</div>
+                                                        <div style={{ borderRight: '1px solid black' }}>
+                                                            {props.getSingleEstimate?.data?.discount}
+                                                        </div>
+                                                        <div>{props.discountAmount}</div>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -334,11 +368,13 @@ const Template4 = React.forwardRef((props, ref) => {
                                                             gridTemplateColumns: '0.5fr 2fr'
                                                         }}
                                                     >
-                                                        <div style={{ borderRight: '1px solid black' }}>5</div>
-                                                        <div>€ 45.00</div>
+                                                        <div style={{ borderRight: '1px solid black' }}>
+                                                            {props.getSingleEstimate?.data?.tax}
+                                                        </div>
+                                                        <div>{props.taxValue}</div>
                                                     </div>
                                                 </td>
-                                                <td>€ 945.00</td>
+                                                <td>₹ {Math.round(props.getSingleEstimate?.data?.grandTotal)}.00</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -372,7 +408,21 @@ const Template4 = React.forwardRef((props, ref) => {
                                                     padding: '0.5rem 0'
                                                 }}
                                             >
-                                                <p>Bank Details Not Found !</p>
+                                                {props.estimateBusinessData?.bankName ||
+                                                props.estimateBusinessData?.branchName ||
+                                                props.estimateBusinessData?.accountNumber ||
+                                                props.estimateBusinessData?.bankIfscCode ? (
+                                                    <div>
+                                                        <p>
+                                                            Bank Name: {props.estimateBusinessData?.bankName},{' '}
+                                                            {props.estimateBusinessData?.branchName}
+                                                        </p>
+                                                        <p>A/C No: {props.estimateBusinessData?.accountNumber}</p>
+                                                        <p>IFSC Code: {props.estimateBusinessData?.bankIfscCode}</p>
+                                                    </div>
+                                                ) : (
+                                                    'Bank Details Not Found !'
+                                                )}
                                             </div>
                                             <div
                                                 style={{
@@ -399,7 +449,7 @@ const Template4 = React.forwardRef((props, ref) => {
                                             >
                                                 <div>Certified that the particulars given above are true and correct</div>
                                                 <div>
-                                                    <b>FOR SilverWebbuzz</b>
+                                                    <b>FOR {props.getSingleEstimate?.data?.title}</b>
                                                 </div>
                                             </div>
                                             <div style={{ borderBottom: '1px solid black' }}>&nbsp;</div>
