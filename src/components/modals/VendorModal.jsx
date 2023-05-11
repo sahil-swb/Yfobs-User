@@ -9,9 +9,8 @@ import '../reactPhoneComponent.css';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 
-const VendorModal = () => {
-    const { getSingleVendorData, updateVendorData } = useSelector((state) => state.vendorReducer);
-    const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
+const VendorModal = ({ rowData }) => {
+    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const [vendorPhoneNumber, setVendorPhoneNumber] = useState('');
     // const { getSingleBusinessData } = useSelector((state) => state.settingsReducer);
     const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const VendorModal = () => {
         };
 
         if (modalType === 'EDIT_VENDOR') {
-            payload._id = getSingleVendorData?._id;
+            payload._id = rowData?._id;
             dispatch(updateVendor({ payload }));
         } else {
             dispatch(createVendor({ payload }));
@@ -38,20 +37,11 @@ const VendorModal = () => {
 
     useEffect(() => {
         if (modalType === 'EDIT_VENDOR') {
-            setVendorPhoneNumber(getSingleVendorData?.phone);
+            setVendorPhoneNumber(rowData?.phone);
         } else {
             setVendorPhoneNumber('');
         }
-    }, [getSingleVendorData, modalType]);
-
-    useEffect(() => {
-        if (modalType === 'EDIT_VENDOR') {
-            let payload = {
-                _id: ID
-            };
-            dispatch(getSingleVendor({ payload }));
-        }
-    }, [modalIsOpen, updateVendorData, ID]);
+    }, [rowData, modalType]);
 
     return (
         <>
@@ -71,9 +61,9 @@ const VendorModal = () => {
                         initialValues={
                             modalType === 'EDIT_VENDOR'
                                 ? {
-                                      vendorName: getSingleVendorData?.vendorName ? getSingleVendorData?.vendorName : '',
-                                      email: getSingleVendorData?.email ? getSingleVendorData?.email : '',
-                                      address: getSingleVendorData?.address ? getSingleVendorData?.address : ''
+                                      vendorName: rowData?.vendorName || '',
+                                      email: rowData?.email || '',
+                                      address: rowData?.address || ''
                                   }
                                 : {
                                       vendorName: '',

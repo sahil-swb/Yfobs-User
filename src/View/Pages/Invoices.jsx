@@ -113,7 +113,7 @@ const Invoices = () => {
 
     return (
         <>
-            <Row style={{ marginTop: '6em' }}>
+            <Row>
                 <Col xl={11}>
                     <div className="d-flex align-items-center justify-content-between">
                         <h3>Invoices</h3>

@@ -12,10 +12,8 @@ import CustomersModal from '../../components/modals/CustomersModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import { getAllCustomersApi } from '../../slices/customersSlice';
 import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
-import singleBusinessId from '../../components/ActiveBusiness';
-import ActiveBusinessId from '../../components/ActiveBusiness';
-import { getAllBusinessesApi } from '../../slices/settingsSlice';
 import { userId } from '../../constants/userData';
+import { Link } from 'react-router-dom';
 
 const Customers = () => {
     //COLUMNS FOR CUSTOMER TABLE
@@ -66,21 +64,21 @@ const Customers = () => {
 
     //STATES
     const { getAllCustomers, createCustomer, deleteCustomer, updateCustomer } = useSelector((state) => state.customers);
-    const { rowData, ID } = useSelector((state) => state.modalReducer);
+    const [rowData, setRowData] = useState({});
 
     const dispatch = useDispatch();
 
     //FUNCTION FOR DELETE CUSTOMER
     const handleDelete = (row) => {
-        dispatch(setRowData(row));
         dispatch(commonDeleteModal(true));
+        setRowData(row);
     };
 
     // FUNCTION FOR EDIT CUSTOMER
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
         dispatch(commonModalType('EDIT'));
-        dispatch(setID(row?._id));
+        setRowData(row);
     };
 
     //APICALL ON PAGE LOAD
@@ -96,23 +94,28 @@ const Customers = () => {
             <Card>
                 <Card.Header className="d-flex justify-content-between align-items-center">
                     <Card.Title className="m-0 font-weight-bold">All Customers</Card.Title>
-                    <Button
-                        onClick={() => {
-                            dispatch(commonModalIsOpen(true));
-                            dispatch(commonModalType('ADD'));
-                        }}
-                        size="sm"
-                        className="d-flex align-items-center p-2"
-                    >
-                        <i className="feather icon-plus f-20" />
-                        New Customer
-                    </Button>
+                    <div className="d-flex justify-content-between">
+                        <Link to="/customers/import" className="mr-3">
+                            <Button variant="outline-primary">Import</Button>
+                        </Link>
+                        <Button
+                            onClick={() => {
+                                dispatch(commonModalIsOpen(true));
+                                dispatch(commonModalType('ADD'));
+                            }}
+                            size="sm"
+                            className="d-flex align-items-center p-2"
+                        >
+                            <i className="feather icon-plus f-20" />
+                            New Customer
+                        </Button>
+                    </div>
                 </Card.Header>
                 <Card.Body>
                     <CommonDataTable columns={columns} data={getAllCustomers} />
                 </Card.Body>
             </Card>
-            <CustomersModal />
+            <CustomersModal rowData={rowData} />
             <DeleteConfModal del_id={rowData?._id} type={'CUSTOMERS'} title={rowData?.name} />
         </div>
     );

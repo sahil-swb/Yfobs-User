@@ -2,4 +2,4 @@ const userData = localStorage.getItem('userData') ? localStorage.getItem('userDa
 export const userId = JSON.parse(userData).userId;
 export const accessToken = JSON.parse(userData).access_token;
 
-export const businessId = localStorage.getItem('singleBusinessId') ? localStorage.getItem('singleBusinessId') : '';
+export const businessId = localStorage.getItem('singleBusinessId') || '';

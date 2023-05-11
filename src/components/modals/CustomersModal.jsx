@@ -8,24 +8,21 @@ import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 //CUSTOM OR COMPONENTS IMPORTS
-import { createCustomerApi, getAllCustomersApi, getCustomerById, updateCustomerApi } from '../../slices/customersSlice';
+import { createCustomerApi, updateCustomerApi } from '../../slices/customersSlice';
 import { commonModalIsOpen } from '../../slices/modalSlice';
 import 'react-phone-number-input/style.css';
 import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
 import '../reactPhoneComponent.css';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
-// import { singleBusinessId, userId } from '../../constants/userData';
 import { getAllBusinessesApi } from '../../slices/settingsSlice';
 import { businessId, userId } from '../../constants/userData';
 
 //MODAL COMPONENT FOR ADD AND EDIT CUSTOMER
-const CustomersModal = () => {
-    const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
+const CustomersModal = ({ rowData }) => {
+    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
-    const { getSingleCustomerData, updateCustomer } = useSelector((state) => state.customers);
     const [customerPhoneNumber, setCustomerPhoneNumber] = useState('');
     const [companyPhoneNumber, setCompanyPhoneNumber] = useState('');
-    const { getAllBusinessesData } = useSelector((state) => state.settingsReducer);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
@@ -46,7 +43,7 @@ const CustomersModal = () => {
             vatCode: values.vatCode
         };
         if (modalType === 'EDIT') {
-            payload._id = getSingleCustomerData?._id;
+            payload._id = rowData?._id;
             dispatch(updateCustomerApi({ payload }));
         } else {
             dispatch(createCustomerApi({ payload }));
@@ -58,22 +55,13 @@ const CustomersModal = () => {
 
     useEffect(() => {
         if (modalType === 'EDIT') {
-            setCustomerPhoneNumber(getSingleCustomerData?.phone);
-            setCompanyPhoneNumber(getSingleCustomerData?.businessNumber);
+            setCustomerPhoneNumber(rowData?.phone);
+            setCompanyPhoneNumber(rowData?.businessNumber);
         } else {
             setCustomerPhoneNumber('');
             setCompanyPhoneNumber('');
         }
-    }, [getSingleCustomerData, modalType]);
-
-    useEffect(() => {
-        if (modalType === 'EDIT') {
-            let payload = {
-                _id: ID
-            };
-            dispatch(getCustomerById({ payload }));
-        }
-    }, [ID, updateCustomer, modalIsOpen]);
+    }, [rowData, modalType]);
 
     useEffect(() => {
         dispatch(getAllCountriesApi());
@@ -101,16 +89,16 @@ const CustomersModal = () => {
                         initialValues={
                             modalType === 'EDIT'
                                 ? {
-                                      name: getSingleCustomerData?.name || '',
-                                      email: getSingleCustomerData?.email || '',
-                                      address: getSingleCustomerData?.address || '',
-                                      countryName: getSingleCustomerData?.countryName || '',
-                                      state: getSingleCustomerData?.state || '',
-                                      city: getSingleCustomerData?.city || '',
-                                      postalCode: getSingleCustomerData?.postalCode || '',
-                                      currencyName: getSingleCustomerData?.currencyName || '',
-                                      businessName: getSingleCustomerData?.businessName || '',
-                                      vatCode: getSingleCustomerData?.vatCode || ''
+                                      name: rowData?.name || '',
+                                      email: rowData?.email || '',
+                                      address: rowData?.address || '',
+                                      countryName: rowData?.countryName || '',
+                                      state: rowData?.state || '',
+                                      city: rowData?.city || '',
+                                      postalCode: rowData?.postalCode || '',
+                                      currencyName: rowData?.currencyName || '',
+                                      businessName: rowData?.businessName || '',
+                                      vatCode: rowData?.vatCode || ''
                                   }
                                 : {
                                       name: '',

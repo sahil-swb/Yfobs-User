@@ -1,13 +1,11 @@
 import { Field, Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { userId } from '../../constants/userData';
-import { getSingleUser, UserUpdateProfile } from '../../slices/authSlice';
+import { UserUpdateProfile } from '../../slices/authSlice';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 
-const GenaralSettings = () => {
-    const { getDataById } = useSelector((state) => state.authReducer);
+const GenaralSettings = ({ getDataById }) => {
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
     const dispatch = useDispatch();
 
@@ -26,10 +24,6 @@ const GenaralSettings = () => {
     };
 
     useEffect(() => {
-        const payload = {
-            _id: userId
-        };
-        dispatch(getSingleUser({ payload }));
         dispatch(getAllCountriesApi());
         dispatch(getAllStatesApi());
     }, []);

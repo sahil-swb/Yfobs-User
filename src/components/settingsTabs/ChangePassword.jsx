@@ -1,13 +1,11 @@
 import { Field, Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { userId } from '../../constants/userData';
-import { getSingleUser, UserChangePassword } from '../../slices/authSlice';
+import React from 'react';
+import { Button, Card } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { UserChangePassword } from '../../slices/authSlice';
 import { errorPNotify } from '../alertMsg';
 
-const ChangePassword = () => {
-    const { getDataById } = useSelector((state) => state.authReducer);
+const ChangePassword = ({ getDataById }) => {
     const dispatch = useDispatch();
     const handleSubmit = (values) => {
         const payload = {
@@ -22,12 +20,6 @@ const ChangePassword = () => {
         }
     };
 
-    useEffect(() => {
-        const payload = {
-            _id: userId
-        };
-        dispatch(getSingleUser({ payload }));
-    }, []);
     return (
         <>
             <Card>

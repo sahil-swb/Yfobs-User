@@ -35,7 +35,7 @@ const AdminLayout = ({ storageObject }) => {
                 <div>
                     <div className="pcoded-content">
                         <div className="pcoded-inner-content">
-                            <Breadcrumb />
+                            {/* <Breadcrumb /> */}
                             <div className="main-body">
                                 <div className="page-wrapper">
                                     <Suspense fallback={<Loader />}>

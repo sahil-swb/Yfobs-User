@@ -12,7 +12,8 @@ import {
     USER_DELETE_CUSTOMER,
     USER_GET_ALL_CUSTOMERS,
     USER_GET_CUSTOMER_BYID,
-    USER_UPDATE_CUSTOMER
+    USER_UPDATE_CUSTOMER,
+    USER_UPLOAD_CUSTOMER_CSV
 } from '../constants/urlConfig';
 
 //INITIAL STATES
@@ -22,7 +23,8 @@ const initialState = {
     createCustomer: {},
     deleteCustomer: {},
     updateCustomer: {},
-    getSingleCustomerData: {}
+    getSingleCustomerData: {},
+    customerUploadCsvData: ''
 };
 
 //APICALL FOR CREATING CUSTOMER USING THUNK
@@ -96,6 +98,20 @@ export const getCustomerById = createAsyncThunk('user/getCustomerById', async ({
     }
 });
 
+export const customerUploadCsv = createAsyncThunk('user/customerUploadCsv', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post(BASE_URL_FOR_USER + USER_UPLOAD_CUSTOMER_CSV, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+
+        successPNotify('Customer Uploaded Successfully');
+        return response?.data?.data;
+    } catch (error) {
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response.data);
+    }
+});
+
 //CUSTOMER SLICE
 const customersSlice = createSlice({
     name: 'customerSlice',
@@ -154,6 +170,16 @@ const customersSlice = createSlice({
                 state.getSingleCustomerData = action.payload;
             })
             .addCase(getCustomerById.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(customerUploadCsv.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(customerUploadCsv.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.customerUploadCsvData = action.payload;
+            })
+            .addCase(customerUploadCsv.rejected, (state) => {
                 state.isLoading = false;
             });
     }

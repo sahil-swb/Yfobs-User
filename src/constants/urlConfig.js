@@ -14,6 +14,7 @@ export const USER_GET_ALL_CUSTOMERS = 'customer/getAllCustomer';
 export const USER_UPDATE_CUSTOMER = 'customer/updateController/';
 export const USER_DELETE_CUSTOMER = 'customer/deleteCustomer/';
 export const USER_GET_CUSTOMER_BYID = 'customer/getCustomer/';
+export const USER_UPLOAD_CUSTOMER_CSV = 'customer/uploadCSV';
 
 //Categories Api
 export const USER_CREATE_CATEGORIES = 'Categories/createCategories';

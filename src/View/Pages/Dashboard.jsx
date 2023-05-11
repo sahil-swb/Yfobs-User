@@ -4,8 +4,20 @@ import Businesses from '../../components/settingsTabs/Businesses';
 import ChangePassword from '../../components/settingsTabs/ChangePassword';
 import GenaralSettings from '../../components/settingsTabs/GenaralSettings';
 import InvoiceCustomization from '../../components/settingsTabs/InvoiceCustomization';
+import { getSingleUser } from '../../slices/authSlice';
+import { useEffect } from 'react';
+import { userId } from '../../constants/userData';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Dashboard = () => {
+    const { getDataById } = useSelector((state) => state.authReducer);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const payload = {
+            _id: userId
+        };
+        dispatch(getSingleUser({ payload }));
+    }, []);
     return (
         <>
             <Row>
@@ -32,10 +44,10 @@ const Dashboard = () => {
 
                         <Tab.Content>
                             <Tab.Pane eventKey="generalSettings">
-                                <GenaralSettings />
+                                <GenaralSettings getDataById={getDataById} />
                             </Tab.Pane>
                             <Tab.Pane eventKey="changePassword">
-                                <ChangePassword />
+                                <ChangePassword getDataById={getDataById} />
                             </Tab.Pane>
                             <Tab.Pane eventKey="business">
                                 <Businesses />

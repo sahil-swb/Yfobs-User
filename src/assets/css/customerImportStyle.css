@@ -1,0 +1,26 @@
+.csv-info{
+    font-size: 1rem;
+}
+
+.csv-heading{
+color: #718fa2;
+}
+
+.customer-details{
+    font-size: 1.1rem;
+    width: 40%;
+    list-style: none;
+    padding: 0;
+    line-height: 2;
+}
+
+.file-format-details{
+    background: #ecf0f3;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.exporting-div{
+    line-height: 2;
+    
+}

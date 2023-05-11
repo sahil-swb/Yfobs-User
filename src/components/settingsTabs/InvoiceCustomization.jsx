@@ -14,7 +14,6 @@ import template2 from '../../assets/images/invoiceTemplateImages/template-2.png'
 import template3 from '../../assets/images/invoiceTemplateImages/template-3.png';
 import template4 from '../../assets/images/invoiceTemplateImages/template-4.png';
 import { getSingleBusiness, updateBusiness } from '../../slices/settingsSlice';
-import { businessId } from '../../constants/userData';
 
 const InvoiceCustomization = () => {
     const { getSingleBusinessData } = useSelector((state) => state.settingsReducer);
@@ -35,12 +34,15 @@ const InvoiceCustomization = () => {
         dispatch(updateBusiness({ payload }));
     };
 
+    const businessId = localStorage.getItem('singleBusinessId') || '';
     useEffect(() => {
-        let payload = {
-            _id: businessId
-        };
-        dispatch(getSingleBusiness({ payload }));
-    }, []);
+        if (businessId) {
+            let payload = {
+                _id: businessId
+            };
+            dispatch(getSingleBusiness({ payload }));
+        }
+    }, [businessId]);
 
     useEffect(() => {
         setColor(getSingleBusinessData?.color);

@@ -8,20 +8,20 @@ import { userId } from '../../constants/userData';
 import Switch from 'react-switch';
 
 const Businesses = () => {
-    const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const [rowData, setRowData] = useState(null);
-    const { getAllBusinessesData, createBusiness, updateBusinessData, deleteBusinessData } = useSelector((state) => state.settingsReducer);
-    const [activeBusiness, setActiveBusiness] = useState(false);
+    const { getAllBusinessesData, createBusiness, updateBusinessData, deleteBusinessData, updateBusinessStatusData } = useSelector(
+        (state) => state.settingsReducer
+    );
 
-    const dispatch = useDispatch();
     getAllBusinessesData.filter((val) => val?.isActive === 1 && localStorage.setItem('singleBusinessId', val?._id));
+    const dispatch = useDispatch();
 
     useEffect(() => {
         let payload = {
             _id: userId
         };
         dispatch(getAllBusinessesApi({ payload }));
-    }, [createBusiness, updateBusinessData, deleteBusinessData]);
+    }, [createBusiness, updateBusinessData, deleteBusinessData, updateBusinessStatusData]);
 
     return (
         <>
@@ -125,10 +125,8 @@ const Businesses = () => {
                                                         size="sm"
                                                         variant={detail?.isActive === 1 ? 'outline-success' : 'outline-primary'}
                                                         onClick={(e) => {
-                                                            setActiveBusiness(!activeBusiness);
                                                             let payload = {
-                                                                _id: detail?._id,
-                                                                isActive: activeBusiness ? 1 : 0
+                                                                _id: detail?._id
                                                             };
                                                             dispatch(updateBusinessStatus({ payload }));
                                                             dispatch(updateBusiness({ payload }));
@@ -136,12 +134,6 @@ const Businesses = () => {
                                                     >
                                                         {detail?.isActive === 1 ? 'Selected' : 'Unselected'}
                                                     </Button>
-
-                                                    {/* <Switch
-                                                        id={detail?._id}
-                                                        onChange={(nextChecked) => handleChange(nextChecked, detail?._id)}
-                                                        checked={checked}
-                                                    /> */}
                                                 </div>
                                             </div>
                                         </td>

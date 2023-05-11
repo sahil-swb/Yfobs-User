@@ -92,7 +92,7 @@ export const getSingleBusiness = createAsyncThunk('getSingleBusiness', async ({ 
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
@@ -105,7 +105,8 @@ export const updateBusiness = createAsyncThunk('updateBusiness', async ({ payloa
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
+        successPNotify('Business Updated Successfully');
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);
@@ -114,11 +115,11 @@ export const updateBusiness = createAsyncThunk('updateBusiness', async ({ payloa
 
 export const updateBusinessStatus = createAsyncThunk('updateBusinessStatus', async ({ payload }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_BUSINESS_STATUS}${payload?._id}`, payload, {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_UPDATE_BUSINESS_STATUS}${payload?._id}`, {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         return rejectWithValue(error?.response?.data);

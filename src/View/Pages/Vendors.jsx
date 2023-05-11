@@ -58,13 +58,13 @@ const Vendors = () => {
     const { createVendorData, getAllVendorData, updateVendorData, deleteVendorData, getSingleVendorData } = useSelector(
         (state) => state.vendorReducer
     );
-    const { rowData, ID } = useSelector((state) => state.modalReducer);
+    const { rowData } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
 
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
         dispatch(commonModalType('EDIT_VENDOR'));
-        dispatch(setID(row?._id));
+        dispatch(setRowData(row));
     };
     const handleDelete = (row) => {
         dispatch(commonDeleteModal(true));
@@ -76,8 +76,6 @@ const Vendors = () => {
         };
         dispatch(getAllVendors({ payload }));
     }, [createVendorData, updateVendorData, deleteVendorData]);
-
-    console.log('ID', ID);
 
     return (
         <>
@@ -101,7 +99,7 @@ const Vendors = () => {
                         <CommonDataTable columns={columns} data={getAllVendorData} />
                     </Card.Body>
                 </Card>
-                <VendorModal />
+                <VendorModal rowData={rowData} />
                 <DeleteConfModal del_id={rowData?._id} type={'VENDORS'} title={rowData?.vendorName} />
             </div>
         </>
