@@ -4,11 +4,12 @@ import { businessId, userId } from '../../constants/userData';
 import { useDispatch, useSelector } from 'react-redux';
 import { customerUploadCsv } from '../../slices/customersSlice';
 import '../../assets/css/customerImportStyle.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const CustomerImport = () => {
     const dispatch = useDispatch();
     const [csvFile, setCsvFile] = useState('');
+    const history = useHistory();
 
     const convertBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -39,6 +40,7 @@ const CustomerImport = () => {
             businessId: businessId
         };
         dispatch(customerUploadCsv({ payload }));
+        history.push('/customers');
     };
 
     console.log('csvFile---', csvFile);

@@ -8,6 +8,7 @@ import {
     USER_GET_SINGLE_EXPENSE,
     USER_UPDATE_EXPENSE
 } from '../constants/urlConfig';
+import { errorPNotify, successPNotify } from '../components/alertMsg';
 
 const initialState = {
     isLoading: false,
@@ -24,8 +25,10 @@ export const createExpense = createAsyncThunk('expense/createExpense', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response.data);
+        successPNotify('Expense Added Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -38,6 +41,7 @@ export const getAllExpenses = createAsyncThunk('expense/getAllExpenses', async (
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -48,8 +52,10 @@ export const updateExpense = createAsyncThunk('expense/updateExpense', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
+        successPNotify('Expense Updated Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -60,8 +66,10 @@ export const deleteExpense = createAsyncThunk('expense/deleteExpense', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
+        successPNotify('Expense Deleted Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -74,6 +82,7 @@ export const getSingleExpense = createAsyncThunk('expense/getSingleExpense', asy
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });

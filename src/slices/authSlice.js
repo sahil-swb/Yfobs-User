@@ -61,7 +61,7 @@ export const UserForgotPassword = createAsyncThunk('user/UserForgotPassword', as
         const response = await axios.post(BASE_URL_FOR_USER + FORGOT_USER_PASSWORD, payload, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        successPNotify(response?.data?.message);
+        successPNotify('OTP Sent Successfully');
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data?.message);
@@ -75,7 +75,7 @@ export const UserChangePassword = createAsyncThunk('user/UserChangePassword', as
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        successPNotify(response?.data?.message);
+        successPNotify('Password Changed Successfully');
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data?.message);

@@ -7,7 +7,7 @@ import Template2 from '../../components/invoiceTemplates/Template2';
 import Template4 from '../../components/invoiceTemplates/Template4';
 import Template3 from '../../components/invoiceTemplates/Template3';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEstimateById } from '../../slices/estimatesSlice';
+import { convertToInvoice, getEstimateById } from '../../slices/estimatesSlice';
 import { commonDeleteModal, commonModalIsOpen, setRowData } from '../../slices/modalSlice';
 import EstimateSendModal from '../../components/modals/EstimateSendModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
@@ -20,6 +20,7 @@ const EstimateDetails = () => {
     const { _id } = useParams();
     const dispatch = useDispatch();
     const componentRef = useRef();
+    const history = useHistory();
 
     const toWords = new ToWords();
     let estimateGrandTotal = Number(getSingleEstimate?.data?.grandTotal) || 0;
@@ -51,6 +52,8 @@ const EstimateDetails = () => {
         getSingleEstimate?.business?.map((data) => setEstimateBusinessData(data));
     }, [getSingleEstimate?.business, getSingleEstimate?.customer]);
 
+    console.log('estimateCustomerData===', estimateCustomerData);
+
     return (
         <>
             <div>
@@ -70,7 +73,17 @@ const EstimateDetails = () => {
 
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={handlePrint}>Print</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Convert to Invoice</Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => {
+                                            let payload = {
+                                                _id: getSingleEstimate?.data?._id
+                                            };
+                                            dispatch(convertToInvoice({ payload }));
+                                            history.push('/estimates');
+                                        }}
+                                    >
+                                        Convert to Invoice
+                                    </Dropdown.Item>
                                     <Dropdown.Item href="#/action-3">Export as PDF</Dropdown.Item>
                                     <Dropdown.Item onClick={() => dispatch(commonModalIsOpen(true))}>Send</Dropdown.Item>
                                     <Dropdown.Item as={Link} target="_blank" to="/estimates_preview">
@@ -144,7 +157,7 @@ const EstimateDetails = () => {
                 </Row>
             </div>
             <EstimateSendModal />
-            <DeleteConfModal del_id={getSingleEstimate?._id} type={'ESTIMATES'} title={getSingleEstimate?.title} />
+            <DeleteConfModal del_id={getSingleEstimate?.data?._id} type={'ESTIMATES'} title={getSingleEstimate?.data?.title} />
         </>
     );
 };

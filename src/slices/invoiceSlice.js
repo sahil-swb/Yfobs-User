@@ -8,6 +8,7 @@ import {
     USER_GET_SINGLE_INVOICE,
     USER_UPDATE_INVOICE
 } from '../constants/urlConfig';
+import { errorPNotify, successPNotify } from '../components/alertMsg';
 
 const initialState = {
     isLoading: false,
@@ -24,8 +25,10 @@ export const createInvoice = createAsyncThunk('user/setCreateInvoice', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
+        successPNotify('Invoice Created Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -38,6 +41,7 @@ export const getAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (
         console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -50,6 +54,7 @@ export const getSingleInvoice = createAsyncThunk('user/setGetSingleInvoice', asy
         console.log(response?.data);
         return response?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -60,8 +65,10 @@ export const updateInvoice = createAsyncThunk('user/setUpdateInvoice', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
+        successPNotify('Invoice Updated Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -73,8 +80,10 @@ export const deleteInvoice = createAsyncThunk('user/setDeleteInvoice', async ({ 
         });
 
         console.log(response?.data?.data);
+        successPNotify('Invoice Deleted Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data.message);
         return rejectWithValue(error?.response?.data);
     }
 });

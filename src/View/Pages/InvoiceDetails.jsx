@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Badge, Button, Card, Col, Dropdown, Row, Table } from 'react-bootstrap';
 import Template1 from '../../components/invoiceTemplates/Template1';
 import '../../assets/css/cardStyle.css';
@@ -8,26 +8,49 @@ import { commonDeleteModal, commonModalIsOpen } from '../../slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import { getSingleInvoice } from '../../slices/invoiceSlice';
+import { ToWords } from 'to-words';
+import Template2 from '../../components/invoiceTemplates/Template2';
+import Template3 from '../../components/invoiceTemplates/Template3';
+import Template4 from '../../components/invoiceTemplates/Template4';
 
 const InvoiceDetails = () => {
     const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
+    const [invoiceCustomerData, setInvoiceCustomerData] = useState({});
+    const [invoiceBusinessData, setInvoiceBusinessData] = useState({});
     const { _id } = useParams();
     const componentRef = useRef();
     const dispatch = useDispatch();
+
+    const toWords = new ToWords();
+    let estimateGrandTotal = Number(getSingleInvoiceData?.data?.grandTotal) || 0;
+    let words = toWords.convert(estimateGrandTotal, { currency: true });
+
+    let discountAmount =
+        Number(getSingleInvoiceData?.data?.subTotal) -
+        (Number(getSingleInvoiceData?.data?.subTotal) * Number(getSingleInvoiceData?.data?.discount)) / 100;
+    let taxValue = (discountAmount * Number(getSingleInvoiceData?.data?.tax)) / 100;
+
     const handlePrint = useReactToPrint({
         content: () => componentRef.current
     });
 
+    const location = {
+        pathname: `/invoices/edit_invoice/${_id}`,
+        state: 'EDIT_INVOICE'
+    };
     useEffect(() => {
         let payload = {
             _id: _id
         };
         dispatch(getSingleInvoice({ payload }));
     }, [_id]);
-    const location = {
-        pathname: `/invoices/edit_invoice/${_id}`,
-        state: 'EDIT_INVOICE'
-    };
+
+    useEffect(() => {
+        getSingleInvoiceData?.customer?.map((data) => setInvoiceCustomerData(data));
+        getSingleInvoiceData?.business?.map((data) => setInvoiceBusinessData(data));
+    }, [getSingleInvoiceData?.business, getSingleInvoiceData?.customer]);
+
+    console.log('invoiceCustomerData===', invoiceCustomerData);
     return (
         <>
             <div className="bg-white p-5 rounded">
@@ -140,7 +163,53 @@ const InvoiceDetails = () => {
                         </Card.Body>
                     </Card>
                 </div>
-                <Template1 ref={componentRef} type={'Invoice'} />
+                {invoiceBusinessData?.templateStyle === 'Template1' ? (
+                    <Template1
+                        ref={componentRef}
+                        type={'Invoice'}
+                        getSingleInvoiceData={getSingleInvoiceData}
+                        invoiceCustomerData={invoiceCustomerData}
+                        invoiceBusinessData={invoiceBusinessData}
+                        discountAmount={discountAmount}
+                        taxValue={taxValue}
+                        words={words}
+                    />
+                ) : invoiceBusinessData?.templateStyle === 'Template2' ? (
+                    <Template2
+                        ref={componentRef}
+                        type={'Invoice'}
+                        getSingleInvoiceData={getSingleInvoiceData}
+                        invoiceCustomerData={invoiceCustomerData}
+                        invoiceBusinessData={invoiceBusinessData}
+                        discountAmount={discountAmount}
+                        taxValue={taxValue}
+                        words={words}
+                    />
+                ) : invoiceBusinessData?.templateStyle === 'Template3' ? (
+                    <Template3
+                        ref={componentRef}
+                        type={'Invoice'}
+                        getSingleInvoiceData={getSingleInvoiceData}
+                        invoiceCustomerData={invoiceCustomerData}
+                        invoiceBusinessData={invoiceBusinessData}
+                        discountAmount={discountAmount}
+                        taxValue={taxValue}
+                        words={words}
+                    />
+                ) : invoiceBusinessData?.templateStyle === 'Template4' ? (
+                    <Template4
+                        ref={componentRef}
+                        type={'Invoice'}
+                        getSingleInvoiceData={getSingleInvoiceData}
+                        invoiceCustomerData={invoiceCustomerData}
+                        invoiceBusinessData={invoiceBusinessData}
+                        discountAmount={discountAmount}
+                        taxValue={taxValue}
+                        words={words}
+                    />
+                ) : (
+                    ''
+                )}
             </div>
             <DeleteConfModal del_id={getSingleInvoiceData?._id} type={'INVOICES'} title={getSingleInvoiceData?.title} />
         </>

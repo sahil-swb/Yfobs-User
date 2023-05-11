@@ -32,7 +32,7 @@ export const createBusinessesApi = createAsyncThunk('createBusinessApi', async (
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         });
-        successPNotify('Created Bussiness Successfully');
+        successPNotify('Bussiness Created Successfully');
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data?.message);
@@ -48,6 +48,7 @@ export const getAllBusinessesApi = createAsyncThunk('getAllBusinessesApi', async
         });
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -65,6 +66,7 @@ export const uploadLogoApi = createAsyncThunk('uploadLogoApi', async ({ payloadL
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -82,6 +84,7 @@ export const uploadUpiQRCodeApi = createAsyncThunk('uploadUpiQRCodeApi', async (
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -95,6 +98,7 @@ export const getSingleBusiness = createAsyncThunk('getSingleBusiness', async ({ 
         // console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -109,6 +113,7 @@ export const updateBusiness = createAsyncThunk('updateBusiness', async ({ payloa
         successPNotify('Business Updated Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -122,6 +127,7 @@ export const updateBusinessStatus = createAsyncThunk('updateBusinessStatus', asy
         // console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -133,8 +139,10 @@ export const deleteBusiness = createAsyncThunk('deleteBusiness', async ({ payloa
             'Content-Type': 'application/json'
         });
         console.log(response?.data?.data);
+        successPNotify('Business Deleted Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });

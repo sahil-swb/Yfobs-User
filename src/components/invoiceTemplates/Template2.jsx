@@ -32,17 +32,37 @@ const Template2 = React.forwardRef((props, ref) => {
                             }}
                         >
                             <div>
-                                <h2 style={{ textTransform: 'uppercase' }}>{props.getSingleEstimate?.data?.title}</h2>
-                                <p style={{ margin: '1.5rem 0' }}>{props.getSingleEstimate?.data?.summary}</p>
+                                <h2 style={{ textTransform: 'uppercase' }}>
+                                    {props.type === 'Invoice'
+                                        ? props.getSingleInvoiceData?.data?.title
+                                        : props.getSingleEstimate?.data?.title}
+                                </h2>
+                                <p style={{ margin: '1.5rem 0' }}>
+                                    {props.type === 'Invoice'
+                                        ? props.getSingleInvoiceData?.data?.summary
+                                        : props.getSingleEstimate?.data?.summary}
+                                </p>
 
                                 <div style={{ marginBottom: '1rem', lineHeight: '1.5rem' }}>
-                                    <strong>{props.estimateBusinessData?.businessName}</strong> <br />
+                                    <strong>
+                                        {props.type === 'Invoice'
+                                            ? props.invoiceBusinessData?.businessName
+                                            : props.estimateBusinessData?.businessName}
+                                    </strong>{' '}
+                                    <br />
                                     <p>
-                                        {props.estimateBusinessData?.address}, {props.estimateBusinessData?.city}
+                                        {props.type === 'Invoice'
+                                            ? props.invoiceBusinessData?.address
+                                            : props.estimateBusinessData?.address}
+                                        , {props.type === 'Invoice' ? props.invoiceBusinessData?.city : props.estimateBusinessData?.city}
                                         <br />
-                                        {props.estimateBusinessData?.stateId}
+                                        {props.type === 'Invoice'
+                                            ? props.invoiceBusinessData?.stateId
+                                            : props.estimateBusinessData?.stateId}
                                         <br />
-                                        {props.estimateBusinessData?.vatCode}
+                                        {props.type === 'Invoice'
+                                            ? props.invoiceBusinessData?.vatCode
+                                            : props.estimateBusinessData?.vatCode}
                                     </p>
                                 </div>
                             </div>
@@ -58,36 +78,63 @@ const Template2 = React.forwardRef((props, ref) => {
                                         <b>Bill to</b>
                                     </p>
                                     <p>
-                                        <b>{props.estimateCustomerData?.name}</b>
+                                        <b>
+                                            {props.type === 'Invoice' ? props.invoiceCustomerData?.name : props.estimateCustomerData?.name}
+                                        </b>
                                     </p>
                                     <div style={{ margin: '0.4rem 0' }}>
                                         <b>Address:</b>{' '}
                                         <div>
                                             <span>
-                                                {props.estimateCustomerData?.address}, {props.estimateCustomerData?.city}
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceCustomerData?.address
+                                                    : props.estimateCustomerData?.address}
+                                                ,{' '}
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceCustomerData?.city
+                                                    : props.estimateCustomerData?.city}
                                             </span>
                                             <br />
                                             <span>
-                                                {props.estimateCustomerData?.state}, {props.estimateCustomerData?.countryName}
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceCustomerData?.state
+                                                    : props.estimateCustomerData?.state}
+                                                ,{' '}
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceCustomerData?.countryName
+                                                    : props.estimateCustomerData?.countryName}
                                             </span>
                                             <br />
-                                            <span>{props.estimateCustomerData?.phone}</span>
+                                            <span>
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceCustomerData?.phone
+                                                    : props.estimateCustomerData?.phone}
+                                            </span>
                                             <br />
                                         </div>
                                     </div>
-                                    <strong>GST No:</strong> {props.estimateCustomerData?.vatCode}
+                                    <strong>GST No:</strong>{' '}
+                                    {props.type === 'Invoice' ? props.invoiceCustomerData?.vatCode : props.estimateCustomerData?.vatCode}
                                 </div>
 
                                 <div style={{ maxWidth: '30%', position: 'absolute', right: 0 }}>
                                     <p>
                                         {props.type === 'Estimate' ? 'Estimate' : 'Invoice'} Number :{' '}
-                                        {props.getSingleEstimate?.data?.number}
+                                        {props.type === 'Invoice'
+                                            ? props.getSingleInvoiceData?.data?.number
+                                            : props.getSingleEstimate?.data?.number}
                                     </p>
                                     <p>
-                                        {props.type === 'Estimate' ? 'Estimate' : 'Invoice'} date : {props.getSingleEstimate?.data?.date}
+                                        {props.type === 'Estimate' ? 'Estimate' : 'Invoice'} date :{' '}
+                                        {props.type === 'Invoice'
+                                            ? props.getSingleInvoiceData?.data?.date
+                                            : props.getSingleEstimate?.data?.date}
                                     </p>
                                     <p>
-                                        {props.type === 'Estimate' ? 'Expires On' : 'Due Date'}: {props.getSingleEstimate?.data?.expireOn}
+                                        {props.type === 'Estimate' ? 'Expires On' : 'Due Date'}:{' '}
+                                        {props.type === 'Invoice'
+                                            ? props.getSingleInvoiceData?.data?.expireOn
+                                            : props.getSingleEstimate?.data?.expireOn}
                                     </p>
                                     {props.type === 'Estimate' ? '' : <p style={{ marginTop: 10 }}>Within 45 Days</p>}
                                 </div>
@@ -105,7 +152,7 @@ const Template2 = React.forwardRef((props, ref) => {
                                 <tbody>
                                     <tr
                                         style={{
-                                            background: props.estimateBusinessData?.color ? props.estimateBusinessData?.color : '#e7d8e8',
+                                            background: props.invoiceBusinessData?.color ? props.estimateBusinessData?.color : '#e7d8e8',
                                             height: '3rem',
                                             borderBottom: '1px solid #eee'
                                         }}
@@ -115,20 +162,35 @@ const Template2 = React.forwardRef((props, ref) => {
                                         <th>Quantity</th>
                                         <th>Amount</th>
                                     </tr>
-                                    {props.getSingleEstimate?.products?.map((val) =>
-                                        val.product?.map((product, index) => {
-                                            return (
-                                                <tr key={index} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
-                                                    <td>{product?.name}</td>
-                                                    <td>{product?.price}</td>
-                                                    <td>{product?.quantity}</td>
-                                                    <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
-                                                        ₹ {product?.price * product?.quantity}.00
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
-                                    )}
+                                    {props.type === 'Invoice'
+                                        ? props.getSingleInvoiceData?.products?.map((val) =>
+                                              val.product?.map((product, index) => {
+                                                  return (
+                                                      <tr key={index} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
+                                                          <td>{product?.name}</td>
+                                                          <td>{product?.price}</td>
+                                                          <td>{product?.quantity}</td>
+                                                          <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
+                                                              ₹ {product?.price * product?.quantity}.00
+                                                          </td>
+                                                      </tr>
+                                                  );
+                                              })
+                                          )
+                                        : props.getSingleEstimate?.products?.map((val) =>
+                                              val.product?.map((product, index) => {
+                                                  return (
+                                                      <tr key={index} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
+                                                          <td>{product?.name}</td>
+                                                          <td>{product?.price}</td>
+                                                          <td>{product?.quantity}</td>
+                                                          <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
+                                                              ₹ {product?.price * product?.quantity}.00
+                                                          </td>
+                                                      </tr>
+                                                  );
+                                              })
+                                          )}
                                 </tbody>
                             </table>
                             <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'end', paddingRight: '1rem' }}>
@@ -137,13 +199,31 @@ const Template2 = React.forwardRef((props, ref) => {
                                         <b>Sub Total: </b>
                                     </li>
                                     <li>
-                                        <b>Discount [{props.getSingleEstimate?.data?.discount}%]: </b>
+                                        <b>
+                                            Discount [
+                                            {props.type === 'Invoice'
+                                                ? props.getSingleInvoiceData?.data?.discount
+                                                : props.getSingleEstimate?.data?.discount}
+                                            %]:{' '}
+                                        </b>
                                     </li>
                                     <li>
-                                        <b>CGST2.5 [{props.getSingleEstimate?.data?.tax / 2}%]: </b>
+                                        <b>
+                                            CGST2.5 [
+                                            {props.type === 'Invoice'
+                                                ? props.getSingleInvoiceData?.data?.tax / 2
+                                                : props.getSingleEstimate?.data?.tax / 2}
+                                            %]:{' '}
+                                        </b>
                                     </li>
                                     <li>
-                                        <b>SGST2.5 [{props.getSingleEstimate?.data?.tax / 2}%]: </b>
+                                        <b>
+                                            SGST2.5 [
+                                            {props.type === 'Invoice'
+                                                ? props.getSingleInvoiceData?.data?.tax / 2
+                                                : props.getSingleEstimate?.data?.tax / 2}
+                                            %]:{' '}
+                                        </b>
                                     </li>
                                     <li>&nbsp;</li>
                                     <li>
@@ -152,7 +232,13 @@ const Template2 = React.forwardRef((props, ref) => {
                                 </ul>
                                 <ul style={{ listStyle: 'none', lineHeight: 2, wordSpacing: '0.5rem' }}>
                                     <li>
-                                        <b> ₹ {props.getSingleEstimate?.data?.subTotal}.00</b>
+                                        <b>
+                                            ₹{' '}
+                                            {props.type === 'Invoice'
+                                                ? props.getSingleInvoiceData?.data?.subTotal
+                                                : props.getSingleEstimate?.data?.subTotal}
+                                            .00
+                                        </b>
                                     </li>
                                     <li>
                                         <b> ₹ {props.discountAmount}.00</b>
@@ -169,7 +255,16 @@ const Template2 = React.forwardRef((props, ref) => {
                                         </b>
                                     </li>
                                     <li>
-                                        <b> ₹ {Math.round(props.getSingleEstimate?.data?.grandTotal)}.00</b>
+                                        <b>
+                                            {' '}
+                                            ₹{' '}
+                                            {Math.round(
+                                                props.type === 'Invoice'
+                                                    ? props.getSingleInvoiceData?.data?.grandTotal
+                                                    : props.getSingleEstimate?.data?.grandTotal
+                                            )}
+                                            .00
+                                        </b>
                                     </li>
                                 </ul>
                             </div>

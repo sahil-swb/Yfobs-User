@@ -3,6 +3,7 @@ import axios from 'axios';
 import React from 'react';
 import {
     BASE_URL_FOR_USER,
+    USER_CONVERT_TO_INVOICE,
     USER_CREATE_ESTIMATES,
     USER_DELETE_ESTIMATES,
     USER_GET_ALL_ESTIMATES,
@@ -10,6 +11,7 @@ import {
     USER_SEND_ESTIMATE_MESSAGE,
     USER_UPDATE_ESTIMATES
 } from '../constants/urlConfig';
+import { errorPNotify, successPNotify } from '../components/alertMsg';
 
 const initialState = {
     isLoading: false,
@@ -19,7 +21,8 @@ const initialState = {
     updateEstimate: {},
     getSingleEstimate: {},
     ESTIMATEID: null,
-    getSingleEstimateMessage: {}
+    getSingleEstimateMessage: {},
+    convertToInvoiceData: {}
 };
 
 export const createEstimateApi = createAsyncThunk('user/createEstimate', async ({ payload }, { rejectWithValue }) => {
@@ -28,9 +31,11 @@ export const createEstimateApi = createAsyncThunk('user/createEstimate', async (
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
+        successPNotify('Estimate Created Successfully');
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -43,6 +48,7 @@ export const getAllEstimatesApi = createAsyncThunk('user/getAllEstimates', async
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response);
     }
 });
@@ -53,8 +59,24 @@ export const updateEstimateApi = createAsyncThunk('user/updateEstimate', async (
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
+        successPNotify('Estimate Updated Successfully');
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response);
+    }
+});
+
+export const convertToInvoice = createAsyncThunk('user/convertToInvoice', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`${BASE_URL_FOR_USER + USER_CONVERT_TO_INVOICE}${payload._id}`, payload, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+        console.log(response?.data?.data);
+        successPNotify('Successfully Converted to Invoice');
+        return response?.data?.data;
+    } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response);
     }
 });
@@ -65,9 +87,11 @@ export const deleteEstimateApi = createAsyncThunk('user/deleteEstimate', async (
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
+        successPNotify('Estimate Deleted Successfully');
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -80,6 +104,7 @@ export const getEstimateById = createAsyncThunk('user/getEstimateById', async ({
         console.log(response?.data);
         return response?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response);
     }
 });
@@ -90,9 +115,11 @@ export const sendEstimateMessage = createAsyncThunk('user/sendEstimateMessage', 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data);
+        successPNotify('Estimate Sent Successfully');
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data);
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error?.response?.data);
     }
 });
@@ -166,6 +193,16 @@ const estimatesSlice = createSlice({
                 state.getSingleEstimateMessage = action.payload;
             })
             .addCase(sendEstimateMessage.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(convertToInvoice.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(convertToInvoice.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.convertToInvoiceData = action.payload;
+            })
+            .addCase(convertToInvoice.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

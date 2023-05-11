@@ -114,7 +114,7 @@ const Invoices = () => {
     return (
         <>
             <Row>
-                <Col xl={11}>
+                <Col xl={12}>
                     <div className="d-flex align-items-center justify-content-between">
                         <h3>Invoices</h3>
                         <Link to={location}>
@@ -125,7 +125,7 @@ const Invoices = () => {
                         </Link>
                     </div>
                 </Col>
-                <Col className="mt-4" xl={11}>
+                <Col className="mt-4" xl={12}>
                     <Tab.Container defaultActiveKey="allInvoice">
                         <Card>
                             <Card.Body>

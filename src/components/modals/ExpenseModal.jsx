@@ -8,11 +8,10 @@ import { businessId, userId } from '../../constants/userData';
 import { getAllVendors } from '../../slices/vendorsSlice';
 import { getAllCategoriesApi } from '../../slices/categoriesSlice';
 
-const ExpenseModal = () => {
+const ExpenseModal = ({ rowData }) => {
     const { modalIsOpen, modalType, ID } = useSelector((state) => state.modalReducer);
     const { getAllVendorData } = useSelector((state) => state.vendorReducer);
     const { getAllData } = useSelector((state) => state.categoriesReducer);
-    const { getSingleExpenseData, updateExpenseData } = useSelector((state) => state.expenseReducer);
     const dispatch = useDispatch();
 
     const handleSubmit = (values) => {
@@ -29,7 +28,7 @@ const ExpenseModal = () => {
         };
 
         if (modalType === 'EDIT') {
-            payload._id = getSingleExpenseData?._id;
+            payload._id = rowData?._id;
             dispatch(updateExpense({ payload }));
         } else {
             dispatch(createExpense({ payload }));
@@ -38,18 +37,12 @@ const ExpenseModal = () => {
     };
 
     useEffect(() => {
-        dispatch(getAllVendors());
-        dispatch(getAllCategoriesApi());
+        let payload = {
+            _id: userId
+        };
+        dispatch(getAllVendors({ payload }));
+        dispatch(getAllCategoriesApi({ payload }));
     }, []);
-
-    useEffect(() => {
-        if (modalType === 'EDIT') {
-            let payload = {
-                _id: ID
-            };
-            dispatch(getSingleExpense({ payload }));
-        }
-    }, [ID, updateExpenseData]);
 
     return (
         <>
@@ -68,13 +61,13 @@ const ExpenseModal = () => {
                         initialValues={
                             modalType === 'EDIT'
                                 ? {
-                                      vendorName: getSingleExpenseData?.vendorName || '',
-                                      amount: getSingleExpenseData?.amount || '',
-                                      date: getSingleExpenseData?.date || '',
-                                      tax: getSingleExpenseData?.tax || '',
-                                      expenseCategory: getSingleExpenseData?.expenseCategory || '',
-                                      paymentStatus: getSingleExpenseData?.paymentStatus || '',
-                                      notes: getSingleExpenseData?.notes || ''
+                                      vendorName: rowData?.vendorName || '',
+                                      amount: rowData?.amount || '',
+                                      date: rowData?.date || '',
+                                      tax: rowData?.tax || '',
+                                      expenseCategory: rowData?.expenseCategory || '',
+                                      paymentStatus: rowData?.paymentStatus || '',
+                                      notes: rowData?.notes || ''
                                   }
                                 : {
                                       vendorName: '',

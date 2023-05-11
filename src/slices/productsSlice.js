@@ -33,7 +33,7 @@ export const createProductApi = createAsyncThunk('user/createProduct', async ({ 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
-        successPNotify('Product Added Successfully');
+        // successPNotify('Product Added Successfully');
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response);
@@ -51,6 +51,7 @@ export const getAllProductsApi = createAsyncThunk('user/getAllProducts', async (
         console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
+        errorPNotify(error?.response?.data?.message);
         return rejectWithValue(error.response?.data?.message);
     }
 });
@@ -90,7 +91,7 @@ export const getSingleProductApi = createAsyncThunk('user/getSingleProductApi', 
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
-        successPNotify('Product Fetched Successfully');
+        // successPNotify('Product Fetched Successfully');
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data?.message);

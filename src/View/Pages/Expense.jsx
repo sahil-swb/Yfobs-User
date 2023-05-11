@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { commonDeleteModal, commonModalIsOpen, commonModalType, setID, setRowData } from '../../slices/modalSlice';
 import CommonDataTable from '../../components/CommonDataTable';
@@ -70,17 +70,18 @@ const Expense = () => {
     ];
 
     const { createExpenseData, getAllExpenseData, updateExpenseData, deleteExpenseData } = useSelector((state) => state.expenseReducer);
-    const { rowData } = useSelector((state) => state.modalReducer);
+    // const { rowData } = useSelector((state) => state.modalReducer);
+    const [rowData, setRowData] = useState({});
     const dispatch = useDispatch();
 
     const handleEdit = (row) => {
         dispatch(commonModalIsOpen(true));
         dispatch(commonModalType('EDIT'));
-        dispatch(setID(row?._id));
+        setRowData(row);
     };
     const handleDelete = (row) => {
         dispatch(commonDeleteModal(true));
-        dispatch(setRowData(row));
+        setRowData(row);
     };
     useEffect(() => {
         let payload = {
@@ -110,7 +111,7 @@ const Expense = () => {
                         <CommonDataTable columns={columns} data={getAllExpenseData} />
                     </Card.Body>
                 </Card>
-                <ExpenseModal data={rowData} />
+                <ExpenseModal rowData={rowData} />
                 <DeleteConfModal del_id={rowData?._id} type={'EXPENSE'} title={rowData?.notes} />
             </div>
         </>
