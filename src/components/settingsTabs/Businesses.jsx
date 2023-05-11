@@ -6,6 +6,7 @@ import NewBusinessModal from '../modals/NewBusinessModal';
 import { deleteBusiness, getAllBusinessesApi, updateBusiness, updateBusinessStatus } from '../../slices/settingsSlice';
 import { userId } from '../../constants/userData';
 import Switch from 'react-switch';
+import { Link } from 'react-router-dom';
 
 const Businesses = () => {
     const [rowData, setRowData] = useState(null);
@@ -43,7 +44,9 @@ const Businesses = () => {
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam consectetur pariatur temporibus laudantium recusandae
                     corporis!
                 </p>
-                <Button>Upgrade Your Plan</Button>
+                <Link to="/subscription">
+                    <Button>Upgrade Your Plan</Button>
+                </Link>
             </div>
 
             <Card>

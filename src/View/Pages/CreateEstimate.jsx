@@ -1,6 +1,6 @@
 import { Field, FieldArray, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { Accordion, Button, Card, Col, ListGroup, Row, Table } from 'react-bootstrap';
+import { Accordion, Badge, Button, Card, Col, ListGroup, Modal, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import CustomersModal from '../../components/modals/CustomersModal';
@@ -11,8 +11,9 @@ import JoditEditor from 'jodit-react';
 import { createEstimateApi, getEstimateById, updateEstimateApi } from '../../slices/estimatesSlice';
 import { getAllCountriesApi, getAllStatesApi } from '../../slices/countryDetailSlice';
 import { businessId, userId } from '../../constants/userData';
-import { createProductApi, updateProductApi } from '../../slices/productsSlice';
+import { createProductApi, getAllProductsApi, getSingleProductApi, updateProductApi } from '../../slices/productsSlice';
 import OpenModalButton from './OpenModalButton';
+import { commonModalIsOpen } from '../../slices/modalSlice';
 
 const CreateEstimate = () => {
     const [modalOpenType, setModalTypeOpen] = useState('');
@@ -27,6 +28,9 @@ const CreateEstimate = () => {
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const [customerName, setCustomerName] = useState('');
     const [content, setContent] = useState('');
+    const { getAllProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
+    const [searchValue, setSearchValue] = useState('');
+    const { modalIsOpen } = useSelector((state) => state.modalReducer);
     const history = useHistory();
     const updateId = useParams();
     const dispatch = useDispatch();
@@ -130,6 +134,29 @@ const CreateEstimate = () => {
         setCustomerName(customerName);
     };
 
+    // PRODUCT ESTIMATE MODAL FUNCTIONS
+
+    const handleListSubmit = (_id, arrayHelpers) => {
+        const payload = {
+            _id: _id
+        };
+        arrayHelpers?.push({
+            name: productName[0] || '',
+            price: productPrice[0] || '',
+            quantity: 1
+        });
+        dispatch(getSingleProductApi({ payload }));
+    };
+
+    let productPrice = [];
+    let productName = [];
+    getSingleProduct?.product?.map((val) => {
+        productName.push(val?.name);
+        productPrice.push(val?.price);
+    });
+
+    //END PRODUCT ESTIMATE MODAL FUNCTIONS
+
     useEffect(() => {
         if (updateId?._id) {
             let payload = {
@@ -164,6 +191,25 @@ const CreateEstimate = () => {
         setDefaultTax(getSingleEstimate?.data?.tax);
         setDefaultDiscount(getSingleEstimate?.data?.discount);
     }, [getSingleEstimate?.data?.tax, getSingleEstimate?.data?.discount]);
+
+    // PRODUCT ESTIMATE MODAL EFFECTS
+    // useEffect(() => {
+    //     if (getSingleProduct?._id) {
+    //         addHelper?.push({
+    //             name: productName[0],
+    //             price: productPrice[0],
+    //             quantity: 1
+    //         });
+    //     }
+    // }, [getSingleProduct?.product]);
+
+    useEffect(() => {
+        let payload = {
+            _id: userId,
+            payload: { keyword: searchValue }
+        };
+        dispatch(getAllProductsApi({ payload }));
+    }, [searchValue]);
 
     return (
         <>
@@ -446,11 +492,91 @@ const CreateEstimate = () => {
                                                                                 );
                                                                             })}
 
-                                                                            {modalOpenType === 'CUSTOMERS' ? (
+                                                                            {modalOpenType === 'CUSTOMERS' ? <CustomersModal /> : null}
+                                                                            {/* {modalOpenType === 'CUSTOMERS' ? (
                                                                                 <CustomersModal />
                                                                             ) : modalOpenType === 'PRODUCTS' ? (
                                                                                 <ProductsEstimateModal addHelper={arrayHelpers} />
-                                                                            ) : null}
+                                                                            ) : null} */}
+                                                                            <Modal
+                                                                                show={modalIsOpen}
+                                                                                onHide={() => {
+                                                                                    dispatch(commonModalIsOpen(false));
+                                                                                }}
+                                                                            >
+                                                                                <Modal.Header closeButton className="font-weight-bold">
+                                                                                    Add Item
+                                                                                </Modal.Header>
+                                                                                <Modal.Body
+                                                                                    className="modal-scrollable overflow-auto"
+                                                                                    style={{ maxHeight: '500px' }}
+                                                                                >
+                                                                                    <ListGroup variant="flush">
+                                                                                        <input
+                                                                                            className="form-control border"
+                                                                                            type="text"
+                                                                                            value={searchValue}
+                                                                                            onChange={(e) => {
+                                                                                                setSearchValue(e.target.value);
+                                                                                            }}
+                                                                                        />
+                                                                                        <div className="text-right my-4">
+                                                                                            <Badge
+                                                                                                pill
+                                                                                                variant="primary"
+                                                                                                className="p-2 px-3"
+                                                                                            >
+                                                                                                <h5 className="text-white m-0">
+                                                                                                    Search results: {getAllProducts.length}
+                                                                                                </h5>
+                                                                                            </Badge>
+                                                                                        </div>
+                                                                                        {getAllProducts && getAllProducts.length > 0 ? (
+                                                                                            getAllProducts.map((val, index) => {
+                                                                                                return (
+                                                                                                    <ListGroup.Item
+                                                                                                        action
+                                                                                                        variant="light"
+                                                                                                        key={index}
+                                                                                                        onClick={() =>
+                                                                                                            handleListSubmit(
+                                                                                                                val._id,
+                                                                                                                arrayHelpers
+                                                                                                            )
+                                                                                                        }
+                                                                                                    >
+                                                                                                        <div
+                                                                                                            className="d-flex"
+                                                                                                            style={{
+                                                                                                                justifyContent:
+                                                                                                                    'space-between'
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            <div>
+                                                                                                                <div className="font-weight-bold h5 text-dark">
+                                                                                                                    {val?.product?.map(
+                                                                                                                        (val) => val?.name
+                                                                                                                    )}{' '}
+                                                                                                                    [{val?.hsnCode}]
+                                                                                                                </div>
+                                                                                                                <div>{val?.details}</div>
+                                                                                                            </div>
+                                                                                                            <div>
+                                                                                                                {val?.product?.map(
+                                                                                                                    (val) => val?.price
+                                                                                                                )}
+                                                                                                                .00
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </ListGroup.Item>
+                                                                                                );
+                                                                                            })
+                                                                                        ) : (
+                                                                                            <h3>No results found!</h3>
+                                                                                        )}
+                                                                                    </ListGroup>
+                                                                                </Modal.Body>
+                                                                            </Modal>
                                                                         </>
                                                                     )}
                                                                 />
