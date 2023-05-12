@@ -12,11 +12,14 @@ import { ToWords } from 'to-words';
 import Template2 from '../../components/invoiceTemplates/Template2';
 import Template3 from '../../components/invoiceTemplates/Template3';
 import Template4 from '../../components/invoiceTemplates/Template4';
+import { getAllCountriesApi } from '../../slices/countryDetailSlice';
 
 const InvoiceDetails = () => {
     const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
+    const { getAllCountries } = useSelector((state) => state.countriesInfoReducer);
     const [invoiceCustomerData, setInvoiceCustomerData] = useState({});
     const [invoiceBusinessData, setInvoiceBusinessData] = useState({});
+    const [currencySign, setCurrencySign] = useState('');
     const { _id } = useParams();
     const componentRef = useRef();
     const dispatch = useDispatch();
@@ -50,7 +53,18 @@ const InvoiceDetails = () => {
         getSingleInvoiceData?.business?.map((data) => setInvoiceBusinessData(data));
     }, [getSingleInvoiceData?.business, getSingleInvoiceData?.customer]);
 
-    console.log('invoiceCustomerData===', invoiceCustomerData);
+    useEffect(() => {
+        getAllCountries.filter(
+            (symbol) => symbol?.currencyName === invoiceCustomerData?.currencyName && setCurrencySign(symbol?.currencySymbol)
+        );
+    }, [invoiceCustomerData?.currencyName]);
+
+    useEffect(() => {
+        dispatch(getAllCountriesApi());
+    }, []);
+
+    console.log('currencySign===', currencySign);
+    // console.log('invoiceCustomerData==', invoiceCustomerData);
     return (
         <>
             <div className="bg-white p-5 rounded">
@@ -173,6 +187,7 @@ const InvoiceDetails = () => {
                         discountAmount={discountAmount}
                         taxValue={taxValue}
                         words={words}
+                        currencySign={currencySign}
                     />
                 ) : invoiceBusinessData?.templateStyle === 'Template2' ? (
                     <Template2
@@ -184,6 +199,7 @@ const InvoiceDetails = () => {
                         discountAmount={discountAmount}
                         taxValue={taxValue}
                         words={words}
+                        currencySign={currencySign}
                     />
                 ) : invoiceBusinessData?.templateStyle === 'Template3' ? (
                     <Template3
@@ -195,6 +211,7 @@ const InvoiceDetails = () => {
                         discountAmount={discountAmount}
                         taxValue={taxValue}
                         words={words}
+                        currencySign={currencySign}
                     />
                 ) : invoiceBusinessData?.templateStyle === 'Template4' ? (
                     <Template4
@@ -206,6 +223,7 @@ const InvoiceDetails = () => {
                         discountAmount={discountAmount}
                         taxValue={taxValue}
                         words={words}
+                        currencySign={currencySign}
                     />
                 ) : (
                     ''

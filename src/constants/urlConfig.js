@@ -37,6 +37,7 @@ export const USER_DELETE_ESTIMATES = 'Estimates/deleteEstimates/';
 export const USER_GET_ESTIMATE_BYID = 'Estimates/getEstimate/';
 export const USER_SEND_ESTIMATE_MESSAGE = 'Estimates/SendEmailCustomer';
 export const USER_CONVERT_TO_INVOICE = 'Estimates/convertInvoice/';
+export const EXPORT_TO_PDF = 'Estimates/htmlToPdf/';
 
 //Countries Api
 export const USER_GETALL_COUNTRIES = 'Country/getAllCountry';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, Suspense } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigation from './Navigation';
 import NavBar from './NavBar';
@@ -9,6 +9,7 @@ import Loader from '../Loader';
 import routes from '../../../routes';
 import useWindowSize from '../../../hooks/useWindowSize';
 import * as actionTypes from '../../../store/actions';
+import { userId } from '../../../constants/userData';
 //import '../../../app.scss';
 const AdminLayout = ({ storageObject }) => {
     const { windowWidth } = useWindowSize();
@@ -27,6 +28,7 @@ const AdminLayout = ({ storageObject }) => {
         }
     };
 
+    console.log('storageObject=====', storageObject);
     return (
         <>
             <Navigation />
@@ -51,7 +53,7 @@ const AdminLayout = ({ storageObject }) => {
                                                 ) : null;
                                             })}
 
-                                            {/* <Redirect from="/" to={'/'} /> */}
+                                            {/* {storageObject?.authToken ? <Redirect to={'/dashboard'} /> : <Redirect to={'/'} />} */}
                                         </Switch>
                                     </Suspense>
                                 </div>

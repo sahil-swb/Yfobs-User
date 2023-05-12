@@ -152,7 +152,11 @@ const Template2 = React.forwardRef((props, ref) => {
                                 <tbody>
                                     <tr
                                         style={{
-                                            background: props.invoiceBusinessData?.color ? props.estimateBusinessData?.color : '#e7d8e8',
+                                            background:
+                                                props.type === 'Invoice'
+                                                    ? props.invoiceBusinessData?.color || '#e7d8e8'
+                                                    : props.estimateBusinessData?.color || '#e7d8e8',
+
                                             height: '3rem',
                                             borderBottom: '1px solid #eee'
                                         }}
@@ -168,10 +172,12 @@ const Template2 = React.forwardRef((props, ref) => {
                                                   return (
                                                       <tr key={index} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
                                                           <td>{product?.name}</td>
-                                                          <td>{product?.price}</td>
+                                                          <td>
+                                                              {props?.currencySign} {product?.price}
+                                                          </td>
                                                           <td>{product?.quantity}</td>
                                                           <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
-                                                              ₹ {product?.price * product?.quantity}.00
+                                                              {props?.currencySign} {product?.price * product?.quantity}.00
                                                           </td>
                                                       </tr>
                                                   );
@@ -182,10 +188,12 @@ const Template2 = React.forwardRef((props, ref) => {
                                                   return (
                                                       <tr key={index} style={{ height: '3rem', borderBottom: '1px solid #eee' }}>
                                                           <td>{product?.name}</td>
-                                                          <td>{product?.price}</td>
+                                                          <td>
+                                                              {props?.currencySign} {product?.price}
+                                                          </td>
                                                           <td>{product?.quantity}</td>
                                                           <td style={{ textAlign: 'end', paddingRight: '1rem' }}>
-                                                              ₹ {product?.price * product?.quantity}.00
+                                                              {props?.currencySign} {product?.price * product?.quantity}.00
                                                           </td>
                                                       </tr>
                                                   );
@@ -233,7 +241,7 @@ const Template2 = React.forwardRef((props, ref) => {
                                 <ul style={{ listStyle: 'none', lineHeight: 2, wordSpacing: '0.5rem' }}>
                                     <li>
                                         <b>
-                                            ₹{' '}
+                                            {props?.currencySign}{' '}
                                             {props.type === 'Invoice'
                                                 ? props.getSingleInvoiceData?.data?.subTotal
                                                 : props.getSingleEstimate?.data?.subTotal}
@@ -241,13 +249,21 @@ const Template2 = React.forwardRef((props, ref) => {
                                         </b>
                                     </li>
                                     <li>
-                                        <b> ₹ {props.discountAmount}.00</b>
+                                        <b>
+                                            {' '}
+                                            {props?.currencySign} {props.discountAmount}.00
+                                        </b>
                                     </li>
                                     <li>
-                                        <b> ₹ {props.taxValue / 2}.00</b>
+                                        <b>
+                                            {' '}
+                                            {props?.currencySign} {props.taxValue / 2}.00
+                                        </b>
                                     </li>
                                     <li>
-                                        <b> ₹ {props.taxValue / 2}.00</b>
+                                        <b>
+                                            {props?.currencySign} {props.taxValue / 2}.00
+                                        </b>
                                     </li>
                                     <li>
                                         <b>
@@ -256,8 +272,7 @@ const Template2 = React.forwardRef((props, ref) => {
                                     </li>
                                     <li>
                                         <b>
-                                            {' '}
-                                            ₹{' '}
+                                            {props?.currencySign}{' '}
                                             {Math.round(
                                                 props.type === 'Invoice'
                                                     ? props.getSingleInvoiceData?.data?.grandTotal

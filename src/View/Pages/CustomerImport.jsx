@@ -40,10 +40,8 @@ const CustomerImport = () => {
             businessId: businessId
         };
         dispatch(customerUploadCsv({ payload }));
-        history.push('/customers');
+        // history.push('/customers');
     };
-
-    console.log('csvFile---', csvFile);
 
     return (
         <>

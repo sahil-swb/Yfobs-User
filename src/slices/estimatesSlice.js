@@ -3,6 +3,7 @@ import axios from 'axios';
 import React from 'react';
 import {
     BASE_URL_FOR_USER,
+    EXPORT_TO_PDF,
     USER_CONVERT_TO_INVOICE,
     USER_CREATE_ESTIMATES,
     USER_DELETE_ESTIMATES,
@@ -22,7 +23,8 @@ const initialState = {
     getSingleEstimate: {},
     ESTIMATEID: null,
     getSingleEstimateMessage: {},
-    convertToInvoiceData: {}
+    convertToInvoiceData: {},
+    exportToPdfData: null
 };
 
 export const createEstimateApi = createAsyncThunk('user/createEstimate', async ({ payload }, { rejectWithValue }) => {
@@ -46,6 +48,19 @@ export const getAllEstimatesApi = createAsyncThunk('user/getAllEstimates', async
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
         console.log(response?.data?.data);
+        return response?.data?.data;
+    } catch (error) {
+        errorPNotify(error?.response?.data?.message);
+        return rejectWithValue(error.response);
+    }
+});
+
+export const exportToPdf = createAsyncThunk('user/exportToPdf', async ({ payload }, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${BASE_URL_FOR_USER + EXPORT_TO_PDF}${payload?._id}`, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+        });
+        console.log(response?.data);
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data?.message);
@@ -203,6 +218,16 @@ const estimatesSlice = createSlice({
                 state.convertToInvoiceData = action.payload;
             })
             .addCase(convertToInvoice.rejected, (state, action) => {
+                state.isLoading = false;
+            })
+            .addCase(exportToPdf.pending, (state, action) => {
+                state.isLoading = true;
+            })
+            .addCase(exportToPdf.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.exportToPdfData = action.payload;
+            })
+            .addCase(exportToPdf.rejected, (state, action) => {
                 state.isLoading = false;
             });
     }

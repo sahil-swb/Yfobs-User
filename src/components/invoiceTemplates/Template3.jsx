@@ -29,7 +29,9 @@ const Template3 = React.forwardRef((props, ref) => {
                                     <div style={{ display: 'grid' }}>
                                         <div>
                                             <h2 style={{ padding: '0.5rem 0 0 0.5rem', textTransform: 'uppercase' }}>
-                                                {props.getSingleEstimate?.data?.title}
+                                                {props.type === 'Invoice'
+                                                    ? props.getSingleInvoiceData?.data?.title
+                                                    : props.getSingleEstimate?.data?.title}
                                             </h2>
                                         </div>
                                         <div style={{ color: '#fff' }}>
@@ -42,14 +44,17 @@ const Template3 = React.forwardRef((props, ref) => {
                                             >
                                                 <div
                                                     style={{
-                                                        background: props.estimateBusinessData?.color
-                                                            ? props.estimateBusinessData?.color
-                                                            : '#e7d8e8',
+                                                        background:
+                                                            props.type === 'Invoice'
+                                                                ? props.invoiceBusinessData?.color || '#e7d8e8'
+                                                                : props.estimateBusinessData?.color || '#e7d8e8',
                                                         padding: '0.5rem 0 0.5rem 0.5rem',
                                                         width: '100%'
                                                     }}
                                                 >
-                                                    {props.getSingleEstimate?.data?.summary}
+                                                    {props.type === 'Invoice'
+                                                        ? props.getSingleInvoiceData?.data?.summary
+                                                        : props.getSingleEstimate?.data?.summary}
                                                 </div>
                                                 <div>
                                                     <img
@@ -60,9 +65,10 @@ const Template3 = React.forwardRef((props, ref) => {
                                                 </div>
                                                 <div
                                                     style={{
-                                                        background: props.estimateBusinessData?.color
-                                                            ? props.estimateBusinessData?.color
-                                                            : '#e7d8e8',
+                                                        background:
+                                                            props.type === 'Invoice'
+                                                                ? props.invoiceBusinessData?.color || '#e7d8e8'
+                                                                : props.estimateBusinessData?.color || '#e7d8e8',
                                                         padding: '0.5rem 0.8rem'
                                                     }}
                                                 >
@@ -71,7 +77,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                             </div>
                                         </div>
                                         <div style={{ width: '50%' }}>
-                                            <p style={{ padding: '0 0 0.5rem 0.5rem' }}>{props.estimateBusinessData?.address}</p>
+                                            <p style={{ padding: '0 0 0.5rem 0.5rem' }}>
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceBusinessData?.address
+                                                    : props.estimateBusinessData?.address}
+                                            </p>
                                         </div>
                                     </div>
                                 </th>
@@ -87,7 +97,12 @@ const Template3 = React.forwardRef((props, ref) => {
                                         }}
                                     >
                                         <div style={{ fontSize: 16 }}>
-                                            <b>GSTIN: {props.estimateBusinessData?.vatCode}</b>
+                                            <b>
+                                                GSTIN:{' '}
+                                                {props.type === 'Invoice'
+                                                    ? props.invoiceBusinessData?.vatCode
+                                                    : props.estimateBusinessData?.vatCode}
+                                            </b>
                                         </div>
                                         <div style={{ fontSize: 16 }}>
                                             <b>Tax Invoice</b>
@@ -115,7 +130,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>M/S: </b>
-                                                                    <span>{props.getSingleEstimate?.data?.summary}</span>
+                                                                    <span>
+                                                                        {props.type === 'Invoice'
+                                                                            ? props.getSingleInvoiceData?.data?.customerName
+                                                                            : props.getSingleEstimate?.data?.customerName}
+                                                                    </span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -124,7 +143,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>Address: </b>
-                                                                    <span>{props.estimateCustomerData?.address}</span>
+                                                                    <span>
+                                                                        {props.type === 'Invoice'
+                                                                            ? props.invoiceCustomerData?.address
+                                                                            : props.estimateCustomerData?.address}
+                                                                    </span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -133,7 +156,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>PHONE: </b>
-                                                                    <span>{props.estimateCustomerData?.phone}</span>
+                                                                    <span>
+                                                                        {props.type === 'Invoice'
+                                                                            ? props.invoiceCustomerData?.phone
+                                                                            : props.estimateCustomerData?.phone}
+                                                                    </span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -142,7 +169,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                                     }}
                                                                 >
                                                                     <b>GSTIN: </b>
-                                                                    <span>{props.estimateCustomerData?.vatCode}</span>
+                                                                    <span>
+                                                                        {props.type === 'Invoice'
+                                                                            ? props.invoiceCustomerData?.vatCode
+                                                                            : props.estimateCustomerData?.vatCode}
+                                                                    </span>
                                                                 </li>
                                                                 <li
                                                                     style={{
@@ -152,8 +183,13 @@ const Template3 = React.forwardRef((props, ref) => {
                                                                 >
                                                                     <b>Place of Supply : </b>
                                                                     <span>
-                                                                        {props.getSingleEstimate?.data?.customerState},{' '}
-                                                                        {props.getSingleEstimate?.data?.customerCountry}
+                                                                        {props.type === 'Invoice'
+                                                                            ? props.getSingleInvoiceData?.data?.customerState
+                                                                            : props.getSingleEstimate?.data?.customerState}
+                                                                        ,{' '}
+                                                                        {props.type === 'Invoice'
+                                                                            ? props.getSingleInvoiceData?.data?.customerCountry
+                                                                            : props.getSingleEstimate?.data?.customerCountry}
                                                                     </span>
                                                                 </li>
                                                             </ul>
@@ -172,7 +208,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                         }}
                                                     >
                                                         <b>Invoice date :</b>
-                                                        <span>{props.getSingleEstimate?.data?.date}</span>
+                                                        <span>
+                                                            {props.type === 'Invoice'
+                                                                ? props.getSingleInvoiceData?.data?.date
+                                                                : props.getSingleEstimate?.data?.date}
+                                                        </span>
                                                     </li>
                                                     <li
                                                         style={{
@@ -199,7 +239,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                         }}
                                                     >
                                                         <b>P.O./S.O. no :</b>
-                                                        <span>{props.getSingleEstimate?.data?.posoNumber}</span>
+                                                        <span>
+                                                            {props.type === 'Invoice'
+                                                                ? props.getSingleInvoiceData?.data?.posoNumber
+                                                                : props.getSingleEstimate?.data?.posoNumber}
+                                                        </span>
                                                     </li>
                                                     <li
                                                         style={{
@@ -208,7 +252,11 @@ const Template3 = React.forwardRef((props, ref) => {
                                                         }}
                                                     >
                                                         <b>Due date :</b>
-                                                        <span>{props.getSingleEstimate?.data?.expireOn}</span>
+                                                        <span>
+                                                            {props.type === 'Invoice'
+                                                                ? props.getSingleInvoiceData?.data?.expireOn
+                                                                : props.getSingleEstimate?.data?.expireOn}
+                                                        </span>
                                                     </li>
                                                     <li
                                                         style={{
@@ -240,36 +288,79 @@ const Template3 = React.forwardRef((props, ref) => {
                                                 <th>Rate</th>
                                                 <th>Total</th>
                                             </tr>
-                                            {props.getSingleEstimate?.products?.map((val) =>
-                                                val.product?.map((product, index) => {
-                                                    return (
-                                                        <tr key={index} style={{ height: '2rem', textAlign: 'center' }}>
-                                                            <td>{index + 1}</td>
-                                                            <td>{product?.name}</td>
-                                                            <td>8798797</td>
-                                                            <td>{product?.quantity}</td>
-                                                            <td>€ {product?.price}</td>
-                                                            <td style={{ textAlign: 'right', padding: '0 0.5rem', background: '#f1f1f1' }}>
-                                                                ₹ {product?.price * product?.quantity}.00
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })
-                                            )}
+                                            {props.type === 'Invoice'
+                                                ? props.getSingleInvoiceData?.products?.map((val) =>
+                                                      val.product?.map((product, index) => {
+                                                          return (
+                                                              <tr key={index} style={{ height: '2rem', textAlign: 'center' }}>
+                                                                  <td>{index + 1}</td>
+                                                                  <td>{product?.name}</td>
+                                                                  <td>8798797</td>
+                                                                  <td>{product?.quantity}</td>
+                                                                  <td>
+                                                                      {props?.currencySign} {product?.price}
+                                                                  </td>
+                                                                  <td
+                                                                      style={{
+                                                                          textAlign: 'right',
+                                                                          padding: '0 0.5rem',
+                                                                          background: '#f1f1f1'
+                                                                      }}
+                                                                  >
+                                                                      {props?.currencySign} {product?.price * product?.quantity}.00
+                                                                  </td>
+                                                              </tr>
+                                                          );
+                                                      })
+                                                  )
+                                                : props.getSingleEstimate?.products?.map((val) =>
+                                                      val.product?.map((product, index) => {
+                                                          return (
+                                                              <tr key={index} style={{ height: '2rem', textAlign: 'center' }}>
+                                                                  <td>{index + 1}</td>
+                                                                  <td>{product?.name}</td>
+                                                                  <td>8798797</td>
+                                                                  <td>{product?.quantity}</td>
+                                                                  <td>
+                                                                      {props?.currencySign} {product?.price}
+                                                                  </td>
+                                                                  <td
+                                                                      style={{
+                                                                          textAlign: 'right',
+                                                                          padding: '0 0.5rem',
+                                                                          background: '#f1f1f1'
+                                                                      }}
+                                                                  >
+                                                                      {props?.currencySign} {product?.price * product?.quantity}.00
+                                                                  </td>
+                                                              </tr>
+                                                          );
+                                                      })
+                                                  )}
                                             <tr style={{ height: '2rem', textAlign: 'center', background: '#f1f1f1' }}>
                                                 <td colSpan={3} style={{ textAlign: 'right', paddingRight: '1rem' }}>
                                                     Total
                                                 </td>
                                                 <td>
-                                                    {props.getSingleEstimate?.products?.map((val) =>
-                                                        val.product?.reduce((acc, val) => {
-                                                            return acc + val?.quantity;
-                                                        }, 0)
-                                                    )}
+                                                    {props.type === 'Invoice'
+                                                        ? props.getSingleInvoiceData?.products?.map((val) =>
+                                                              val.product?.reduce((acc, val) => {
+                                                                  return acc + val?.quantity;
+                                                              }, 0)
+                                                          )
+                                                        : props.getSingleEstimate?.products?.map((val) =>
+                                                              val.product?.reduce((acc, val) => {
+                                                                  return acc + val?.quantity;
+                                                              }, 0)
+                                                          )}
                                                 </td>
                                                 <td />
                                                 <td style={{ textAlign: 'right', padding: '0 0.5rem' }}>
-                                                    ₹ {props.getSingleEstimate?.data?.subTotal}.00
+                                                    {props?.currencySign}{' '}
+                                                    {props.type === 'Invoice'
+                                                        ? props.getSingleInvoiceData?.data?.subTotal
+                                                        : props.getSingleEstimate?.data?.subTotal}
+                                                    .00
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -314,10 +405,26 @@ const Template3 = React.forwardRef((props, ref) => {
                                                     justifyContent: 'center'
                                                 }}
                                             >
-                                                {props.estimateBusinessData?.bankName ||
-                                                props.estimateBusinessData?.branchName ||
-                                                props.estimateBusinessData?.accountNumber ||
-                                                props.estimateBusinessData?.bankIfscCode ? (
+                                                {props.type === 'Invoice' ? (
+                                                    props.invoiceBusinessData?.bankName ||
+                                                    props.invoiceBusinessData?.branchName ||
+                                                    props.invoiceBusinessData?.accountNumber ||
+                                                    props.invoiceBusinessData?.bankIfscCode ? (
+                                                        <div>
+                                                            <p>
+                                                                Bank Name: {props.invoiceBusinessData?.bankName},{' '}
+                                                                {props.invoiceBusinessData?.branchName}
+                                                            </p>
+                                                            <p>A/C No: {props.invoiceBusinessData?.accountNumber}</p>
+                                                            <p>IFSC Code: {props.invoiceBusinessData?.bankIfscCode}</p>
+                                                        </div>
+                                                    ) : (
+                                                        'Bank Details Not Found !'
+                                                    )
+                                                ) : props.estimateBusinessData?.bankName ||
+                                                  props.estimateBusinessData?.branchName ||
+                                                  props.estimateBusinessData?.accountNumber ||
+                                                  props.estimateBusinessData?.bankIfscCode ? (
                                                     <div>
                                                         <p>
                                                             Bank Name: {props.estimateBusinessData?.bankName},{' '}
@@ -348,7 +455,13 @@ const Template3 = React.forwardRef((props, ref) => {
                                                 }}
                                             >
                                                 <span>Taxable Amount</span>
-                                                <span>₹ {props.getSingleEstimate?.data?.subTotal}.00</span>
+                                                <span>
+                                                    {props?.currencySign}{' '}
+                                                    {props.type === 'Invoice'
+                                                        ? props.getSingleInvoiceData?.data?.subTotal
+                                                        : props.getSingleEstimate?.data?.subTotal}
+                                                    .00
+                                                </span>
                                             </div>
                                             <div
                                                 style={{
@@ -358,8 +471,16 @@ const Template3 = React.forwardRef((props, ref) => {
                                                     padding: '0 0.5rem'
                                                 }}
                                             >
-                                                <span>Discount [{props.getSingleEstimate?.data?.discount}%]</span>
-                                                <span>{props.discountAmount} </span>
+                                                <span>
+                                                    Discount [
+                                                    {props.type === 'Invoice'
+                                                        ? props.getSingleInvoiceData?.data?.discount
+                                                        : props.getSingleEstimate?.data?.discount}
+                                                    %]
+                                                </span>
+                                                <span>
+                                                    {props?.currencySign} {props.discountAmount}{' '}
+                                                </span>
                                             </div>
 
                                             <div
@@ -370,8 +491,16 @@ const Template3 = React.forwardRef((props, ref) => {
                                                     padding: '0 0.5rem'
                                                 }}
                                             >
-                                                <span>Add: IGST5 [{props.getSingleEstimate?.data?.tax}%]</span>
-                                                <span>{props.taxValue} </span>
+                                                <span>
+                                                    Add: IGST5 [
+                                                    {props.type === 'Invoice'
+                                                        ? props?.getSingleInvoiceData?.data?.tax
+                                                        : props.getSingleEstimate?.data?.tax}
+                                                    %]
+                                                </span>
+                                                <span>
+                                                    {props?.currencySign} {props.taxValue}{' '}
+                                                </span>
                                             </div>
                                             <div
                                                 style={{
@@ -382,7 +511,15 @@ const Template3 = React.forwardRef((props, ref) => {
                                             >
                                                 <b style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <span>Total Amout After Tax</span>
-                                                    <span>₹ {Math.round(props.getSingleEstimate?.data?.grandTotal)}.00 </span>
+                                                    <span>
+                                                        {props?.currencySign}{' '}
+                                                        {Math.round(
+                                                            props.type === 'Invoice'
+                                                                ? props.getSingleInvoiceData?.data?.grandTotal
+                                                                : props.getSingleEstimate?.data?.grandTotal
+                                                        )}
+                                                        .00{' '}
+                                                    </span>
                                                 </b>
                                             </div>
                                             <div
@@ -417,7 +554,12 @@ const Template3 = React.forwardRef((props, ref) => {
                                                 }}
                                             >
                                                 <p>
-                                                    <b>FOR {props.getSingleEstimate?.data?.title} </b>
+                                                    <b>
+                                                        FOR{' '}
+                                                        {props.type === 'Invoice'
+                                                            ? props.getSingleInvoiceData?.data?.title
+                                                            : props.getSingleEstimate?.data?.title}{' '}
+                                                    </b>
                                                 </p>
                                             </div>
                                             <div style={{ textAlign: 'center' }}>

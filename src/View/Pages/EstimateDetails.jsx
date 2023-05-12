@@ -7,16 +7,22 @@ import Template2 from '../../components/invoiceTemplates/Template2';
 import Template4 from '../../components/invoiceTemplates/Template4';
 import Template3 from '../../components/invoiceTemplates/Template3';
 import { useDispatch, useSelector } from 'react-redux';
-import { convertToInvoice, getEstimateById } from '../../slices/estimatesSlice';
+import { convertToInvoice, exportToPdf, getEstimateById } from '../../slices/estimatesSlice';
 import { commonDeleteModal, commonModalIsOpen, setRowData } from '../../slices/modalSlice';
 import EstimateSendModal from '../../components/modals/EstimateSendModal';
 import DeleteConfModal from '../../components/modals/DeleteConfModal';
 import { ToWords } from 'to-words';
+import { getAllCountriesApi } from '../../slices/countryDetailSlice';
+import { BASE_URL_FOR_USER } from '../../constants/urlConfig';
 
 const EstimateDetails = () => {
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
+    const { getAllCountries } = useSelector((state) => state.countriesInfoReducer);
     const [estimateCustomerData, setEstimateCustomerData] = useState({});
     const [estimateBusinessData, setEstimateBusinessData] = useState({});
+    const [currencySign, setCurrencySign] = useState('');
+    const [exportData, setExportData] = useState('');
+    const { exportToPdfData } = useSelector((state) => state.estimateReducer);
     const { _id } = useParams();
     const dispatch = useDispatch();
     const componentRef = useRef();
@@ -52,7 +58,17 @@ const EstimateDetails = () => {
         getSingleEstimate?.business?.map((data) => setEstimateBusinessData(data));
     }, [getSingleEstimate?.business, getSingleEstimate?.customer]);
 
-    console.log('estimateCustomerData===', estimateCustomerData);
+    useEffect(() => {
+        getAllCountries.filter(
+            (symbol) => symbol?.currencyName === estimateCustomerData?.currencyName && setCurrencySign(symbol?.currencySymbol)
+        );
+    }, [estimateCustomerData?.currencyName]);
+
+    useEffect(() => {
+        dispatch(getAllCountriesApi());
+    }, []);
+
+    // console.log('exportToPdfData---', exportToPdfData);
 
     return (
         <>
@@ -84,7 +100,25 @@ const EstimateDetails = () => {
                                     >
                                         Convert to Invoice
                                     </Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Export as PDF</Dropdown.Item>
+                                    <Dropdown.Item
+                                        as={Link}
+                                        onClick={() => {
+                                            fetch(`${BASE_URL_FOR_USER}Estimates/htmlToPdf/${getSingleEstimate?.data?._id}`).then(
+                                                (response) => {
+                                                    response.blob().then((blob) => {
+                                                        const fileURL = window.URL.createObjectURL(blob);
+                                                        let alink = document.createElement('a');
+                                                        alink.href = fileURL;
+                                                        let pdfTitle = getSingleEstimate?.data?.title || 'SamplePDF';
+                                                        alink.download = `${pdfTitle}.pdf`;
+                                                        alink.click();
+                                                    });
+                                                }
+                                            );
+                                        }}
+                                    >
+                                        Export as PDF
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => dispatch(commonModalIsOpen(true))}>Send</Dropdown.Item>
                                     <Dropdown.Item as={Link} target="_blank" to="/estimates_preview">
                                         Preview as a Customer
@@ -116,6 +150,7 @@ const EstimateDetails = () => {
                                 discountAmount={discountAmount}
                                 taxValue={taxValue}
                                 words={words}
+                                currencySign={currencySign}
                             />
                         ) : estimateBusinessData?.templateStyle === 'Template2' ? (
                             <Template2
@@ -127,6 +162,7 @@ const EstimateDetails = () => {
                                 discountAmount={discountAmount}
                                 taxValue={taxValue}
                                 words={words}
+                                currencySign={currencySign}
                             />
                         ) : estimateBusinessData?.templateStyle === 'Template3' ? (
                             <Template3
@@ -138,6 +174,7 @@ const EstimateDetails = () => {
                                 discountAmount={discountAmount}
                                 taxValue={taxValue}
                                 words={words}
+                                currencySign={currencySign}
                             />
                         ) : estimateBusinessData?.templateStyle === 'Template4' ? (
                             <Template4
@@ -149,6 +186,7 @@ const EstimateDetails = () => {
                                 discountAmount={discountAmount}
                                 taxValue={taxValue}
                                 words={words}
+                                currencySign={currencySign}
                             />
                         ) : (
                             ''

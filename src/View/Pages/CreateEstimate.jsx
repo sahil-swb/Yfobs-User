@@ -25,6 +25,7 @@ const CreateEstimate = () => {
     const [defaultTax, setDefaultTax] = useState(0);
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
+    const [customerPrefill, setCustomerPrefill] = useState('');
     const [customerName, setCustomerName] = useState('');
     const [content, setContent] = useState('');
     const history = useHistory();
@@ -43,7 +44,7 @@ const CreateEstimate = () => {
     };
 
     // Customer Prefill Name From Estimate Api
-    let prefillCustomerName = getSingleEstimate?.data?.customerName;
+    let prefillCustomerName = customerPrefill;
 
     // Product Array From Estimate Api
     let productArray = getSingleEstimate?.products?.map((val) => val?.product);
@@ -164,6 +165,10 @@ const CreateEstimate = () => {
         setDefaultTax(getSingleEstimate?.data?.tax);
         setDefaultDiscount(getSingleEstimate?.data?.discount);
     }, [getSingleEstimate?.data?.tax, getSingleEstimate?.data?.discount]);
+
+    useEffect(() => {
+        setCustomerPrefill(getSingleEstimate?.data?.customerName);
+    }, [getSingleEstimate?.data?.customerName]);
 
     return (
         <>
