@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { lazy, Suspense } from 'react';
-import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
+import { Switch, Route, useLocation, Redirect, useHistory } from 'react-router-dom';
 import '../../node_modules/font-awesome/scss/font-awesome.scss';
 import Loader from './layout/Loader';
 import ScrollToTop from './layout/ScrollToTop';
@@ -12,6 +12,13 @@ const App = () => {
     let localStorageData = localStorage.getItem('userData');
     let storageObject = JSON.parse(localStorageData);
     const location = useLocation();
+    const history = useHistory();
+
+    React.useEffect(() => {
+        if (storageObject !== null) {
+            history.push('/dashboard');
+        }
+    }, [storageObject?.accessToken]);
 
     return (
         <>

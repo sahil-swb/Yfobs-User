@@ -18,6 +18,7 @@ const CreateAndEditInvoice = () => {
     const [content, setContent] = useState('');
     const [modalOpenType, setModalTypeOpen] = useState('');
     const [currencySign, setCurrencySign] = useState('');
+    const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
     const { getEstimateProducts } = useSelector((state) => state.productsReducer);
     const { getAllCustomers, createCustomer, getSingleCustomerData } = useSelector((state) => state.customers);
     const { getAllCountries, getAllStates } = useSelector((state) => state.countriesInfoReducer);
@@ -27,6 +28,7 @@ const CreateAndEditInvoice = () => {
     const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const [customerName, setCustomerName] = useState('');
+    const [addProducts, setAddProducts] = useState([]);
     const history = useHistory();
     const updateId = useParams();
     const dispatch = useDispatch();
@@ -49,16 +51,6 @@ const CreateAndEditInvoice = () => {
     let productArray = getSingleInvoiceData?.products?.map((val) => val?.product);
 
     // Product Array created using onClick
-    let addProducts = getEstimateProducts?.map((val) =>
-        val?.product.map((newVal) => {
-            let newProductObj = {
-                name: newVal?.name,
-                price: newVal?.price,
-                quantity: 1
-            };
-            return newProductObj;
-        })
-    );
 
     const handleSubmit = (values, resetForm) => {
         const payload = {
@@ -140,6 +132,20 @@ const CreateAndEditInvoice = () => {
         });
         setCustomerName(customerName);
     };
+
+    useEffect(() => {
+        // Product Array created using onClick
+        getEstimateProducts?.map((val) =>
+            val?.product.map((newVal) => {
+                let newProductObj = {
+                    name: newVal?.name,
+                    price: newVal?.price,
+                    quantity: 1
+                };
+                setAddProducts([newProductObj]);
+            })
+        );
+    }, [getSingleEstimate?.product]);
 
     useEffect(() => {
         if (updateId?._id) {

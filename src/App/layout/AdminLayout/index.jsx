@@ -28,7 +28,6 @@ const AdminLayout = ({ storageObject }) => {
         }
     };
 
-    console.log('storageObject=====', storageObject);
     return (
         <>
             <Navigation />

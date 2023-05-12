@@ -56,8 +56,6 @@ const NewBusinessModal = ({ rowData }) => {
         dispatch(uploadUpiQRCodeApi({ payloadUpiImage }));
     };
 
-    console.log('first', upiImage);
-
     const handleSubmit = (values) => {
         let payload = {
             userId: userId,

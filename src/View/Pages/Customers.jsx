@@ -64,6 +64,7 @@ const Customers = () => {
 
     //STATES
     const { getAllCustomers, createCustomer, deleteCustomer, updateCustomer } = useSelector((state) => state.customers);
+    const { updateBusinessData } = useSelector((state) => state.settingsReducer);
     const [rowData, setRowData] = useState({});
 
     const dispatch = useDispatch();
@@ -87,7 +88,7 @@ const Customers = () => {
             _id: userId
         };
         dispatch(getAllCustomersApi({ payload }));
-    }, [createCustomer, deleteCustomer, updateCustomer]);
+    }, [createCustomer, deleteCustomer, updateCustomer, updateBusinessData]);
 
     return (
         <div>

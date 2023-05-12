@@ -25,9 +25,9 @@ const CreateEstimate = () => {
     const [defaultTax, setDefaultTax] = useState(0);
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
-    const [customerPrefill, setCustomerPrefill] = useState('');
     const [customerName, setCustomerName] = useState('');
     const [content, setContent] = useState('');
+    const [addProducts, setAddProducts] = useState([]);
     const history = useHistory();
     const updateId = useParams();
     const dispatch = useDispatch();
@@ -44,22 +44,10 @@ const CreateEstimate = () => {
     };
 
     // Customer Prefill Name From Estimate Api
-    let prefillCustomerName = customerPrefill;
+    let prefillCustomerName = getSingleEstimate?.data?.customerName;
 
     // Product Array From Estimate Api
     let productArray = getSingleEstimate?.products?.map((val) => val?.product);
-
-    // Product Array created using onClick
-    let addProducts = getEstimateProducts?.map((val) =>
-        val?.product.map((newVal) => {
-            let newProductObj = {
-                name: newVal?.name,
-                price: newVal?.price,
-                quantity: 1
-            };
-            return newProductObj;
-        })
-    );
 
     const handleSubmit = (values, resetForm) => {
         const payload = {
@@ -114,6 +102,7 @@ const CreateEstimate = () => {
         }
 
         setContent('');
+        setAddProducts([]);
         history.push('/estimates');
     };
 
@@ -130,6 +119,20 @@ const CreateEstimate = () => {
         });
         setCustomerName(customerName);
     };
+
+    useEffect(() => {
+        // Product Array created using onClick
+        getEstimateProducts?.map((val) =>
+            val?.product.map((newVal) => {
+                let newProductObj = {
+                    name: newVal?.name,
+                    price: newVal?.price,
+                    quantity: 1
+                };
+                setAddProducts([newProductObj]);
+            })
+        );
+    }, [getSingleEstimate?.product]);
 
     useEffect(() => {
         if (updateId?._id) {
@@ -166,9 +169,8 @@ const CreateEstimate = () => {
         setDefaultDiscount(getSingleEstimate?.data?.discount);
     }, [getSingleEstimate?.data?.tax, getSingleEstimate?.data?.discount]);
 
-    useEffect(() => {
-        setCustomerPrefill(getSingleEstimate?.data?.customerName);
-    }, [getSingleEstimate?.data?.customerName]);
+    console.log('addProducts', addProducts);
+    console.log('getEstimateProducts', getEstimateProducts);
 
     return (
         <>
@@ -207,7 +209,7 @@ const CreateEstimate = () => {
                                           expireOn: '',
                                           customerCountry: '',
                                           customerState: '',
-                                          estimateProducts: addProducts[0] || []
+                                          estimateProducts: []
                                       }
                             }
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
@@ -461,7 +463,7 @@ const CreateEstimate = () => {
                                                                 />
                                                             </tbody>
                                                         </Table>
-                                                        <div onClick={() => setModalTypeOpen('PRODUCTS')}>
+                                                        <div className="d-inline-block" onClick={() => setModalTypeOpen('PRODUCTS')}>
                                                             <OpenModalButton modalType={'ADD'} buttonName={'Add an Item'} />
                                                         </div>
                                                     </div>

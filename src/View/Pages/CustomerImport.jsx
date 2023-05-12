@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { customerUploadCsv } from '../../slices/customersSlice';
 import '../../assets/css/customerImportStyle.css';
 import { Link, useHistory } from 'react-router-dom';
+import { isUtf8 } from 'buffer';
 
 const CustomerImport = () => {
+    const { customerUploadCsvData } = useSelector((state) => state.customers);
     const dispatch = useDispatch();
     const [csvFile, setCsvFile] = useState('');
     const history = useHistory();
@@ -89,25 +91,25 @@ const CustomerImport = () => {
                             <li>
                                 <div className="d-flex justify-content-between">
                                     <strong>Name </strong>
-                                    <span>sdhfish</span>
+                                    <span>{customerUploadCsvData?.[0]?.name}</span>
                                 </div>
                             </li>
                             <li>
                                 <div className="d-flex justify-content-between">
                                     <strong>Phone </strong>
-                                    <span>sdhfish</span>
+                                    <span>{customerUploadCsvData?.[0]?.phone}</span>
                                 </div>
                             </li>
                             <li>
                                 <div className="d-flex justify-content-between">
                                     <strong>Email </strong>
-                                    <span>sdhfish</span>
+                                    <span>{customerUploadCsvData?.[0]?.email}</span>
                                 </div>
                             </li>
                             <li>
                                 <div className="d-flex justify-content-between">
                                     <b>Address </b>
-                                    <span>sdhfish</span>
+                                    <span>{customerUploadCsvData?.[0]?.address}</span>
                                 </div>
                             </li>
                         </ul>
