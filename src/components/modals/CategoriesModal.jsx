@@ -46,14 +46,14 @@ const CategoriesModal = ({ data }) => {
                             <Field className="form-control" type="text" name="name" />
                         </div>
 
-                        <div role="group">
-                            <label className="mx-4">
+                        <div role="group" className="d-flex">
+                            <label className="mx-4 d-flex">
                                 <Field type="radio" name="type" value="Income" />
-                                Income
+                                <span className="ml-1">Income</span>
                             </label>
-                            <label>
+                            <label className="d-flex">
                                 <Field type="radio" name="type" value="Expense" />
-                                Expense
+                                <span className="ml-1">Expense</span>
                             </label>
                         </div>
 

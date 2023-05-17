@@ -4,7 +4,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import DEMO from '../../../../../store/constant';
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { getSingleUser } from '../../../../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { userId } from '../../../../../constants/userData';
@@ -139,17 +139,26 @@ const NavRight = (props) => {
                             <div className="pro-head bg-dark">
                                 <img src={Avatar1} className="img-radius" alt="User Profile" />
                                 <span>{getDataById?.name}</span>
-                                <Button variant="link" onClick={() => handleLogout()} className="dud-logout" title="Logout">
-                                    <i className="feather icon-log-out" />
-                                </Button>
                             </div>
                             <ul className="pro-body">
                                 <li>
-                                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
+                                    <Link to="/settings" className="dropdown-item">
                                         <i className="feather icon-settings" /> Settings
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
+                                    <Link as="button" to="/settings" onClick={() => handleLogout()} className="dropdown-item">
+                                        <i className="feather icon-log-out" />
+                                        Logout
+                                    </Link>
+                                    {/* <Button
+                                            variant="link"
+                                            onClick={() => handleLogout()}
+                                            className="dud-logout"
+                                            title="Logout"
+                                        ></Button> */}
+                                </li>
+                                {/* <li>
                                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
                                         <i className="feather icon-user" /> Profile
                                     </a>
@@ -163,7 +172,7 @@ const NavRight = (props) => {
                                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
                                         <i className="feather icon-lock" /> Lock Screen
                                     </a>
-                                </li>
+                                </li> */}
                             </ul>
                         </Dropdown.Menu>
                     </Dropdown>

@@ -4,7 +4,7 @@ import Breadcrumb from '../App/layout/AdminLayout/Breadcrumb';
 const AuthLayout = ({ children }) => {
     return (
         <>
-            <Breadcrumb />
+            {/* <Breadcrumb /> */}
             <div className="auth-wrapper">
                 <div className="auth-content">
                     <div className="card">

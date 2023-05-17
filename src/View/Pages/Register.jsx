@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import Breadcrumb from '../../App/layout/AdminLayout/Breadcrumb';
 import '../../assets/scss/style.scss';
-import logoDark from '../../assets/images/logo-dark.png';
+import yfobslogo from '../../assets/images/yfobs-logo.png';
 import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../slices/authSlice';
@@ -43,7 +43,7 @@ const Register = () => {
     return (
         <AuthLayout>
             <div className="card-body">
-                <img src={logoDark} alt="" className="img-fluid mb-4" />
+                <img src={yfobslogo} alt="" width={100} className="img-fluid mb-4" />
                 <h4 className="mb-3 f-w-400">Sign up</h4>
                 <Formik
                     initialValues={{ name: '', email: '', password: '' }}

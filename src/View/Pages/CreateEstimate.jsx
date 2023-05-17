@@ -24,10 +24,8 @@ const CreateEstimate = () => {
     const [defaultDiscount, setDefaultDiscount] = useState(0);
     const [defaultTax, setDefaultTax] = useState(0);
     const { getSingleEstimate } = useSelector((state) => state.estimateReducer);
-    const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const [customerName, setCustomerName] = useState('');
     const [content, setContent] = useState('');
-    const [addProducts, setAddProducts] = useState([]);
     const history = useHistory();
     const updateId = useParams();
     const dispatch = useDispatch();
@@ -102,7 +100,8 @@ const CreateEstimate = () => {
         }
 
         setContent('');
-        setAddProducts([]);
+        setCustomerName('');
+        setCurrencySign('');
         history.push('/estimates');
     };
 
@@ -121,20 +120,6 @@ const CreateEstimate = () => {
     };
 
     useEffect(() => {
-        // Product Array created using onClick
-        getEstimateProducts?.map((val) =>
-            val?.product.map((newVal) => {
-                let newProductObj = {
-                    name: newVal?.name,
-                    price: newVal?.price,
-                    quantity: 1
-                };
-                setAddProducts([newProductObj]);
-            })
-        );
-    }, [getSingleEstimate?.product]);
-
-    useEffect(() => {
         if (updateId?._id) {
             let payload = {
                 _id: updateId?._id
@@ -147,10 +132,11 @@ const CreateEstimate = () => {
         getAllCountries.map((val) => {
             if (getSingleCustomerData?.currencyName === val?.currencyName) {
                 setCurrencySign(val?.currencySymbol);
-                setCountryPrefillValue(getSingleCustomerData?.countryName);
             }
         });
-    }, [getSingleCustomerData, countryPrefillValue]);
+    }, [getSingleCustomerData]);
+
+    console.log('getSingleCustomerData', getSingleCustomerData);
 
     useEffect(() => {
         let payload = {
@@ -169,8 +155,8 @@ const CreateEstimate = () => {
         setDefaultDiscount(getSingleEstimate?.data?.discount);
     }, [getSingleEstimate?.data?.tax, getSingleEstimate?.data?.discount]);
 
-    console.log('addProducts', addProducts);
-    console.log('getEstimateProducts', getEstimateProducts);
+    // console.log('addProducts', addProducts);
+    // console.log('getEstimateProducts', getEstimateProducts);
 
     return (
         <>
@@ -214,7 +200,7 @@ const CreateEstimate = () => {
                             }
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
                         >
-                            {({ values }) => (
+                            {({ values, setFieldValue }) => (
                                 <Form>
                                     <Accordion defaultActiveKey="0">
                                         <Card>
@@ -407,6 +393,10 @@ const CreateEstimate = () => {
                                                                             {values?.estimateProducts?.map((estimate, index) => {
                                                                                 return (
                                                                                     <tr key={index}>
+                                                                                        {console.log(
+                                                                                            'values?.estimateProducts',
+                                                                                            values?.estimateProducts
+                                                                                        )}
                                                                                         <td>
                                                                                             <Field
                                                                                                 type="text"
@@ -463,13 +453,14 @@ const CreateEstimate = () => {
                                                                 />
                                                             </tbody>
                                                         </Table>
-                                                        <div className="d-inline-block" onClick={() => setModalTypeOpen('PRODUCTS')}>
+                                                        <div onClick={() => setModalTypeOpen('PRODUCTS')}>
                                                             <OpenModalButton modalType={'ADD'} buttonName={'Add an Item'} />
                                                         </div>
                                                     </div>
                                                     <div className="text-right font-weight-bold h5">
                                                         <ListGroup variant="flush">
                                                             <ListGroup.Item>
+                                                                {console.log('currencySign-----', currencySign)}
                                                                 <span className="mr-5">Sub Total</span> {currencySign}{' '}
                                                                 {values.estimateProducts.reduce((acc, val) => {
                                                                     let subTotalAmount = acc + val.price * val.quantity;

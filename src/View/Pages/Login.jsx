@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import Breadcrumb from '../../App/layout/AdminLayout/Breadcrumb';
 import '../../assets/scss/style.scss';
-import logoDark from '../../assets/images/logo-dark.png';
 import { useHistory } from 'react-router-dom';
+import yfobslogo from '../../assets/images/yfobs-logo.png';
 import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, setIsLogin } from '../../slices/authSlice';
@@ -37,7 +37,7 @@ const Login = () => {
         <>
             <AuthLayout>
                 <div className="card-body">
-                    <img src={logoDark} alt="" className="img-fluid mb-4" />
+                    <img src={yfobslogo} width={100} alt="" className="img-fluid mb-4" />
                     <h4 className="mb-3 f-w-400">Signin</h4>
                     <Formik initialValues={{ email: '', password: '' }} onSubmit={(values) => handleLogin(values)}>
                         <Form>

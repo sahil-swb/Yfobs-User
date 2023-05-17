@@ -38,7 +38,7 @@ export const getAllInvoices = createAsyncThunk('user/setGetAllInvoices', async (
         const response = await axios.post(`${BASE_URL_FOR_USER + USER_GETALL_INVOICES}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data);
+        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data.message);

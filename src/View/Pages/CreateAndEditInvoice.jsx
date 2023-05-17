@@ -28,7 +28,6 @@ const CreateAndEditInvoice = () => {
     const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
     const [countryPrefillValue, setCountryPrefillValue] = useState('');
     const [customerName, setCustomerName] = useState('');
-    const [addProducts, setAddProducts] = useState([]);
     const history = useHistory();
     const updateId = useParams();
     const dispatch = useDispatch();
@@ -116,6 +115,8 @@ const CreateAndEditInvoice = () => {
         }
 
         setContent('');
+        setCustomerName('');
+        setCurrencySign('');
         history.push('/invoices');
     };
 
@@ -132,20 +133,6 @@ const CreateAndEditInvoice = () => {
         });
         setCustomerName(customerName);
     };
-
-    useEffect(() => {
-        // Product Array created using onClick
-        getEstimateProducts?.map((val) =>
-            val?.product.map((newVal) => {
-                let newProductObj = {
-                    name: newVal?.name,
-                    price: newVal?.price,
-                    quantity: 1
-                };
-                setAddProducts([newProductObj]);
-            })
-        );
-    }, [getSingleEstimate?.product]);
 
     useEffect(() => {
         if (updateId?._id) {
@@ -219,7 +206,7 @@ const CreateAndEditInvoice = () => {
                                           expireOn: '',
                                           customerCountry: '',
                                           customerState: '',
-                                          estimateProducts: addProducts[0] || []
+                                          estimateProducts: []
                                       }
                             }
                             onSubmit={(values, { resetForm }) => handleSubmit(values, resetForm)}
@@ -481,7 +468,7 @@ const CreateAndEditInvoice = () => {
                                                             <ListGroup.Item>
                                                                 <span className="mr-5">Sub Total</span> {currencySign}{' '}
                                                                 {values.estimateProducts.reduce((acc, val) => {
-                                                                    let subTotalAmount = acc + val.price * val.quantity;
+                                                                    let subTotalAmount = acc + val?.price * val?.quantity;
                                                                     setDefaultTotal(subTotalAmount);
                                                                     return subTotalAmount;
                                                                 }, 0)}

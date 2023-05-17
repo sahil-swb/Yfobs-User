@@ -2,6 +2,7 @@ import * as React from 'react';
 import history from './history';
 
 const Dashboard = React.lazy(() => import('./View/Pages/Dashboard'));
+const Settings = React.lazy(() => import('./View/Pages/Settings'));
 const Customers = React.lazy(() => import('./View/Pages/Customers'));
 const CustomerImport = React.lazy(() => import('./View/Pages/CustomerImport'));
 const Categories = React.lazy(() => import('./View/Pages/Categories'));
@@ -23,6 +24,7 @@ const CreateAndEditInvoice = React.lazy(() => import('./View/Pages/CreateAndEdit
 
 const routes = [
     { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
+    { path: '/settings', exact: true, name: 'Settings', component: Settings },
     { path: '/customers', exact: true, name: 'Customers', component: Customers },
     { path: '/customers/import', exact: true, name: 'CustomerImport', component: CustomerImport },
     { path: '/categories', exact: true, name: 'Categories', component: Categories },

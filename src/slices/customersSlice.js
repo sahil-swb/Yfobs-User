@@ -48,7 +48,7 @@ export const getAllCustomersApi = createAsyncThunk('user/getAllCustomers', async
         const response = await axios.get(`${BASE_URL_FOR_USER + USER_GET_ALL_CUSTOMERS}/${payload?._id}`, {
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
-        console.log(response?.data);
+        console.log(response?.data?.data);
         return response?.data?.data;
     } catch (error) {
         console.log(error?.response?.data?.statusCode === 422 ? [] : null);
@@ -107,7 +107,8 @@ export const customerUploadCsv = createAsyncThunk('user/customerUploadCsv', asyn
             headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
         });
 
-        response?.data?.status ? successPNotify('Customer Uploaded Successfully') : errorPNotify('Customer Already Added');
+        console.log('response', response);
+        response?.data?.status ? successPNotify('Customer Uploaded Successfully') : errorPNotify('Customer Already Exists');
         return response?.data?.data;
     } catch (error) {
         errorPNotify(error?.response?.data?.message);

@@ -14,6 +14,7 @@ const chartData = {
                     classes: 'nav-item',
                     icon: 'fa fa-home'
                 },
+
                 {
                     id: 'customers',
                     title: 'Customers',
@@ -85,12 +86,20 @@ const chartData = {
                     url: '/subscription',
                     icon: 'fa fa-calculator'
                 },
+                // {
+                //     id: 'user_change_password',
+                //     title: 'Change Password',
+                //     type: 'item',
+                //     url: '/user_change_password',
+                //     icon: 'fa fa-key'
+                // },
                 {
-                    id: 'user_change_password',
-                    title: 'Change Password',
+                    id: 'settings',
+                    title: 'Settings',
                     type: 'item',
-                    url: '/user_change_password',
-                    icon: 'fa fa-key'
+                    url: '/settings',
+                    classes: 'nav-item',
+                    icon: 'fa fa-cog'
                 },
                 {
                     id: 'gst_calculate',

@@ -2,40 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Badge, ListGroup, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalIsOpen } from '../../slices/modalSlice';
-import { getAllProductsApi, getSingleProductApi } from '../../slices/productsSlice';
-import { getCustomerById } from '../../slices/customersSlice';
+import { getAllProductsApi } from '../../slices/productsSlice';
 import { userId } from '../../constants/userData';
 
 const ProductsEstimateModal = ({ addHelper }) => {
     const { modalIsOpen } = useSelector((state) => state.modalReducer);
-    const { getAllProducts, getSingleProduct } = useSelector((state) => state.productsReducer);
+    const { getAllProducts } = useSelector((state) => state.productsReducer);
     const [searchValue, setSearchValue] = useState('');
 
     const dispatch = useDispatch();
 
-    const handleSubmit = (_id) => {
-        const payload = {
-            _id: _id
-        };
-        dispatch(getSingleProductApi({ payload }));
-    };
-
-    let productPrice = [];
-    let productName = [];
-    getSingleProduct?.product?.map((val) => {
-        productName.push(val?.name);
-        productPrice.push(val?.price);
-    });
-
-    useEffect(() => {
-        if (getSingleProduct?._id) {
+    const handleSubmit = (val) => {
+        val?.product.map((val) =>
             addHelper?.push({
-                name: productName[0],
-                price: productPrice[0],
+                name: val?.name,
+                price: val?.price,
                 quantity: 1
-            });
-        }
-    }, [getSingleProduct?.product]);
+            })
+        );
+    };
 
     useEffect(() => {
         let payload = {
@@ -73,7 +58,7 @@ const ProductsEstimateModal = ({ addHelper }) => {
                     {getAllProducts && getAllProducts.length > 0 ? (
                         getAllProducts.map((val, index) => {
                             return (
-                                <ListGroup.Item action variant="light" key={index} onClick={() => handleSubmit(val._id)}>
+                                <ListGroup.Item action variant="light" key={index} onClick={() => handleSubmit(val)}>
                                     <div className="d-flex" style={{ justifyContent: 'space-between' }}>
                                         <div>
                                             <div className="font-weight-bold h5 text-dark">

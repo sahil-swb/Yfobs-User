@@ -88,7 +88,7 @@ const InvoiceDetails = () => {
 
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={handlePrint}>Print</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Convert to Invoice</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2">Convert to Recurring Invoice</Dropdown.Item>
                                     <Dropdown.Item href="#/action-3">Export as PDF</Dropdown.Item>
                                     <Dropdown.Item onClick={() => dispatch(commonModalIsOpen(true))}>Send</Dropdown.Item>
                                     <Dropdown.Item as={Link} target="_blank" to="/estimates_preview">

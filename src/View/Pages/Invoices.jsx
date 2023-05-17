@@ -56,6 +56,7 @@ const Invoices = () => {
             selector: (row) => {
                 return (
                     <div>
+                        {/* <Button>Approve</Button> */}
                         <Button size="sm" className="mr-1" as={Link} to={`/invoices/invoice_details/${row._id}`}>
                             View
                         </Button>
