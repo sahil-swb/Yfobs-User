@@ -57,6 +57,7 @@ const CreateAndEditInvoice = () => {
             businessId: businessId,
             title: values?.title,
             summary: values?.summary,
+            customerId: getSingleCustomerData?._id,
             customerName: customerName,
             customerCountry: values?.customerCountry,
             customerState: values?.customerState,

@@ -76,11 +76,12 @@ const Template3 = React.forwardRef((props, ref) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        {console.log('props.getSingleInvoiceData', props.getSingleInvoiceData)}
                                         <div style={{ width: '50%' }}>
                                             <p style={{ padding: '0 0 0.5rem 0.5rem' }}>
                                                 {props.type === 'Invoice'
-                                                    ? props.invoiceBusinessData?.address
-                                                    : props.estimateBusinessData?.address}
+                                                    ? props?.invoiceBusinessData?.address
+                                                    : props?.estimateBusinessData?.address}
                                             </p>
                                         </div>
                                     </div>

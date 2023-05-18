@@ -6,7 +6,7 @@ import { commonModalIsOpen } from '../../slices/modalSlice';
 import { sendEstimateMessage } from '../../slices/estimatesSlice';
 import { businessId, userId } from '../../constants/userData';
 
-const EstimateSendModal = () => {
+const EstimateSendModal = ({ ...props }) => {
     const { modalIsOpen, modalType } = useSelector((state) => state.modalReducer);
     const dispatch = useDispatch();
 
@@ -21,6 +21,8 @@ const EstimateSendModal = () => {
         dispatch(sendEstimateMessage({ payload }));
     };
 
+    console.log('props', props);
+
     return (
         <>
             <Modal
@@ -29,7 +31,15 @@ const EstimateSendModal = () => {
                     dispatch(commonModalIsOpen(false));
                 }}
             >
-                <Formik initialValues={{ email: '', message: '', isChecked: '' }} onSubmit={(values) => handleSendMessage(values)}>
+                <Formik
+                    enableReinitialize
+                    initialValues={{
+                        email: props?.type === 'Estimate' ? props?.estimateCustomerData?.email : props?.invoiceCustomerData?.email,
+                        message: '',
+                        isChecked: ''
+                    }}
+                    onSubmit={(values) => handleSendMessage(values)}
+                >
                     <Form>
                         <Modal.Header closeButton className="font-weight-bold">
                             Send Estimate

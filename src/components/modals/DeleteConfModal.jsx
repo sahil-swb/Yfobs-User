@@ -35,6 +35,7 @@ const DeleteConfModal = ({ type, del_id, title }) => {
             dispatch(deleteVendor({ del_id }));
         } else if (type === 'INVOICES') {
             dispatch(deleteInvoice({ del_id }));
+            history.push('/invoices');
         }
         dispatch(commonDeleteModal(false));
     };

@@ -85,7 +85,7 @@ const Businesses = () => {
                                             </div>
                                         </td>
                                         <td>
-                                            <div className="d-flex justify-content-between">
+                                            <div className="d-flex justify-content-around">
                                                 <div>
                                                     <Button
                                                         size="sm"
@@ -97,22 +97,25 @@ const Businesses = () => {
                                                     >
                                                         Edit
                                                     </Button>
-
-                                                    <Button
-                                                        className="ml-3"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            let payload = { _id: detail?._id };
-                                                            dispatch(deleteBusiness({ payload }));
-                                                        }}
-                                                    >
-                                                        Delete
-                                                    </Button>
                                                 </div>
                                                 <div
                                                     aria-disabled="true"
                                                     className="d-flex justify-content-between align-items-center w-50"
                                                 >
+                                                    <Button
+                                                        // disabled={detail?.isActive === 1 ? false : false}
+                                                        size="sm"
+                                                        variant={detail?.isActive === 1 ? 'outline-success' : 'outline-primary'}
+                                                        onClick={(e) => {
+                                                            let payload = {
+                                                                _id: detail?._id
+                                                            };
+                                                            dispatch(updateBusiness({ payload }));
+                                                            dispatch(updateBusinessStatus({ payload }));
+                                                        }}
+                                                    >
+                                                        {detail?.isActive === 1 ? 'Selected' : 'Unselected'}
+                                                    </Button>
                                                     <div>
                                                         {detail?.isActive === 1 ? (
                                                             <i className="fa fa-check f-22 text-c-info" aria-hidden="true" />
@@ -120,20 +123,6 @@ const Businesses = () => {
                                                             ''
                                                         )}
                                                     </div>
-                                                    <Button
-                                                        disabled={detail?.isActive === 1 ? false : false}
-                                                        size="sm"
-                                                        variant={detail?.isActive === 1 ? 'outline-success' : 'outline-primary'}
-                                                        onClick={(e) => {
-                                                            let payload = {
-                                                                _id: detail?._id
-                                                            };
-                                                            dispatch(updateBusinessStatus({ payload }));
-                                                            dispatch(updateBusiness({ payload }));
-                                                        }}
-                                                    >
-                                                        {detail?.isActive === 1 ? 'Selected' : 'Unselected'}
-                                                    </Button>
                                                 </div>
                                             </div>
                                         </td>

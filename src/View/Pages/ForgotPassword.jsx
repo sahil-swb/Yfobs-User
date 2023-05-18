@@ -8,7 +8,6 @@ import { getSingleUser, UserForgotPassword } from '../../slices/authSlice';
 import AuthLayout from '../../components/AuthLayout';
 
 const ForgotPassword = () => {
-    const { forgotPasswordData } = useSelector((state) => state.authReducer);
     const dispatch = useDispatch();
     const history = useHistory();
     const handleForgotPassword = (values) => {
@@ -18,7 +17,6 @@ const ForgotPassword = () => {
         dispatch(UserForgotPassword({ payload }));
         history.push('/change_password');
     };
-    console.log(forgotPasswordData);
     return (
         <AuthLayout>
             <div className="card-body">

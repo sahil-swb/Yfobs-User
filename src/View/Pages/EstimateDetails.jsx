@@ -189,12 +189,22 @@ const EstimateDetails = () => {
                                 currencySign={currencySign}
                             />
                         ) : (
-                            ''
+                            <Template1
+                                ref={componentRef}
+                                type={'Estimate'}
+                                getSingleEstimate={getSingleEstimate}
+                                estimateCustomerData={estimateCustomerData}
+                                estimateBusinessData={estimateBusinessData}
+                                discountAmount={discountAmount}
+                                taxValue={taxValue}
+                                words={words}
+                                currencySign={currencySign}
+                            />
                         )}
                     </Col>
                 </Row>
             </div>
-            <EstimateSendModal />
+            <EstimateSendModal type={'Estimate'} estimateCustomerData={estimateCustomerData} />
             <DeleteConfModal del_id={getSingleEstimate?.data?._id} type={'ESTIMATES'} title={getSingleEstimate?.data?.title} />
         </>
     );

@@ -13,6 +13,7 @@ import Template2 from '../../components/invoiceTemplates/Template2';
 import Template3 from '../../components/invoiceTemplates/Template3';
 import Template4 from '../../components/invoiceTemplates/Template4';
 import { getAllCountriesApi } from '../../slices/countryDetailSlice';
+import EstimateSendModal from '../../components/modals/EstimateSendModal';
 
 const InvoiceDetails = () => {
     const { getSingleInvoiceData } = useSelector((state) => state.invoiceReducer);
@@ -226,10 +227,21 @@ const InvoiceDetails = () => {
                         currencySign={currencySign}
                     />
                 ) : (
-                    ''
+                    <Template1
+                        ref={componentRef}
+                        type={'Invoice'}
+                        getSingleInvoiceData={getSingleInvoiceData}
+                        invoiceCustomerData={invoiceCustomerData}
+                        invoiceBusinessData={invoiceBusinessData}
+                        discountAmount={discountAmount}
+                        taxValue={taxValue}
+                        words={words}
+                        currencySign={currencySign}
+                    />
                 )}
             </div>
-            <DeleteConfModal del_id={getSingleInvoiceData?._id} type={'INVOICES'} title={getSingleInvoiceData?.title} />
+            <EstimateSendModal type={'Invoice'} invoiceCustomerData={invoiceCustomerData} />
+            <DeleteConfModal del_id={getSingleInvoiceData?.data?._id} type={'INVOICES'} title={getSingleInvoiceData?.data?.title} />
         </>
     );
 };

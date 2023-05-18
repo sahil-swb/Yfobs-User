@@ -9,15 +9,16 @@ import { useHistory } from 'react-router-dom';
 import { userId } from '../../constants/userData';
 
 const ChangePassword = () => {
+    const { forgotPasswordData } = useSelector((state) => state.authReducer);
     const history = useHistory();
     const dispatch = useDispatch();
     const handleChangePassword = (values) => {
         let payload = {
-            _id: userId,
+            _id: forgotPasswordData?._id,
             password: values.password,
             newPassword: values.newPassword
         };
-        console.log('payload', payload);
+
         if (values.newPassword === values.confPassword) {
             dispatch(UserChangePassword({ payload }));
             history.push('/');
@@ -25,6 +26,8 @@ const ChangePassword = () => {
             alert('Password Not Matched');
         }
     };
+
+    console.log('forgotPasswordData', forgotPasswordData);
     return (
         <AuthLayout>
             <div className="card-body">
@@ -36,7 +39,7 @@ const ChangePassword = () => {
                 >
                     <Form>
                         <div className="form-group fill mb-4">
-                            <Field name="password" type="password" className="form-control" placeholder="Enter OTP" />
+                            <Field name="password" className="form-control" placeholder="Enter OTP" />
                         </div>
                         <div className="form-group fill mb-4">
                             <Field name="newPassword" type="password" className="form-control" placeholder="New Password" />
